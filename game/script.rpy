@@ -35,7 +35,11 @@ screen room_screen():
 
 
 screen laptop_screen():
-    add "laptop_(transparent)"
+    # For now, the laptop screen is just a black background with the laptop. 
+    # TODO: Get a close-up picture of the lectern for the background of this screen.
+    add Solid("#000")
+    add "laptop_(transparent)":
+        align (0.5, 0.5)
 
     # Go to venue view
     textbutton "Venue":
