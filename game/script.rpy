@@ -16,6 +16,14 @@ style blue_button_text:
     color "#000000"
     size 30
 
+style set_button:
+    color "#000000"
+    idle_background Frame(Solid("#ffffff"), 4, 4)
+    hover_background Frame(Solid("#ffffff"), 4, 4)
+    padding (10, 10)
+    background Frame(Solid("#ffffff"), 4, 4)
+    xysize (215, 50)
+
 # Screens
 screen room_screen():
     add "background 2"
@@ -31,8 +39,6 @@ screen room_screen():
             Show("laptop_screen", transition=easeinbottom),
             Hide("room_screen")
         ]
-
-
 
 screen laptop_screen():
     # For now, the laptop screen is just a black background with the laptop. 
@@ -53,6 +59,12 @@ screen laptop_screen():
             Hide("laptop_screen")
         ]
 
+screen bracket_screen():
+    $ sets = [0, 1, 2, 3, 4, 5]
+    for i in sets:
+        textbutton "{color=#000000}RoyalXTitan{/color}":
+            style "set_button"
+            pos (281 + (228 * i), 108)
 
 # The game starts here.
 
