@@ -28,7 +28,7 @@ screen room_screen():
         
         # Logic
         action [
-            Show("laptop_screen", transition=dissolve),
+            Show("laptop_screen", transition=easeinbottom),
             Hide("room_screen")
         ]
 
@@ -49,7 +49,7 @@ screen laptop_screen():
 
         # Logic
         action [
-            Show("room_screen", transition=dissolve), 
+            Show("room_screen", transition=easeintop), 
             Hide("laptop_screen")
         ]
 
@@ -57,7 +57,7 @@ screen laptop_screen():
 # The game starts here.
 
 label start:
-    scene background 2 with dissolve
+    scene black
     m "Quit your friendlies!"
 
     call screen room_screen
