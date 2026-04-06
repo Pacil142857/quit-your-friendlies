@@ -24,6 +24,12 @@ style set_button:
     background Frame(Solid("#ffffff"), 4, 4)
     xysize (215, 50)
 
+
+style game_count_button is button:
+    idle_background Frame(Solid("#dbdbdb"), corner_radius=50)
+    hover_background Frame(Solid("#dbdbdb"), corner_radius=50)
+
+
 # Screens
 screen room_screen():
     add "background 2"
@@ -65,6 +71,22 @@ screen bracket_screen():
         textbutton "{color=#000000}RoyalXTitan{/color}":
             style "set_button"
             pos (281 + (228 * i), 108)
+
+
+# Screen for reporting the matches
+screen match_report_screen(player_a, player_b):
+    add "match_report":
+        align(0.5, 0.5)
+
+    text player_a:
+        color "#000"
+        align(0.35, 0.195)
+
+    text player_b:
+        color "#000"
+        align(0.67, 0.195)
+		
+		
 
 # The game starts here.
 
