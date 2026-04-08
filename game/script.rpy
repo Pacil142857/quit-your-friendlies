@@ -65,14 +65,14 @@ screen room_screen():
     add "background 2"
     
     # Go to laptop view
-    textbutton "Laptop":
+    textbutton "Bracket":
         # Placement and styling
         align(0.7, 0.8)
         style "blue_button"
         
         # Logic
         action [
-            Show("laptop_screen", transition=easeinbottom),
+            Show("bracket_screen", transition=easeinbottom),
             Hide("room_screen")
         ]
 
@@ -96,12 +96,24 @@ screen laptop_screen():
         ]
 
 screen bracket_screen():
+    add Solid("#000000")
     $ sets = [0, 1, 2, 3, 4, 5]
     for i in sets:
-        textbutton "{color=#000000}RoyalXTitan{/color}":
+        textbutton "{color=#000000}RoyalXTitan\nPacil{/color}":
             style "set_button"
             pos (281 + (228 * i), 108)
 
+    # Go to venue view
+    textbutton "Venue":
+        # Placement and styling
+        align(0.7, 0.8)
+        style "blue_button"
+
+        # Logic
+        action [
+            Show("room_screen", transition=easeintop), 
+            Hide("bracket_screen")
+        ]
 
 # Screen for reporting the matches. Pass the players as arguments
 screen match_report_screen(player_a, player_b):
@@ -188,18 +200,18 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
 label start:
 
     # Previous code
-    # scene black
-    # m "Quit your friendlies!"
+    scene black
+    m "Quit your friendlies!"
 
-    # call screen room_screen
+    call screen room_screen
 
     # TEST for the match report screen.
     # player_a == "blah", player_b == "blahblah". 
     # If the user correctly enters the gamescore as 3-0, "Success!" will show, 
     # Otherwise, "Failure" will show.
-    $ a_correct_gamecount = 3
-    $ b_correct_gamecount = 0
-    call screen match_report_screen("blah", "blahblah")
+    # $ a_correct_gamecount = 3
+    # $ b_correct_gamecount = 0
+    # call screen match_report_screen("blah", "blahblah")
     
     
 
