@@ -1,8 +1,26 @@
 ﻿# The script of the game goes in this file.
-
-# Declare characters used by this game. The color argument colorizes the
-# name of the character.
+image reggie = "images/reggie.png"
+# Characters
+define n = Character(None) # Narrator
+define e = Character(None, what_italic=True, what_color="#58eafd") # Special events. Emphasis.
 define m = Character("Me")
+define r = Character(name="Reggie", color="#32f35c")
+# TODO: Replace these names with the real names of the players. I forgot what their real tags are.
+define p1 = Character(name="1", color="#ffe449")
+define p2 = Character(name="2", color="#c7ffcf")
+define p3 = Character(name="3", color="#ee89e0")
+define p4 = Character(name="4", color="#f77c7c")
+define p5 = Character(name="5", color="#778af7")
+define p6 = Character(name="6", color="#5ddbf1")
+define p7 = Character(name="7", color="#f89451")
+
+# Success and failure "characters"
+define s = Character(None, what_italic=True, what_color="#0cff20")
+define f = Character(None, what_italic=True, what_color="#ff0c0c")
+
+
+
+
 
 # Style vars
 style blue_button is button:
@@ -62,6 +80,10 @@ style submit_result_button_text:
 
 # Screens
 screen room_screen():
+    add "background 2"
+
+
+screen room_screen_with_button():
     add "background 2"
     
     # Go to laptop view
@@ -163,11 +185,12 @@ screen match_report_screen(player_a, player_b):
     textbutton "Submit Result":
         style "submit_result_button"
         align(0.87, 0.95)
-        action [
-            Show("post_match_report_screen", selected_agmc=a_selected_gamecount, selected_bgmc=b_selected_gamecount, 
-                                            agmc=a_correct_gamecount, bgmc=b_correct_gamecount), 
-            Hide("match_report_screen")
-        ]
+        action Return((a_selected_gamecount, b_selected_gamecount))
+        # action [
+        #     Show("post_match_report_screen", selected_agmc=a_selected_gamecount, selected_bgmc=b_selected_gamecount, 
+        #                                     agmc=a_correct_gamecount, bgmc=b_correct_gamecount), 
+        #     Hide("match_report_screen")
+        # ]
 
 
 # Shown after the player submits the game score
@@ -181,29 +204,28 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
     
     # Success!
     if selected_agmc == agmc and selected_bgmc == bgmc:
-        text "Success!":
-            align (0.5, 0.5)
-            size 100
-            color "#00ff00"
+        timer 0.01 action Function(renpy.say, s, "Success! The score was recorded correctly.")
 
     # Failure
     else:
-        text "Failure":
-            align (0.5, 0.5)
-            size 100
-            color "#ff0000"
+        timer 0.01 action Function(renpy.say, f, "Failure. That wasn't the correct score.")
+
+    textbutton "Return to Venue":
+        align (0.5, 0.8)
+        style "blue_button"
+        action [Hide("post_match_report_screen"), Show("room_screen_with_button")]
 
 
 
 # The game starts here.
 
 label start:
-
+ 
     # Previous code
-    scene black
-    m "Quit your friendlies!"
+    # scene black
+    # m "Quit your friendlies!"
 
-    call screen room_screen
+    # call screen room_screen
 
     # TEST for the match report screen.
     # player_a == "blah", player_b == "blahblah". 
@@ -212,6 +234,80 @@ label start:
     # $ a_correct_gamecount = 3
     # $ b_correct_gamecount = 0
     # call screen match_report_screen("blah", "blahblah")
+
+
+    # Script
+    n "Why did I come here again?"
+    n "I was just supposed to be playing Super Smash Bros, and I ended up getting roped into coming to a tournament."
+    scene background 2
+    n "My friends told me this would be fun, but I haven't seen much happen yet."
+    n "There's just a bunch of people playing and talking about things like \"frame data\" that I don't understand."
+    n "Where's the tournament organizer anyways? Aren't they supposed to be here by now?"
+    n "Wait, I feel like a new challenger is approaching..."
+    show expression Solid("#fff") as flash
+    with dissolve
+    pause 0.1
+    hide flash
+    with dissolve
+    show reggie at right with moveinright
+    with vpunch
+    r "My body is ready!"
+    r "Hello! It's me, Reggie Fils-Aimé, former CEO of Nintendo, and also the tournament organizer of this competition, or TO for short."
+    r "Thanks for showing up, we're going to make this the greatest tournament ever held for this children's party game."
+    r "Hopefully you came prepared, as today's performance will determine the future of your gaming career."
+    r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your fr-"
+    hide reggie
+    # TODO: Play phone ringing noise
+    e "{cps=5}Ring... Ring... Ring...{nw}{/cps}"
+    show reggie at left with moveinleft
+    r "Hello? What's that, Mr. Sakurai? You need me back at Nintendo headquarters immediately in order to promote Mario Kart 14 featuring Shaquille O'Neal?"
+    r "Well I suppose that does sound pretty important. I'll be there right away!"
+    show reggie at center with move
+    r "It seems I've been called away on very important business. I'll have to have someone else run this tournament for me."
+    r "{cps=10}How about... you there?{/cps}"
+    with hpunch
+    m "Me?!"
+    m "No way, this is my first tournament and I don't even know how to-"
+    r "Perfect! I'm sure you'll do great. Ta-ta now!"
+    hide reggie with moveoutleft
+
+    n "Good grief, how did I get myself into this situation?"
+    n "I could just leave, but that doesn't feel right. Didn't Reggie say that today would decide the future of my gaming career? That sounds pretty important."
+    n "I think I've seen one of my friends do something like this before. How hard could it be?"
+    n "Alright, I can make it through this. I can do this."
+    with hpunch
+    m "Everyone, quit your friendlies!"
+
+    # TODO: Tutorial text. Tell the players how the game works
+
+    hide background 2
+    show screen room_screen_with_button
+
+    # TODO: Show the bracket and have the player choose 2-3 1st round matches to start
+
+    hide screen room_screen_with_button
+    show screen room_screen
+    
+    n "Oh! It looks like someone's finished playing their set."
+    # TODO: For now, this is just a random player. In the finished game, make sure the player shown is someone who was actually playing a set
+    show p2 at left onlayer screens
+    p2 "Hello, I beat player 3 2-1. They got DESTROYED hahaha."
+    n "Okay, I'll have to input that into the bracket"
+
+    # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
+    $ a_correct_gamecount = 2
+    $ b_correct_gamecount = 1
+    call screen match_report_screen("player_2", "player_3")
+    $ results = _return
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount:
+        scene background 4
+        s "Success! The score was recorded correctly." 
+    else:
+        scene background 4
+        f "Failure. That wasn't the correct score."
+
+    hide p2
+    show screen room_screen_with_button
     
     
 
