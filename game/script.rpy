@@ -6,13 +6,14 @@ define e = Character(None, what_italic=True, what_color="#58eafd") # Special eve
 define m = Character("Me")
 define r = Character(name="Reggie", color="#32f35c")
 # TODO: Replace these names with the real names of the players. I forgot what their real tags are.
-define p1 = Character(name="1", color="#ffe449")
-define p2 = Character(name="2", color="#c7ffcf")
-define p3 = Character(name="3", color="#ee89e0")
-define p4 = Character(name="4", color="#f77c7c")
-define p5 = Character(name="5", color="#778af7")
-define p6 = Character(name="6", color="#5ddbf1")
-define p7 = Character(name="7", color="#f89451")
+define p1 = Character(name="red dot", color="#ffe449")
+define p2 = Character(name="SaggyMilkJug", color="#c7ffcf")
+define p3 = Character(name="colorfulʚɞ", color="#ee89e0")
+define p4 = Character(name="Blue Line", color="#f77c7c")
+define p5 = Character(name="Nyramyss", color="#778af7")
+define p6 = Character(name="Kitsch", color="#5ddbf1")
+define p7 = Character(name="Ford", color="#f89451")
+define p8 = Character(name="Pacil", color="#9cffbb") # Currently does not have an image
 
 # Success and failure "characters"
 define s = Character(None, what_italic=True, what_color="#0cff20")
@@ -40,7 +41,7 @@ style set_button:
     hover_background Frame(Solid("#ffffff"), 4, 4)
     padding (10, 10)
     background Frame(Solid("#ffffff"), 4, 4)
-    xysize (215, 50)
+    xysize (215, 90)
 
 
 # Match report screen vars
@@ -118,24 +119,108 @@ screen laptop_screen():
         ]
 
 screen bracket_screen():
-    add Solid("#000000")
-    $ sets = [0, 1, 2, 3, 4, 5]
-    for i in sets:
-        textbutton "{color=#000000}RoyalXTitan\nPacil{/color}":
+    # Set buttons should be (315, 130) pixels away from each other
+    # For a sample 12-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-34/event/ultimate-singles/brackets/1868263/2751603
+    # For a sample 8-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-44/event/ultimate-singles/brackets/1940157/2849091
+    # This will be an 8-person bracket screen
+
+    # add Solid("#000000")
+    $ wr1 = [BracketSet(p1, p2), BracketSet(p3, p4), BracketSet(p5, p6), BracketSet(p7, p8)] # winners round 1
+    $ wr2 = [BracketSet(), BracketSet()]
+    $ wf = [BracketSet()] # winners finals (wr3)
+    $ gf = [BracketSet()] # grand finals
+    $ lr1 =[BracketSet(), BracketSet()] # losers round 1
+    $ lr2 = [BracketSet(), BracketSet()]
+    $ lr3 = [BracketSet()]
+    $ lf = [BracketSet()] # losers finals
+    $ tf = [BracketSet()] # true finals / grand finals reset
+
+    # Winners Round 1
+    for i, match in enumerate(wr1):
+        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
-            pos (281 + (228 * i), 108)
+            pos (65, 20 + (130 * i))
+    
+    # Winners Round 2
+    for i, match in enumerate(wr2):
+        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            # Y-position: Y-padding + Half the height of a set button + Half the height between set buttons
+            # + (Height of set button + height between set buttons) * 2 * i
+            pos (65 + (315 * 1), 20 + (90 // 2) + ((130 - 90) // 2) + (130 * 2 * i))
+    
+    # Winners Finals
+    for i, match in enumerate(wf):
+        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (65 + (315 * 2), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 4 * i))
+    
+    # Grand Finals
+    for i, match in enumerate(gf):
+        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (65 + (315 * 3), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 8 * i))
+    
+    # True Finals
+    # Winners Finals
+    for i, match in enumerate(tf):
+        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (65 + (315 * 4), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 16 * i))
+    
+    # Losers Round 1
+    for i, match in enumerate(lr1):
+        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (65, 20 + 60 + (130 * len(wr1)) + (130 * i))
+    
+    # Losers Round 2
+    for i, match in enumerate(lr2):
+        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (65 + (315 * 1), 20 + 60 + (130 * len(wr1)) + (130 * i))
+    
+    # Losers Round 3
+    for i, match in enumerate(lr3):
+        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (65 + (315 * 2), 20 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
+    
+    # Losers Finals
+    for i, match in enumerate(lf):
+        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (65 + (315 * 3), 20 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
+    
+    # Add a line separating the Winners and Losers brackets
+    # (This doesn't work right now)
+    # $ bracket_separator_line = Line(0, 20 + (130 * len(wr1)) + (60 // 2), 1920, 1080)
+    # $ bracket_separator_line.render(5, 5, 5, 5)
+    # # $ bracket_separator_line.event(0, 0, 0, 0)
+
+    # $ sets = [0, 1, 2, 3, 4, 5]
+    # for i in sets:
+    #     textbutton "{size=26}{color=#000000}RoyalXTitan\n{size=18}vs.{/size}[p1.name]{/color}{/size}":
+    #         style "set_button"
+    #         pos (65 + (315 * i), 20)
+
+    # $ vertical_sets = [1, 2, 3, 4, 5, 6, 7]
+    # for i in vertical_sets:
+    #     textbutton "{size=26}{color=#000000}RoyalXTitan\n{size=18}vs.{/size}\nPacil{/color}{/size}":
+    #         style "set_button"
+    #         pos (65, 20 + (130 * i))
 
     # Go to venue view
-    textbutton "Venue":
-        # Placement and styling
-        align(0.7, 0.8)
-        style "blue_button"
+    # textbutton "Venue":
+    #     # Placement and styling
+    #     align(0.7, 0.8)
+    #     style "blue_button"
 
-        # Logic
-        action [
-            Show("room_screen", transition=easeintop), 
-            Hide("bracket_screen")
-        ]
+    #     # Logic
+    #     action [
+    #         Show("room_screen", transition=easeintop), 
+    #         Hide("bracket_screen")
+    #     ]
 
 # Screen for reporting the matches. Pass the players as arguments
 screen match_report_screen(player_a, player_b):
@@ -220,6 +305,7 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
 # The game starts here.
 
 label start:
+    call screen bracket_screen
  
     # Previous code
     # scene black
