@@ -65,13 +65,109 @@ init python:
         def is_callable(self):
             return self.p1 is not None and self.p2 is not None
 
-    def determine_winner(p1_name, p2_name, p1_score, p2_score):
+    class BracketAdvancementDataHolder:
+        def __init__(self, in_winners, round_number, set_number, next_sets, losers_sets):
+            self.in_winners = in_winners
+            self.round_number = round_number
+            self.set_number = set_number
+            self.next_sets = next_sets
+            self.losers_sets = losers_sets # If self.in_winners is False, then this is equivalent to self.next_sets
+    
+    def send_to_losers(player, advancement_data):
+        """ Updates the Losers Bracket to send a player to Losers. This is only configured to work for 8-person brackets.
+
+        player: the player (a Character object)
+        winners_round: Either 1, 2, 3, or 4 for winners round 1, 2, 3, or Grand Finals
+        set_number: 0 if it's the topmost set, 1 if it's below that, 2 if it's below *that*, and so on
+        losers_sets: A list of sets in the relevant losers round (probably lr1, lr2, or lf)
+        """
+        if not advancement_data.in_winners:
+            return
+        winners_round = advancement_data.round_number
+        set_number = advancement_data.set_number
+        losers_sets = advancement_data.losers_sets
+
+        if winners_round == 1:
+            if set_number == 0:
+                losers_sets[0].set_p2(player)
+            elif set_number == 1:
+                losers_sets[0].set_p1(player)
+            elif set_number == 2:
+                losers_sets[1].set_p2(player)
+            elif set_number == 3:
+                losers_sets[1].set_p1(player)
+        elif winners_round == 2:
+            if set_number == 0:
+                losers_sets[1].set_p1(player)
+            elif set_number == 1:
+                losers_sets[0].set_p1(player)
+        elif winners_round == 3:
+            losers_sets[0].set_p1(player)
+        elif winners_round == 4:
+            losers_sets[0].set_p2(player) # Should work for True Finals
+    
+    def advance_in_bracket(player, advancement_data):
+        """ Advances the winner of a set to their next set. This is configured for an 8-person bracket.
+
+        player: The player who won (a Character object)
+        in_winners: True if the player is in Winners bracket and False otherwise
+        round_number: The round. Should be 1 for Winners/Losers Round 1, 2 for Winners/Losers Round 2, and so on.
+        set_number: The number of their set. The topmost set is 0, the one below that is 1, and so on.
+        next_sets: A list of sets in the round that the player is advancing to
+        """
+        in_winners = advancement_data.in_winners
+        round_number = advancement_data.round_number
+        set_number = advancement_data.set_number
+        next_sets = advancement_data.next_sets
+
+        if in_winners:
+            if round_number == 1:
+                if set_number == 0:
+                    next_sets[0].set_p1(player)
+                elif set_number == 1:
+                    next_sets[0].set_p2(player)
+                elif set_number == 2:
+                    next_sets[1].set_p1(player)
+                elif set_number == 3:
+                    next_sets[1].set_p2(player)
+            elif round_number == 2:
+                if set_number == 0:
+                    next_sets[0].set_p1(player)
+                elif set_number == 1:
+                    next_sets[0].set_p2(player)
+            elif round_number == 3:
+                next_sets[0].set_p1(player)
+            elif round_number == 4:
+                next_sets[0].set_p1(player) # Advances the player to True Finals
+        else:
+            if round_number == 1:
+                next_sets[set_number].set_p2(player)
+            elif round_number == 2:
+                if set_number == 0:
+                    next_sets[0].set_p1(player)
+                elif set_number == 1:
+                    next_sets[0].set_p2(player)
+            elif round_number == 3:
+                next_sets[0].set_p2(player)
+            elif round_number == 4:
+                next_sets[0].set_p2(player)
+
+    def determine_winner(p1, p2, p1_score, p2_score):
         if p1_score is None or p2_score is None:
             return ""
         if p1_score > p2_score:
-            return p1_name
+            return p1
         if p2_score > p1_score:
-            return p2_name
+            return p2
+        return ""
+    
+    def determine_loser(p1, p2, p1_score, p2_score):
+        if p1_score is None or p2_score is None:
+            return ""
+        if p1_score < p2_score:
+            return p1
+        if p2_score < p1_score:
+            return p2
         return ""
     
     # This class currently doesn't work, and I don't intend to fix it

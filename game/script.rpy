@@ -20,7 +20,16 @@ define s = Character(None, what_italic=True, what_color="#0cff20")
 define f = Character(None, what_italic=True, what_color="#ff0c0c")
 
 
-
+# Make bracket
+define wr1 = [BracketSet(p1, p2), BracketSet(p3, p4), BracketSet(p5, p6), BracketSet(p7, p8)] # winners round 1
+define wr2 = [BracketSet(), BracketSet()]
+define wf = [BracketSet()] # winners finals (wr3)
+define gf = [BracketSet()] # grand finals
+define lr1 =[BracketSet(), BracketSet()] # losers round 1
+define lr2 = [BracketSet(), BracketSet()]
+define lr3 = [BracketSet()]
+define lf = [BracketSet()] # losers finals
+define tf = [BracketSet()] # true finals / grand finals reset
 
 
 # Style vars
@@ -125,15 +134,6 @@ screen bracket_screen():
     # This will be an 8-person bracket screen
 
     add Solid("#000000")
-    $ wr1 = [BracketSet(p1, p2), BracketSet(p3, p4), BracketSet(p5, p6), BracketSet(p7, p8)] # winners round 1
-    $ wr2 = [BracketSet(), BracketSet()]
-    $ wf = [BracketSet()] # winners finals (wr3)
-    $ gf = [BracketSet()] # grand finals
-    $ lr1 =[BracketSet(), BracketSet()] # losers round 1
-    $ lr2 = [BracketSet(), BracketSet()]
-    $ lr3 = [BracketSet()]
-    $ lf = [BracketSet()] # losers finals
-    $ tf = [BracketSet()] # true finals / grand finals reset
 
     # Winners Round 1
     for i, match in enumerate(wr1):
@@ -143,7 +143,8 @@ screen bracket_screen():
 
             if match.is_callable():
                 action [
-                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 1, i, wr2, lr1)),
                     Hide("bracket_screen")
                 ]
     
@@ -157,7 +158,8 @@ screen bracket_screen():
             pos (65 + (315 * 1), 20 + (90 // 2) + ((130 - 90) // 2) + (130 * 2 * i))
             if match.is_callable():
                 action [
-                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 2, i, wf, lr2)),
                     Hide("bracket_screen")
                 ]
     
@@ -169,7 +171,8 @@ screen bracket_screen():
             pos (65 + (315 * 2), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 4 * i))
             if match.is_callable():
                 action [
-                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 3, i, gf, lf)),
                     Hide("bracket_screen")
                 ]
     
@@ -181,20 +184,21 @@ screen bracket_screen():
             pos (65 + (315 * 3), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 8 * i))
             if match.is_callable():
                 action [
-                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 4, i, tf, tf)),
                     Hide("bracket_screen")
                 ]
     
     
     # True Finals
-    # Winners Finals
     for i, match in enumerate(tf):
         textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (65 + (315 * 4), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 16 * i))
             if match.is_callable():
                 action [
-                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 5, i, None, None)),
                     Hide("bracket_screen")
                 ]
     
@@ -207,7 +211,8 @@ screen bracket_screen():
 
             if match.is_callable():
                 action [
-                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(False, 1, i, lr2, lr2)),
                     Hide("bracket_screen")
                 ]
     
@@ -218,7 +223,8 @@ screen bracket_screen():
             pos (65 + (315 * 1), 20 + 60 + (130 * len(wr1)) + (130 * i))
             if match.is_callable():
                 action [
-                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(False, 2, i, lr3, lr3)),
                     Hide("bracket_screen")
                 ]
     
@@ -230,7 +236,8 @@ screen bracket_screen():
             pos (65 + (315 * 2), 20 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
             if match.is_callable():
                 action [
-                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(False, 3, i, lf, lf)),
                     Hide("bracket_screen")
                 ]
     
@@ -242,7 +249,8 @@ screen bracket_screen():
             pos (65 + (315 * 3), 20 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
             if match.is_callable():
                 action [
-                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(False, 4, i, gf, gf)),
                     Hide("bracket_screen")
                 ]
     
@@ -254,23 +262,23 @@ screen bracket_screen():
     # # $ bracket_separator_line.event(0, 0, 0, 0)
 
 # Screen for reporting the matches. Pass the players as arguments
-screen match_report_screen(player_a, player_b):
+screen match_report_screen(player_a, player_b, advancement_data):
     add "match_report":
         align(0.5, 0.5)
 
-    text player_a:
+    text player_a.name:
         color "#000"
         align(0.33, 0.175)
 
-    text player_b:
+    text player_b.name:
         color "#000"
         align(0.69, 0.175)
 
-    text player_a:
+    text player_a.name:
         color "#000"
         align (0.15, 0.52)
 
-    text player_b:
+    text player_b.name:
         color "#000"
         align (0.15, 0.61)
 
@@ -315,6 +323,12 @@ screen match_report_screen(player_a, player_b):
         style "submit_result_button"
         align(0.87, 0.95)
         action [
+            SetVariable("player_a_active_button", None),
+            SetVariable("player_b_active_button", None),
+            SetVariable("a_selected_gamecount", None),
+            SetVariable("b_selected_gamecount", None),
+            Function(advance_in_bracket, player=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
+            Function(send_to_losers, player=determine_loser(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
             Return((a_selected_gamecount, b_selected_gamecount, determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount))),
             Hide("match_report_screen")
         ]
@@ -433,7 +447,7 @@ label start:
     call screen bracket_screen
     # call screen match_report_screen("player_2", "player_3")
     $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p2.name:
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p2:
         scene background 4
         s "Success! The score was recorded correctly." 
     else:
