@@ -315,7 +315,7 @@ screen match_report_screen(player_a, player_b):
         style "submit_result_button"
         align(0.87, 0.95)
         action [
-            Return((a_selected_gamecount, b_selected_gamecount)),
+            Return((a_selected_gamecount, b_selected_gamecount, determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount))),
             Hide("match_report_screen")
         ]
         # action [
@@ -433,17 +433,14 @@ label start:
     call screen bracket_screen
     # call screen match_report_screen("player_2", "player_3")
     $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount:
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p2.name:
         scene background 4
         s "Success! The score was recorded correctly." 
     else:
         scene background 4
-        f "Failure. That wasn't the correct score."
+        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
     hide p2
     show screen room_screen_with_button
-    
-    
-
     
     return

@@ -65,6 +65,15 @@ init python:
         def is_callable(self):
             return self.p1 is not None and self.p2 is not None
 
+    def determine_winner(p1_name, p2_name, p1_score, p2_score):
+        if p1_score is None or p2_score is None:
+            return ""
+        if p1_score > p2_score:
+            return p1_name
+        if p2_score > p1_score:
+            return p2_name
+        return ""
+    
     # This class currently doesn't work, and I don't intend to fix it
     class Line(renpy.Displayable):
         def __init__(self, x1, y1, x2, y2):
