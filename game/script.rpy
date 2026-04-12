@@ -254,6 +254,7 @@ screen bracket_screen():
     # # $ bracket_separator_line.event(0, 0, 0, 0)
 
 # Screen for reporting the matches. Pass the players as arguments
+$ in_match_reporting_screen = False
 screen match_report_screen(player_a, player_b):
     add "match_report":
         align(0.5, 0.5)
@@ -284,24 +285,31 @@ screen match_report_screen(player_a, player_b):
             textbutton "[cur]":
                 style "game_count_button"
                 if i <= 3:
+                    selected(player_a_active_button == i and in_match_reporting_screen)
                     action [
                         SetVariable("player_a_active_button", i), 
-                        SetVariable("a_selected_gamecount", cur)
+                        SetVariable("a_selected_gamecount", cur),
+                        SetVariable("in_match_reporting_screen", True)
                     ]
-                    selected(player_a_active_button == i) # Mark this button as selected if active_button == i
 
                 else:
+                    selected(player_b_active_button == i and in_match_reporting_screen)
                     action [
                         SetVariable("player_b_active_button", i), 
-                        SetVariable("b_selected_gamecount", cur)
+                        SetVariable("b_selected_gamecount", cur),
+                        SetVariable("in_match_reporting_screen", True)
                     ]
-                    selected(player_b_active_button == i)
 
     # Back button
     textbutton "Go Back":
         style "submit_result_button" # it looks the same anyway
         align(1 - 0.87, 0.95)
         action [
+            SetVariable("player_a_active_button", 0),
+            SetVariable("player_b_active_button", 0),
+            SetVariable("a_selected_gamecount", 0),
+            SetVariable("b_selected_gamecount", 0),
+            SetVariable("in_match_reporting_screen", False),
             Show("bracket_screen"),
             Hide("match_report_screen")
         ]
@@ -310,7 +318,10 @@ screen match_report_screen(player_a, player_b):
     textbutton "Submit Result":
         style "submit_result_button"
         align(0.87, 0.95)
-        action Return((a_selected_gamecount, b_selected_gamecount))
+        action [
+            SetVariable("in_match_reporting_screen", False),
+            Return((a_selected_gamecount, b_selected_gamecount))
+        ]
         # action [
         #     Show("post_match_report_screen", selected_agmc=a_selected_gamecount, selected_bgmc=b_selected_gamecount, 
         #                                     agmc=a_correct_gamecount, bgmc=b_correct_gamecount), 
