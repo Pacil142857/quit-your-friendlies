@@ -140,6 +140,13 @@ screen bracket_screen():
         textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (65, 20 + (130 * i))
+
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Hide("bracket_screen")
+                ]
+    
     
     # Winners Round 2
     for i, match in enumerate(wr2):
@@ -148,18 +155,36 @@ screen bracket_screen():
             # Y-position: Y-padding + Half the height of a set button + Half the height between set buttons
             # + (Height of set button + height between set buttons) * 2 * i
             pos (65 + (315 * 1), 20 + (90 // 2) + ((130 - 90) // 2) + (130 * 2 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Hide("bracket_screen")
+                ]
+    
     
     # Winners Finals
     for i, match in enumerate(wf):
         textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (65 + (315 * 2), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 4 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Hide("bracket_screen")
+                ]
+    
     
     # Grand Finals
     for i, match in enumerate(gf):
         textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (65 + (315 * 3), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 8 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Hide("bracket_screen")
+                ]
+    
     
     # True Finals
     # Winners Finals
@@ -167,60 +192,66 @@ screen bracket_screen():
         textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (65 + (315 * 4), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 16 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Hide("bracket_screen")
+                ]
+    
     
     # Losers Round 1
     for i, match in enumerate(lr1):
         textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (65, 20 + 60 + (130 * len(wr1)) + (130 * i))
+
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Hide("bracket_screen")
+                ]
     
     # Losers Round 2
     for i, match in enumerate(lr2):
         textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (65 + (315 * 1), 20 + 60 + (130 * len(wr1)) + (130 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Hide("bracket_screen")
+                ]
+    
     
     # Losers Round 3
     for i, match in enumerate(lr3):
         textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (65 + (315 * 2), 20 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Hide("bracket_screen")
+                ]
+    
     
     # Losers Finals
     for i, match in enumerate(lf):
         textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (65 + (315 * 3), 20 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1_name(), player_b=match.get_p2_name()),
+                    Hide("bracket_screen")
+                ]
+    
     
     # Add a line separating the Winners and Losers brackets
     # (This doesn't work right now)
     # $ bracket_separator_line = Line(0, 20 + (130 * len(wr1)) + (60 // 2), 1920, 1080)
     # $ bracket_separator_line.render(5, 5, 5, 5)
     # # $ bracket_separator_line.event(0, 0, 0, 0)
-
-    # $ sets = [0, 1, 2, 3, 4, 5]
-    # for i in sets:
-    #     textbutton "{size=26}{color=#000000}RoyalXTitan\n{size=18}vs.{/size}[p1.name]{/color}{/size}":
-    #         style "set_button"
-    #         pos (65 + (315 * i), 20)
-
-    # $ vertical_sets = [1, 2, 3, 4, 5, 6, 7]
-    # for i in vertical_sets:
-    #     textbutton "{size=26}{color=#000000}RoyalXTitan\n{size=18}vs.{/size}\nPacil{/color}{/size}":
-    #         style "set_button"
-    #         pos (65, 20 + (130 * i))
-
-    # Go to venue view
-    # textbutton "Venue":
-    #     # Placement and styling
-    #     align(0.7, 0.8)
-    #     style "blue_button"
-
-    #     # Logic
-    #     action [
-    #         Show("room_screen", transition=easeintop), 
-    #         Hide("bracket_screen")
-    #     ]
 
 # Screen for reporting the matches. Pass the players as arguments
 screen match_report_screen(player_a, player_b):
@@ -266,6 +297,15 @@ screen match_report_screen(player_a, player_b):
                     ]
                     selected(player_b_active_button == i)
 
+    # Back button
+    textbutton "Go Back":
+        style "submit_result_button" # it looks the same anyway
+        align(1 - 0.87, 0.95)
+        action [
+            Show("bracket_screen"),
+            Hide("match_report_screen")
+        ]
+
     # Submit result button
     textbutton "Submit Result":
         style "submit_result_button"
@@ -285,7 +325,7 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
     add "background 4":
         align(0.5, 0.5)
 
-    # TODO: Add more robus success and failure states
+    # TODO: Add more robust success and failure states
     
     # Success!
     if selected_agmc == agmc and selected_bgmc == bgmc:
@@ -377,7 +417,7 @@ label start:
     n "Oh! It looks like someone's finished playing their set."
     # TODO: For now, this is just a random player. In the finished game, make sure the player shown is someone who was actually playing a set
     show p2 at left onlayer screens
-    p2 "Hello, I beat player 3 2-1. They got DESTROYED hahaha."
+    p2 "Hello, I beat [p1.name] 2-1. They got DESTROYED hahaha."
     n "Okay, I'll have to input that into the bracket"
 
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes

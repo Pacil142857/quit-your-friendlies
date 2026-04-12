@@ -61,6 +61,9 @@ init python:
         
         def set_p2(self, p2):
             self.p2 = p2
+        
+        def is_callable(self):
+            return self.p1 is not None and self.p2 is not None
 
     # This class currently doesn't work, and I don't intend to fix it
     class Line(renpy.Displayable):
