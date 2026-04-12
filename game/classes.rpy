@@ -95,3 +95,69 @@ init python:
     
         def event(self, ev, x, y, st):
             renpy.redraw(self, 0)
+
+    VALID_TIMER_MODES = ("countdown", "countup", "stopwatch")
+
+    class TimerState:
+        def __init__(self, duration, mode="countdown"):
+            # duration is in seconds, mode can be "countdown", "countup", or "stopwatch"
+            if mode not in VALID_TIMER_MODES:
+                raise ValueError("TimerState mode must be one of: " + ", ".join(VALID_TIMER_MODES))
+            self.duration = max(0, duration) # negative durations don't make sense
+            self.mode = mode
+            self.elapsed = 0.0
+            self.running = False
+            self.finished = False
+            self.just_expired = False # set to True for one tick when the timer finishes
+
+        def start(self):
+            if not self.finished:
+                self.running = True
+
+        def pause(self):
+            self.running = False
+
+        def reset(self):
+            self.elapsed = 0.0
+            self.running = False
+            self.finished = False
+            self.just_expired = False
+
+        def stop(self):
+            # full stop, can't resume without reset.
+            # does NOT trigger on_expire (that only happens when the timer runs out naturally)
+            self.running = False
+            self.finished = True
+
+        def tick(self, dt):
+            # Clear the expired flag each tick so it only stays True for one cycle
+            self.just_expired = False
+            if not self.running or self.finished:
+                return
+            self.elapsed += dt
+            # Stopwatch has no limit, so only check for countdown/countup
+            if self.mode != "stopwatch" and self.elapsed >= self.duration:
+                self.elapsed = self.duration
+                self.finished = True
+                self.running = False
+                self.just_expired = True
+
+        def get_display_time(self):
+            if self.mode == "countdown":
+                t = max(0, self.duration - self.elapsed)
+            else:
+                t = self.elapsed
+            total_secs = int(t)
+            hrs = total_secs // 3600
+            mins = (total_secs % 3600) // 60
+            secs = total_secs % 60
+            if hrs > 0:
+                return "{:d}:{:02d}:{:02d}".format(hrs, mins, secs)
+            return "{:02d}:{:02d}".format(mins, secs)
+
+        def get_fraction(self):
+            # Returns a value from 0.0 to 1.0 representing how much time has passed
+            if self.duration <= 0:
+                return 0.0
+            frac = self.elapsed / self.duration
+            return min(1.0, frac)
