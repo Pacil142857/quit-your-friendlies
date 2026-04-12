@@ -124,7 +124,7 @@ screen bracket_screen():
     # For a sample 8-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-44/event/ultimate-singles/brackets/1940157/2849091
     # This will be an 8-person bracket screen
 
-    # add Solid("#000000")
+    add Solid("#000000")
     $ wr1 = [BracketSet(p1, p2), BracketSet(p3, p4), BracketSet(p5, p6), BracketSet(p7, p8)] # winners round 1
     $ wr2 = [BracketSet(), BracketSet()]
     $ wf = [BracketSet()] # winners finals (wr3)
@@ -254,7 +254,6 @@ screen bracket_screen():
     # # $ bracket_separator_line.event(0, 0, 0, 0)
 
 # Screen for reporting the matches. Pass the players as arguments
-$ in_match_reporting_screen = False
 screen match_report_screen(player_a, player_b):
     add "match_report":
         align(0.5, 0.5)
@@ -285,19 +284,17 @@ screen match_report_screen(player_a, player_b):
             textbutton "[cur]":
                 style "game_count_button"
                 if i <= 3:
-                    selected(player_a_active_button == i and in_match_reporting_screen)
+                    selected(player_a_active_button == i)
                     action [
                         SetVariable("player_a_active_button", i), 
                         SetVariable("a_selected_gamecount", cur),
-                        SetVariable("in_match_reporting_screen", True)
                     ]
 
                 else:
-                    selected(player_b_active_button == i and in_match_reporting_screen)
+                    selected(player_b_active_button == i)
                     action [
                         SetVariable("player_b_active_button", i), 
                         SetVariable("b_selected_gamecount", cur),
-                        SetVariable("in_match_reporting_screen", True)
                     ]
 
     # Back button
@@ -305,11 +302,10 @@ screen match_report_screen(player_a, player_b):
         style "submit_result_button" # it looks the same anyway
         align(1 - 0.87, 0.95)
         action [
-            SetVariable("player_a_active_button", 0),
-            SetVariable("player_b_active_button", 0),
-            SetVariable("a_selected_gamecount", 0),
-            SetVariable("b_selected_gamecount", 0),
-            SetVariable("in_match_reporting_screen", False),
+            SetVariable("player_a_active_button", None),
+            SetVariable("player_b_active_button", None),
+            SetVariable("a_selected_gamecount", None),
+            SetVariable("b_selected_gamecount", None),
             Show("bracket_screen"),
             Hide("match_report_screen")
         ]
@@ -319,8 +315,8 @@ screen match_report_screen(player_a, player_b):
         style "submit_result_button"
         align(0.87, 0.95)
         action [
-            SetVariable("in_match_reporting_screen", False),
-            Return((a_selected_gamecount, b_selected_gamecount))
+            Return((a_selected_gamecount, b_selected_gamecount)),
+            Hide("match_report_screen")
         ]
         # action [
         #     Show("post_match_report_screen", selected_agmc=a_selected_gamecount, selected_bgmc=b_selected_gamecount, 
@@ -356,7 +352,7 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
 # The game starts here.
 
 label start:
-    call screen bracket_screen
+    # call screen bracket_screen
  
     # Previous code
     # scene black
@@ -432,9 +428,10 @@ label start:
     n "Okay, I'll have to input that into the bracket"
 
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
-    $ a_correct_gamecount = 2
-    $ b_correct_gamecount = 1
-    call screen match_report_screen("player_2", "player_3")
+    $ a_correct_gamecount = 1
+    $ b_correct_gamecount = 2
+    call screen bracket_screen
+    # call screen match_report_screen("player_2", "player_3")
     $ results = _return
     if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount:
         scene background 4
