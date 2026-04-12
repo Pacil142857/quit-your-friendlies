@@ -86,6 +86,40 @@ style submit_result_button_text:
     color "#000000"
     hover_color "#ffffff"
 
+# Speech bubble styles
+style speech_bubble is frame:
+    background Frame(Solid("#ffffff"), 0, 0)
+    padding (40, 30)
+
+style speech_bubble_text:
+    color "#000000"
+    size 28
+    text_align 0.0
+
+# Timer styles
+style timer_frame is frame:
+    background Frame(Solid("#1a1a1a"), 10, 10)
+    padding (20, 15)
+
+style timer_text:
+    color "#ffffff"
+    size 36
+    text_align 0.5
+
+style timer_bar is bar:
+    xsize 500
+    ysize 30
+    left_bar Frame(Solid("#5db2ce"), 4, 4)
+    right_bar Frame(Solid("#444444"), 4, 4)
+
+style timer_control_button is button:
+    idle_background Frame(Solid("#9dddf3"), 4, 4)
+    hover_background Frame(Solid("#5db2ce"), 4, 4)
+    padding (15, 10)
+
+style timer_control_button_text:
+    color "#000000"
+    size 20
 
 
 # Screens
@@ -126,6 +160,77 @@ screen laptop_screen():
             Show("room_screen", transition=easeintop), 
             Hide("laptop_screen")
         ]
+
+# Speech bubble. Pass in the text and optionally the position and size.
+# vpos: "top", "middle", "bottom" (default: "bottom")
+# hpos: "left", "center", "right" (default: "center")
+# size: "small", "medium", "large" (default: "medium")
+screen speech_bubble(message, vpos="bottom", hpos="center", size="medium"):
+    $ x_positions = {"left": 0.1, "center": 0.5, "right": 0.9}
+    $ y_positions = {"top": 0.1, "middle": 0.5, "bottom": 0.85}
+    $ sizes = {"small": 400, "medium": 700, "large": 1100}
+
+    # Fall back to defaults if someone passes a bad value
+    $ xa = x_positions.get(hpos, 0.5)
+    $ ya = y_positions.get(vpos, 0.85)
+    $ w = sizes.get(size, 700)
+
+    frame:
+        style "speech_bubble"
+        align (xa, ya)
+        xsize w
+        text message style "speech_bubble_text"
+
+# Timer screen, requires a TimerState object (note to self see classes.rpy).
+# show_controls: whether to show start/pause/reset buttons for the player
+# on_expire: action(s) to run when the timer finishes (countdown/countup only)
+# Note/maybe thing to look at later: Function() calls restart_interaction() every 0.1s while this screen is showing. so renpy.pause(hard=True) won't work in the same interaction, need to use dialogue or screen timers to wait for time to pass instead. (renpy.pause() and timer_screen are incompatible for whatever reason)
+screen timer_screen(timer_state, show_controls=False, on_expire=None, xalign=0.5, yalign=0.0):
+    # Tick the timer every 0.1 seconds. Function() restarts the interaction each tick
+    # so the display stays up to date.
+    timer 0.1 repeat True action Function(timer_state.tick, 0.1)
+
+    # Fire the on_expire action exactly once when the timer finishes
+    if timer_state.just_expired and on_expire is not None:
+        timer 0.01 action on_expire
+
+    frame:
+        style "timer_frame"
+        align (xalign, yalign)
+        vbox:
+            spacing 10
+
+            # Digital readout
+            text timer_state.get_display_time():
+                style "timer_text"
+                xalign 0.5
+
+            # Progress bar (not shown for stopwatch since there's no limit)
+            if timer_state.mode != "stopwatch":
+                $ frac = timer_state.get_fraction()
+                if timer_state.mode == "countdown":
+                    bar value StaticValue(1.0 - frac, 1.0):
+                        style "timer_bar"
+                else:
+                    bar value StaticValue(frac, 1.0):
+                        style "timer_bar"
+
+            # Player controls (optional)
+            if show_controls:
+                hbox:
+                    spacing 10
+                    xalign 0.5
+                    if not timer_state.running and not timer_state.finished:
+                        textbutton "Start":
+                            style "timer_control_button"
+                            action Function(timer_state.start)
+                    elif timer_state.running:
+                        textbutton "Pause":
+                            style "timer_control_button"
+                            action Function(timer_state.pause)
+                    textbutton "Reset":
+                        style "timer_control_button"
+                        action Function(timer_state.reset)
 
 screen bracket_screen():
     # Set buttons should be (315, 130) pixels away from each other
