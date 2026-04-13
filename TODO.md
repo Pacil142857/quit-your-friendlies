@@ -6,7 +6,7 @@
 [x] Add functionality for switching between the venue, setups, and bracket screens
 [ ] Extend the script to include more sets
 [x] Make a background for the bracket screen
-[ ] Make the tutorial
+[x] Make the tutorial
 [ ] Playtest the game
 [ ] Have the winner and loser of a set be color coded (green and red)
 
