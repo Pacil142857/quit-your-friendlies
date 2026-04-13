@@ -35,8 +35,25 @@ define tf = [BracketSet()] # true finals / grand finals reset
 
 
 # Style vars
+style venue_button:
+    idle_background Frame(Solid("#9dddf3"), 4, 4)
+    hover_background Frame(Solid("#5db2ce"), 4, 4)
+    padding (30, 30)
+    background Frame(Solid("#9dddf3"), 4, 4)
+
+style setups_button:
+    idle_background Frame(Solid("#ddf39d"), 4, 4)
+    hover_background Frame(Solid("#b2ce5d"), 4, 4)
+    padding (30, 30)
+    background Frame(Solid("#ddf39d"), 4, 4)
+
+style bracket_button:
+    idle_background Frame(Solid("#f39ddd"), 4, 4)
+    hover_background Frame(Solid("#ce5db2"), 4, 4)
+    padding (30, 30)
+    background Frame(Solid("#f39ddd"), 4, 4)
+
 style blue_button is button:
-    
     idle_background Frame(Solid("#9dddf3"), 4, 4)
     hover_background Frame(Solid("#5db2ce"), 4, 4)
     padding (30, 30)
@@ -238,11 +255,56 @@ screen timer_screen(timer_state, show_controls=False, on_expire=None, xalign=0.5
                         style "timer_control_button"
                         action Function(timer_state.reset)
 
-screen setup_screen():
+screen venue_screen():
+    # Buttons to transition to the bracket and setups screens
+    textbutton "{color=#000000}Bracket{/color}":
+        style "bracket_button"
+        align (0.95, 0.825)
+        text_align 1.0
+        xsize 200
+
+        action [
+            Show("bracket_screen"),
+            Hide("venue_screen")
+        ]
+    textbutton "{color=#000000} Setups {/color}":
+        style "setups_button"
+        align (0.95, 0.95)
+        text_align 1.0
+        xsize 200
+
+        action [
+            Hide("venue_screen"),
+            Show("setups_screen")
+        ]
+
+screen setups_screen():
     add Solid("#000000")
 
+    # Buttons to transition to the venue and bracket screens
+    textbutton "{color=#000000} Venue {/color}":
+        style "venue_button"
+        align (0.95, 0.825)
+        text_align 1.0
+        xsize 200
+
+        action [
+            Hide("setups_screen"),
+            Show("venue_screen")
+        ]
+    textbutton "{color=#000000}Bracket{/color}":
+        style "bracket_button"
+        align (0.95, 0.95)
+        text_align 1.0
+        xsize 200
+
+        action [
+            Show("bracket_screen"),
+            Hide("setups_screen")
+        ]
+
     # The setups and players
-    $ alignments = [(0.15, 0.1), (0.85, 0.1), (0.15, 0.9), (0.85, 0.9)]
+    $ alignments = [(0.25, 0.1), (0.75, 0.1), (0.25, 0.9), (0.75, 0.9)]
     for i in range(4):
         $ setup = setups[i]
         $ alignment = alignments[i]
@@ -294,9 +356,30 @@ screen bracket_screen():
     # For a sample 8-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-44/event/ultimate-singles/brackets/1940157/2849091
     # This will be an 8-person bracket screen
 
-    # add Solid("#000000")
     add "bracketTemplate"
 
+    # Buttons to transition to the venue and setups screens
+    textbutton "{color=#000000} Venue {/color}":
+        style "venue_button"
+        align (0.95, 0.825)
+        text_align 0.5
+        xsize 200
+
+        action [
+            Hide("bracket_screen"),
+            Show("venue_screen")
+        ]
+    textbutton "{color=#000000} Setups {/color}":
+        style "setups_button"
+        align (0.95, 0.95)
+        text_align 0.5
+        xsize 200
+
+        action [
+            Show("setups_screen"),
+            Hide("bracket_screen")
+        ]
+    
     # Winners Round 1
     for i, match in enumerate(wr1):
         textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
@@ -415,13 +498,6 @@ screen bracket_screen():
                     advancement_data=BracketAdvancementDataHolder(False, 4, i, gf, gf)),
                     Hide("bracket_screen")
                 ]
-    
-    
-    # Add a line separating the Winners and Losers brackets
-    # (This doesn't work right now)
-    # $ bracket_separator_line = Line(0, 20 + (130 * len(wr1)) + (60 // 2), 1920, 1080)
-    # $ bracket_separator_line.render(5, 5, 5, 5)
-    # # $ bracket_separator_line.event(0, 0, 0, 0)
 
 # Screen for reporting the matches. Pass the players as arguments
 screen match_report_screen(player_a, player_b, advancement_data):
@@ -533,7 +609,7 @@ label start:
     $ setups[1].set_players(PlayerPicture(p3, "p3 cropped"), PlayerPicture(p4, "p4 cropped"))
     $ setups[2].set_players(PlayerPicture(p5, "p5 cropped"), PlayerPicture(p6, "p6 cropped"))
     $ setups[3].set_players(PlayerPicture(p7, "p7 cropped"), PlayerPicture(p8, "p8 cropped"))
-    call screen setup_screen
+    # call screen setups_screen
  
     # Previous code
     # scene black
@@ -611,9 +687,10 @@ label start:
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
     $ a_correct_gamecount = 1
     $ b_correct_gamecount = 2
-    hide screen room_screen
-    hide p2 onlayer screens
-    call screen bracket_screen
+    # hide screen room_screen
+    # hide p2 onlayer screens
+    # call screen bracket_screen
+    call screen venue_screen
     $ results = _return
     if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p2:
         scene background 4
