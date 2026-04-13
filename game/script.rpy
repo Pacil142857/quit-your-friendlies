@@ -256,6 +256,7 @@ screen timer_screen(timer_state, show_controls=False, on_expire=None, xalign=0.5
                         action Function(timer_state.reset)
 
 screen venue_screen():
+    add "background 2"
     # Buttons to transition to the bracket and setups screens
     textbutton "{color=#000000}Bracket{/color}":
         style "bracket_button"
@@ -672,10 +673,16 @@ label start:
     scene black with fade
     e "Welcome to the TO's Chair. Since Reggie is off promoting Mario Kart 14, you're in charge of the bracket."
     e "Here is how a Smash Tournament works:"
+    show screen venue_screen with dissolve
+    e "From the {b}Venue{/b}, you'll access the core of the tournament."
+    e "The buttons on the right allow you to jump between the {b}Bracket{/b} and the {b}Setups{/b}."
+    hide screen venue_screen
+    show screen setups_screen with dissolve
     e "{b}Assigning Setups{/b}: When players approach you to start a set, you'll need to find them an open setup in the room."
     e "A 'setup' is just a TV and a console ready for a match."
-    show background 2 with dissolve
-    e "From the main screen, you'll be able to access the bracket and setup screens with the corresponding buttons."
+    e "Notice how the setups have players playing already. During the tournament, you'll need to assign players to open setups so that players can start their sets."
+    e "You can navigate back to the venue or to the bracket with the buttons on this screen as well"
+    hide screen setups_screen with dissolve
     e "{b}Double Elimination{/b}: Most Smash events are 'Double Elimination'. Lose once, and you go to the Losers Bracket. Lose twice, and you're out! In a tournament bracket, it'll look like this."
     show bracketTemplate at truecenter with dissolve
     e "{b}The Bracket{/b}: This is the map of the tournament. This will be shown at appropriate times throoughout the game, and those white boxes will be filled in with players' names."
@@ -685,7 +692,7 @@ label start:
     e "{b}Reporting Scores{/b}: When a set finishes, a player will come to you with their score." 
     e "You'll use this screen to input the games won by each player. Accuracy is key!"
     hide match_report with dissolve
-    e "{b}Your Goal{/b}: Keep the tournament moving! If a set is ready to be played, make sure the players find a station."
+    e "{b}Your Goal{/b}: Keep the tournament moving! If a set is ready to be played, make sure the players find a setup."
     m "Okay... bracket, scores, winners, losers. I think I've got the hang of it."
 
     scene background 2 with fade
