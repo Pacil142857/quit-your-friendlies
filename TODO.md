@@ -16,3 +16,4 @@
 [ ] Add music
 [ ] Add ability to tell people to quit playing friendlies
 [ ] Remove save, load, and history functionality
+[ ] Have an indicator for when the player can continue after calling a set
