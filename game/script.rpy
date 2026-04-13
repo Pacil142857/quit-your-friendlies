@@ -1,11 +1,11 @@
 ﻿# The script of the game goes in this file.
 image reggie = "images/reggie.png"
+image bracketTemplate = "images/bracketTemplate.png"
 # Characters
 define n = Character(None) # Narrator
 define e = Character(None, what_italic=True, what_color="#58eafd") # Special events. Emphasis.
 define m = Character("Me")
 define r = Character(name="Reggie", color="#32f35c")
-# TODO: Replace these names with the real names of the players. I forgot what their real tags are.
 define p1 = Character(name="red dot", color="#ffe449")
 define p2 = Character(name="SaggyMilkJug", color="#c7ffcf")
 define p3 = Character(name="colorfulʚɞ", color="#ee89e0")
@@ -294,13 +294,14 @@ screen bracket_screen():
     # For a sample 8-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-44/event/ultimate-singles/brackets/1940157/2849091
     # This will be an 8-person bracket screen
 
-    add Solid("#000000")
+    # add Solid("#000000")
+    add "bracketTemplate"
 
     # Winners Round 1
     for i, match in enumerate(wr1):
-        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
-            pos (65, 20 + (130 * i))
+            pos (87, 115 + (115 * i) + (i * 3))
 
             if match.is_callable():
                 action [
@@ -312,11 +313,11 @@ screen bracket_screen():
     
     # Winners Round 2
     for i, match in enumerate(wr2):
-        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             # Y-position: Y-padding + Half the height of a set button + Half the height between set buttons
             # + (Height of set button + height between set buttons) * 2 * i
-            pos (65 + (315 * 1), 20 + (90 // 2) + ((130 - 90) // 2) + (130 * 2 * i))
+            pos (75 + (315 * 1), 100 + (90 // 2) + ((130 - 90) // 2) + (120 * 2 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
@@ -327,9 +328,9 @@ screen bracket_screen():
     
     # Winners Finals
     for i, match in enumerate(wf):
-        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
-            pos (65 + (315 * 2), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 4 * i))
+            pos (45 + (315 * 2), 90 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 4 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
@@ -338,11 +339,11 @@ screen bracket_screen():
                 ]
     
     
-    # Grand Finals
+    # Winners Finals
     for i, match in enumerate(gf):
-        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
-            pos (65 + (315 * 3), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 8 * i))
+            pos (10 + (315 * 3), 90 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 8 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
@@ -351,11 +352,11 @@ screen bracket_screen():
                 ]
     
     
-    # True Finals
+    # Grand Finals (no grand finals reset currently)
     for i, match in enumerate(tf):
-        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
-            pos (65 + (315 * 4), 20 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 16 * i))
+            pos (-20 + (315 * 4), 90 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 16 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
@@ -366,9 +367,9 @@ screen bracket_screen():
     
     # Losers Round 1
     for i, match in enumerate(lr1):
-        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
-            pos (65, 20 + 60 + (130 * len(wr1)) + (130 * i))
+            pos (95, 50 + 60 + (130 * len(wr1)) + (120 * i))
 
             if match.is_callable():
                 action [
@@ -379,9 +380,9 @@ screen bracket_screen():
     
     # Losers Round 2
     for i, match in enumerate(lr2):
-        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
-            pos (65 + (315 * 1), 20 + 60 + (130 * len(wr1)) + (130 * i))
+            pos (75 + (315 * 1), 50 + 60 + (130 * len(wr1)) + (120 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
@@ -392,9 +393,9 @@ screen bracket_screen():
     
     # Losers Round 3
     for i, match in enumerate(lr3):
-        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
-            pos (65 + (315 * 2), 20 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
+            pos (45 + (315 * 2), 50 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
@@ -405,9 +406,9 @@ screen bracket_screen():
     
     # Losers Finals
     for i, match in enumerate(lf):
-        textbutton "{size=26}{color=#000000}[match.get_p1_name()]\n{size=18}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
             style "set_button"
-            pos (65 + (315 * 3), 20 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
+            pos (5 + (315 * 3), 50 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
@@ -610,8 +611,9 @@ label start:
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
     $ a_correct_gamecount = 1
     $ b_correct_gamecount = 2
+    hide screen room_screen
+    hide p2 onlayer screens
     call screen bracket_screen
-    # call screen match_report_screen("player_2", "player_3")
     $ results = _return
     if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p2:
         scene background 4
@@ -620,7 +622,7 @@ label start:
         scene background 4
         f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
-    hide p2
+    # hide p2
     show screen room_screen_with_button
     
     return
