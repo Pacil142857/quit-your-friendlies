@@ -287,6 +287,7 @@ screen timer_screen(timer_state, show_controls=False, on_expire=None, xalign=0.5
                         action Function(timer_state.reset)
 
 screen venue_screen():
+    add "background 2"
     # Buttons to transition to the bracket and setups screens
     textbutton "{color=#000000}Bracket{/color}":
         style "bracket_button"
@@ -724,13 +725,20 @@ label start:
     with hpunch
     m "Everyone, quit your friendlies!"
 
-    # TODO: Tutorial text. Tell the players how the game works
+    # Tutorial
     scene black with fade
-    
     e "Welcome to the TO's Chair. Since Reggie is off promoting Mario Kart 14, you're in charge of the bracket."
     e "Here is how a Smash Tournament works:"
+    show screen venue_screen with dissolve
+    e "From the {b}Venue{/b}, you'll access the core of the tournament."
+    e "The buttons on the right allow you to jump between the {b}Bracket{/b} and the {b}Setups{/b}."
+    hide screen venue_screen
+    show screen setups_screen with dissolve
     e "{b}Assigning Setups{/b}: When players approach you to start a set, you'll need to find them an open setup in the room."
     e "A 'setup' is just a TV and a console ready for a match."
+    e "Notice how the setups have players playing already. During the tournament, you'll need to assign players to open setups so that players can start their sets."
+    e "You can navigate back to the venue or to the bracket with the buttons on this screen as well"
+    hide screen setups_screen with dissolve
     e "{b}Double Elimination{/b}: Most Smash events are 'Double Elimination'. Lose once, and you go to the Losers Bracket. Lose twice, and you're out! In a tournament bracket, it'll look like this."
     show bracketTemplate at truecenter with dissolve
     e "{b}The Bracket{/b}: This is the map of the tournament. This will be shown at appropriate times throoughout the game, and those white boxes will be filled in with players' names."
@@ -740,31 +748,23 @@ label start:
     e "{b}Reporting Scores{/b}: When a set finishes, a player will come to you with their score." 
     e "You'll use this screen to input the games won by each player. Accuracy is key!"
     hide match_report with dissolve
-    e "{b}Your Goal{/b}: Keep the tournament moving! If a set is ready to be played, make sure the players find a station."
+    e "{b}Your Goal{/b}: Keep the tournament moving! If a set is ready to be played, make sure the players find a setup."
     m "Okay... bracket, scores, winners, losers. I think I've got the hang of it."
 
-    # Return to the venue
     scene background 2 with fade
-    show screen room_screen_with_button 
-
-    # Return to the venue
-    scene background 2 with fade
-    show screen room_screen_with_button
-
-    hide background 2
-    show screen room_screen_with_button
+    
+    n "The room is buzzing with energy. It's time to get this bracket moving."
+    n "I should check the bracket and see which sets are ready to be played."
 
     # TODO: Show the bracket and have the player choose 2-3 1st round matches to start
-
-    hide screen room_screen_with_button
-    show screen room_screen
     
     n "Oh! It looks like someone's finished playing their set."
     # TODO: For now, this is just a random player. In the finished game, make sure the player shown is someone who was actually playing a set
     show p2 at left onlayer screens
     p2 "Hello, I beat [p1.name] 2-1. They got DESTROYED hahaha."
-    n "Okay, I'll have to input that into the bracket"
+    m "Okay, I'll have to input that into the bracket"
 
+    # 1st set report (winners round 1, SaggyMilkJug)
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
     $ a_correct_gamecount = 1
     $ b_correct_gamecount = 2
@@ -782,5 +782,51 @@ label start:
 
     # hide p2
     show screen room_screen_with_button
+
+    # 2nd set report (winners round 1, colorful)
+    show p3 at left onlayer screens
+    p2 "Hey, I beat BlueLine 2-0. Cloud BUSTED."
+    m "Sounds good! I'll input that for you"
+
+    # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
+    $ a_correct_gamecount = 2
+    $ b_correct_gamecount = 0
+    hide screen room_screen
+    hide p3 onlayer screens
+    call screen bracket_screen
+    $ results = _return
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p3:
+        scene background 4
+        s "Success! The score was recorded correctly." 
+    else:
+        scene background 4
+        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
+
+    # 3rd set report (losers round 1, red dot)
+    show p1 angry at right onlayer screens
+    p1 "{cps=50}Dang ZSS is so busted with her frame 1 jab, she gets away with WAY TOO MUCH{nw}{/cps}"
+    p1 "{cps=60}And don't get me even started on flip kick having invulnerability. I don't know who's idea it was to add that {nw}{/cps}"
+    p1 "{cps=70}I can't stand this stupid character, WE NEED TO BAN HER IMMEDIATELY AND GET RID OF ALL ZSS PLAYERS AT THIS TOURNAMENT {nw}{/cps}"
+    m "{cps=2}.  .  .  {nw}{/cps}"
+    n "What's this guy's problem? He must've lost pretty badly I suppose."
+    m "Uh... alright. What was the score for your set?"
+    hide p1 angry onlayer screens
+    show p1 happy at right onlayer screens
+    p1 "Oh! I won 2-0."
+    n "I can't believe it. I've never met such a sore winner before."
+    m "Okay, I'll put that in for you"
+
+    $ a_correct_gamecount = 0
+    $ b_correct_gamecount = 2
+    hide screen room_screen
+    hide p3 onlayer screens
+    call screen bracket_screen
+    $ results = _return
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p1:
+        scene background 4
+        s "Success! The score was recorded correctly." 
+    else:
+        scene background 4
+        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
     
     return
