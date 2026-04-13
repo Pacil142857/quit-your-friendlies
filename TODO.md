@@ -15,3 +15,4 @@
 [ ] Have failure messages that are explanatory and diegetic
 [ ] Add music
 [ ] Add ability to tell people to quit playing friendlies
+[ ] Remove save, load, and history functionality
