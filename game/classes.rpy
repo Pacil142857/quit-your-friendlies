@@ -1,4 +1,78 @@
 init python:
+    class PlayerPicture:
+        def __init__(self, player=None, picture_name=None):
+            self.player = player
+            self.picture_name = picture_name
+        
+        def get_player(self):
+            return self.player
+        
+        def get_player_name(self):
+            if self.player is None:
+                return ""
+            return self.player.name
+        
+        def get_picture_name(self):
+            if self.picture_name is None:
+                return "black"
+            return self.picture_name
+        
+        def set_player(self, player):
+            self.player = player
+
+    class Setup:
+        def __init__(self, setup_number, *players):
+            # `players` should be None or a list of two PlayerPictures
+            self.setup_number = setup_number
+
+            if len(players) > 0:
+                self.p1 = players[0]
+                self.p2 = players[1]
+            else:
+                self.p1 = PlayerPicture()
+                self.p2 = PlayerPicture()
+        
+        def set_p1(self, p1):
+            self.p1 = p1
+        
+        def set_p2(self, p2):
+            self.p2 = p2
+
+        def set_players(self, p1, p2):
+            self.set_p1(p1)
+            self.set_p2(p2)
+
+        def clear_setup(self):
+            self.set_p1(PlayerPicture())
+            self.set_p2(PlayerPicture())
+        
+        def set_setup_number(self, setup_number):
+            self.setup_number = setup_number
+        
+        def get_setup_number(self):
+            return self.setup_number
+        
+        def get_p1(self):
+            return self.p1.get_player()
+        
+        def get_p2(self):
+            return self.p2.get_player()
+        
+        def get_p1_name(self):
+            return self.p1.get_player_name()
+        
+        def get_p2_name(self):
+            return self.p2.get_player_name()
+        
+        def get_p1_picture(self):
+            return self.p1.get_picture_name()
+        
+        def get_p2_picture(self):
+            return self.p2.get_picture_name()
+        
+        def get_player_names_and_pictures(self):
+            return ((self.get_p1_name(), self.get_p1_picture()), (self.get_p2_name(), self.get_p2_picture()))
+
     class BracketSet:
         def __init__(self, *players):
             # P1 and P2 should be Character objects
