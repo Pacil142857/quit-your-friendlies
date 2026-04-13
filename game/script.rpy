@@ -19,6 +19,8 @@ define p8 = Character(name="Pacil", color="#9cffbb") # Currently does not have a
 define s = Character(None, what_italic=True, what_color="#0cff20")
 define f = Character(None, what_italic=True, what_color="#ff0c0c")
 
+# Setups
+define setups = [Setup(1), Setup(2), Setup(3), Setup(4)]
 
 # Make bracket
 define wr1 = [BracketSet(p1, p2), BracketSet(p3, p4), BracketSet(p5, p6), BracketSet(p7, p8)] # winners round 1
@@ -85,6 +87,10 @@ style submit_result_button_text:
     align (0.5, 0.5)
     color "#000000"
     hover_color "#ffffff"
+
+style setup_box is frame:
+    background Frame(Solid("#ffffff"), 0, 0)
+    padding (10, 0)
 
 # Speech bubble styles
 style speech_bubble is frame:
@@ -231,6 +237,56 @@ screen timer_screen(timer_state, show_controls=False, on_expire=None, xalign=0.5
                     textbutton "Reset":
                         style "timer_control_button"
                         action Function(timer_state.reset)
+
+screen setup_screen():
+    add Solid("#000000")
+
+    # The setups and players
+    $ alignments = [(0.15, 0.1), (0.85, 0.1), (0.15, 0.9), (0.85, 0.9)]
+    for i in range(4):
+        $ setup = setups[i]
+        $ alignment = alignments[i]
+
+        hbox:
+            align alignment
+            if i % 2 == 0:
+                # Box that says "Setup X"
+                frame:
+                    style "setup_box"
+                    vbox:
+                        xsize 150
+                        ysize 400
+                        text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
+                            xalign 0.5
+                            yalign 0.5
+                vbox:
+                    xsize 150
+                    ysize 400
+                    for name, picture in setup.get_player_names_and_pictures():
+                        add picture:
+                            xalign 0.5
+                            xysize (150, 150)
+                        text "{color=#ffffff}[name]{/color}":
+                            xalign 0.5
+            else:
+                vbox:
+                    xsize 150
+                    ysize 400
+                    for name, picture in setup.get_player_names_and_pictures():
+                        add picture:
+                            xalign 0.5
+                            xysize (150, 150)
+                        text "{color=#ffffff}[name]{/color}":
+                            xalign 0.5
+                frame:
+                    style "setup_box"
+                    vbox:
+                        xsize 150
+                        ysize 400
+                        text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
+                            xalign 0.5
+                            yalign 0.5
+
 
 screen bracket_screen():
     # Set buttons should be (315, 130) pixels away from each other
@@ -472,6 +528,11 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
 
 label start:
     # call screen bracket_screen
+    $ setups[0].set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p2, "p2 cropped"))
+    $ setups[1].set_players(PlayerPicture(p3, "p3 cropped"), PlayerPicture(p4, "p4 cropped"))
+    $ setups[2].set_players(PlayerPicture(p5, "p5 cropped"), PlayerPicture(p6, "p6 cropped"))
+    $ setups[3].set_players(PlayerPicture(p7, "p7 cropped"), PlayerPicture(p8, "p8 cropped"))
+    call screen setup_screen
  
     # Previous code
     # scene black
