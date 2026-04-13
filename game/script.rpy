@@ -15,6 +15,9 @@ define p6 = Character(name="Kitsch", color="#5ddbf1")
 define p7 = Character(name="Ford", color="#f89451")
 define p8 = Character(name="Pacil", color="#9cffbb") # Currently does not have an image
 
+# Give each character a profile picture
+define player_pictures = {p1: "p1 cropped", p2: "p2 cropped", p3: "p3 cropped", p4: "p4 cropped", p5: "p5 cropped", p6: "p6 cropped", p7: "p7 cropped", p8: "p8 cropped"}
+
 # Success and failure "characters"
 define s = Character(None, what_italic=True, what_color="#0cff20")
 define f = Character(None, what_italic=True, what_color="#ff0c0c")
@@ -35,23 +38,32 @@ define tf = [BracketSet()] # true finals / grand finals reset
 
 
 # Style vars
-style venue_button:
+style venue_button is button:
     idle_background Frame(Solid("#9dddf3"), 4, 4)
     hover_background Frame(Solid("#5db2ce"), 4, 4)
     padding (30, 30)
     background Frame(Solid("#9dddf3"), 4, 4)
 
-style setups_button:
+style venue_button_text:
+    align (0.5, 0.5)
+
+style setups_button is button:
     idle_background Frame(Solid("#ddf39d"), 4, 4)
     hover_background Frame(Solid("#b2ce5d"), 4, 4)
     padding (30, 30)
     background Frame(Solid("#ddf39d"), 4, 4)
 
-style bracket_button:
+style setups_button_text:
+    align (0.5, 0.5)
+
+style bracket_button is button:
     idle_background Frame(Solid("#f39ddd"), 4, 4)
     hover_background Frame(Solid("#ce5db2"), 4, 4)
     padding (30, 30)
     background Frame(Solid("#f39ddd"), 4, 4)
+
+style bracket_button_text:
+    align (0.5, 0.5)
 
 style blue_button is button:
     idle_background Frame(Solid("#9dddf3"), 4, 4)
@@ -104,6 +116,25 @@ style submit_result_button_text:
     align (0.5, 0.5)
     color "#000000"
     hover_color "#ffffff"
+
+style start_set_button is button:
+    xysize(700, 70)
+    background Frame(Solid("#3870e0"))
+    hover_background Frame(Solid("#3366cd"))
+    align (0.5, 0.5)
+
+style start_set_button_text:
+    align (0.5, 0.5)
+    color "#ffffff"
+
+style start_set_button_disabled is button:
+    xysize(700, 70)
+    background Frame(Solid("#cecece"))
+    align (0.5, 0.5)
+
+style start_set_button_disabled_text:
+    align (0.5, 0.5)
+    color "#ffffff"
 
 style setup_box is frame:
     background Frame(Solid("#ffffff"), 0, 0)
@@ -267,7 +298,7 @@ screen venue_screen():
             Show("bracket_screen"),
             Hide("venue_screen")
         ]
-    textbutton "{color=#000000} Setups {/color}":
+    textbutton "{color=#000000}Setups{/color}":
         style "setups_button"
         align (0.95, 0.95)
         text_align 1.0
@@ -282,7 +313,7 @@ screen setups_screen():
     add Solid("#000000")
 
     # Buttons to transition to the venue and bracket screens
-    textbutton "{color=#000000} Venue {/color}":
+    textbutton "{color=#000000}Venue{/color}":
         style "venue_button"
         align (0.95, 0.825)
         text_align 1.0
@@ -359,7 +390,7 @@ screen bracket_screen():
     add "bracketTemplate"
 
     # Buttons to transition to the venue and setups screens
-    textbutton "{color=#000000} Venue {/color}":
+    textbutton "{color=#000000}Venue{/color}":
         style "venue_button"
         align (0.95, 0.825)
         text_align 0.5
@@ -369,7 +400,7 @@ screen bracket_screen():
             Hide("bracket_screen"),
             Show("venue_screen")
         ]
-    textbutton "{color=#000000} Setups {/color}":
+    textbutton "{color=#000000}Setups{/color}":
         style "setups_button"
         align (0.95, 0.95)
         text_align 0.5
@@ -543,6 +574,30 @@ screen match_report_screen(player_a, player_b, advancement_data):
                         SetVariable("b_selected_gamecount", cur),
                     ]
 
+    # Start a set button
+    # Once started, a set cannot be stopped
+    if find_setup(setups, player_a, player_b) is not None:
+        textbutton "{color=#ffffff}Match Started{/color}":
+            align(0.5, 0.75)
+            style "start_set_button_disabled"
+    elif find_open_setup(setups) is not None:
+        textbutton "{color=#ffffff}Start Match{/color}":
+            align(0.5, 0.75)        
+            style "start_set_button"
+            action [
+                Function(call_set, setups=setups, p1=PlayerPicture(player_a, player_pictures[player_a]), p2=PlayerPicture(player_b, player_pictures[player_b])),
+                SetVariable("player_a_active_button", None),
+                SetVariable("player_b_active_button", None),
+                SetVariable("a_selected_gamecount", None),
+                SetVariable("b_selected_gamecount", None),
+                Show("bracket_screen"),
+                Hide("match_report_screen")
+            ]
+    else:
+        textbutton "{color=#ffffff}Cannot Start Match{/color}":
+            align(0.5, 0.75)
+            style "start_set_button_disabled"
+
     # Back button
     textbutton "Go Back":
         style "submit_result_button" # it looks the same anyway
@@ -565,6 +620,7 @@ screen match_report_screen(player_a, player_b, advancement_data):
             SetVariable("player_b_active_button", None),
             SetVariable("a_selected_gamecount", None),
             SetVariable("b_selected_gamecount", None),
+            Function(clear_setup, setups=setups, p1=player_a, p2=player_b),
             Function(advance_in_bracket, player=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
             Function(send_to_losers, player=determine_loser(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
             Return((a_selected_gamecount, b_selected_gamecount, determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount))),
@@ -605,10 +661,10 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
 
 label start:
     # call screen bracket_screen
-    $ setups[0].set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p2, "p2 cropped"))
-    $ setups[1].set_players(PlayerPicture(p3, "p3 cropped"), PlayerPicture(p4, "p4 cropped"))
-    $ setups[2].set_players(PlayerPicture(p5, "p5 cropped"), PlayerPicture(p6, "p6 cropped"))
-    $ setups[3].set_players(PlayerPicture(p7, "p7 cropped"), PlayerPicture(p8, "p8 cropped"))
+    # $ setups[0].set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p2, "p2 cropped"))
+    # $ setups[1].set_players(PlayerPicture(p3, "p3 cropped"), PlayerPicture(p4, "p4 cropped"))
+    # $ setups[2].set_players(PlayerPicture(p5, "p5 cropped"), PlayerPicture(p6, "p6 cropped"))
+    # $ setups[3].set_players(PlayerPicture(p7, "p7 cropped"), PlayerPicture(p8, "p8 cropped"))
     # call screen setups_screen
  
     # Previous code

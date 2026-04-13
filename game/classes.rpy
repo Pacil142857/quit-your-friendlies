@@ -19,6 +19,9 @@ init python:
         
         def set_player(self, player):
             self.player = player
+        
+        def is_none(self):
+            return self.player is None or self.picture_name is None
 
     class Setup:
         def __init__(self, setup_number, *players):
@@ -72,6 +75,36 @@ init python:
         
         def get_player_names_and_pictures(self):
             return ((self.get_p1_name(), self.get_p1_picture()), (self.get_p2_name(), self.get_p2_picture()))
+        
+        def is_free(self):
+            return self.p1.is_none() and self.p2.is_none()
+
+    def find_open_setup(setups):
+        for setup in setups:
+            if setup.is_free():
+                return setup
+        return None
+
+    def call_set(setups, p1, p2):
+        # p1 and p2 should be PlayerPicture objects!
+        setup = find_open_setup(setups)
+        if setup is None:
+            return None # No open setups
+        setup.set_players(p1, p2)
+        return None
+
+    def find_setup(setups, p1, p2):
+        for setup in setups:
+            if (setup.get_p1() == p1 and setup.get_p2() == p2) or (setup.get_p1() == p2 and setup.get_p2() == p1):
+                return setup
+        return None
+    
+    def clear_setup(setups, p1, p2):
+        setup = find_setup(setups, p1, p2)
+        if setup is not None:
+            setup.clear_setup()
+            return None
+        return None
 
     class BracketSet:
         def __init__(self, *players):

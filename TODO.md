@@ -1,11 +1,11 @@
 # TODO.md
 
 ## Immediate Tasks
-[ ] Add functionality for starting/calling sets
-[ ] Add a screen for looking at the setups
-[ ] Add functionality for switching between the venue, setups, and bracket screens
+[x] Add functionality for starting/calling sets
+[x] Add a screen for looking at the setups
+[x] Add functionality for switching between the venue, setups, and bracket screens
 [ ] Extend the script to include more sets
-[ ] Make a background for the bracket screen
+[x] Make a background for the bracket screen
 [ ] Make the tutorial
 [ ] Playtest the game
 [ ] Have the winner and loser of a set be color coded (green and red)
