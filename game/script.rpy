@@ -312,6 +312,7 @@ screen venue_screen():
 
 screen setups_screen():
     add Solid("#000000")
+    key "mouseup_1" action NullAction()
 
     # Buttons to transition to the venue and bracket screens
     textbutton "{color=#000000}Venue{/color}":
@@ -389,6 +390,7 @@ screen bracket_screen():
     # This will be an 8-person bracket screen
 
     add "bracketTemplate"
+    key "mouseup_1" action NullAction()
 
     # Buttons to transition to the venue and setups screens
     textbutton "{color=#000000}Venue{/color}":
@@ -533,6 +535,7 @@ screen bracket_screen():
 
 # Screen for reporting the matches. Pass the players as arguments
 screen match_report_screen(player_a, player_b, advancement_data):
+    key "mouseup_1" action NullAction()
     add "match_report":
         align(0.5, 0.5)
 
@@ -656,8 +659,6 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
         style "blue_button"
         action [Hide("post_match_report_screen"), Show("room_screen_with_button")]
 
-
-
 # The game starts here.
 
 label start:
@@ -702,7 +703,13 @@ label start:
     r "Hello! It's me, Reggie Fils-Aimé, former CEO of Nintendo, and also the tournament organizer of this competition, or TO for short."
     r "Thanks for showing up, we're going to make this the greatest tournament ever held for this children's party game."
     r "Hopefully you came prepared, as today's performance will determine the future of your gaming career."
-    r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your fr-"
+    r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your friendlies!"
+    r "I'm gonna have [p1.name] and [p2.name] on setup 1, [p3.name] and [p4.name] on setup 2,..."
+    r "...[p5.name] and [p6.name] on setup 3, and [p7.name] and [p8.name] on setup 4. Okay everyone, good luck and have f—"
+    $ call_set(setups, PlayerPicture(p1, player_pictures[p1]), PlayerPicture(p2, player_pictures[p2]))
+    $ call_set(setups, PlayerPicture(p3, player_pictures[p3]), PlayerPicture(p4, player_pictures[p4]))
+    $ call_set(setups, PlayerPicture(p5, player_pictures[p5]), PlayerPicture(p6, player_pictures[p6]))
+    $ call_set(setups, PlayerPicture(p7, player_pictures[p7]), PlayerPicture(p8, player_pictures[p8]))
     hide reggie
     # TODO: Play phone ringing noise
     e "{cps=5}Ring... Ring... Ring...{nw}{/cps}"
@@ -736,8 +743,8 @@ label start:
     show screen setups_screen with dissolve
     e "{b}Assigning Setups{/b}: When players approach you to start a set, you'll need to find them an open setup in the room."
     e "A 'setup' is just a TV and a console ready for a match."
-    e "Notice how the setups have players playing already. During the tournament, you'll need to assign players to open setups so that players can start their sets."
-    e "You can navigate back to the venue or to the bracket with the buttons on this screen as well"
+    e "You'll be able to see who is playing at what setup on this screen. During the tournament, you'll need to assign players to open setups so that players can start their sets."
+    e "You can start matches from the bracket screen by clicking on a set and then clicking the \"Start Match\" button."
     hide screen setups_screen with dissolve
     e "{b}Double Elimination{/b}: Most Smash events are 'Double Elimination'. Lose once, and you go to the Losers Bracket. Lose twice, and you're out! In a tournament bracket, it'll look like this."
     show bracketTemplate at truecenter with dissolve
@@ -747,6 +754,7 @@ label start:
     show match_report at truecenter with dissolve
     e "{b}Reporting Scores{/b}: When a set finishes, a player will come to you with their score." 
     e "You'll use this screen to input the games won by each player. Accuracy is key!"
+    e "This is also where you'll start sets."
     hide match_report with dissolve
     e "{b}Your Goal{/b}: Keep the tournament moving! If a set is ready to be played, make sure the players find a setup."
     m "Okay... bracket, scores, winners, losers. I think I've got the hang of it."
@@ -760,50 +768,48 @@ label start:
     
     n "Oh! It looks like someone's finished playing their set."
     # TODO: For now, this is just a random player. In the finished game, make sure the player shown is someone who was actually playing a set
-    show p2 at left onlayer screens
+    show p2 at left onlayer screens with dissolve
     p2 "Hello, I beat [p1.name] 2-1. They got DESTROYED hahaha."
-    m "Okay, I'll have to input that into the bracket"
+    m "Okay, I'll have to input that into the bracket."
 
     # 1st set report (winners round 1, SaggyMilkJug)
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
     $ a_correct_gamecount = 1
     $ b_correct_gamecount = 2
-    # hide screen room_screen
-    # hide p2 onlayer screens
-    # call screen bracket_screen
+    hide p2 onlayer screens with dissolve
     call screen venue_screen
     $ results = _return
     if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p2:
-        scene background 4
         s "Success! The score was recorded correctly." 
     else:
-        scene background 4
         f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
-    # hide p2
-    show screen room_screen_with_button
+    # show screen room_screen_with_button
 
     # 2nd set report (winners round 1, colorful)
-    show p3 at left onlayer screens
-    p2 "Hey, I beat BlueLine 2-0. Cloud BUSTED."
-    m "Sounds good! I'll input that for you"
+    show p3 at left onlayer screens with dissolve
+    p3 "Hey, I beat [p4.name] 2-0."
+    m "Sounds good! I'll input that for you now."
 
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
     $ a_correct_gamecount = 2
     $ b_correct_gamecount = 0
-    hide screen room_screen
-    hide p3 onlayer screens
-    call screen bracket_screen
+    # hide screen room_screen
+    hide p3 onlayer screens with dissolve
+    call screen venue_screen
     $ results = _return
     if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p3:
-        scene background 4
         s "Success! The score was recorded correctly." 
     else:
-        scene background 4
         f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
+    n "Two sets have just finished, which means that there's currently two empty setups."
+    show screen venue_screen
+    while find_setup(setups, p1, p4) is None:
+        n "I should see if I can call any sets to fill the setups."
     # 3rd set report (losers round 1, red dot)
-    show p1 angry at right onlayer screens
+    hide screen venue_screen
+    show p1 angry at left onlayer screens
     p1 "{cps=50}Dang ZSS is so busted with her frame 1 jab, she gets away with WAY TOO MUCH{nw}{/cps}"
     p1 "{cps=60}And don't get me even started on flip kick having invulnerability. I don't know who's idea it was to add that {nw}{/cps}"
     p1 "{cps=70}I can't stand this stupid character, WE NEED TO BAN HER IMMEDIATELY AND GET RID OF ALL ZSS PLAYERS AT THIS TOURNAMENT {nw}{/cps}"
@@ -811,22 +817,20 @@ label start:
     n "What's this guy's problem? He must've lost pretty badly I suppose."
     m "Uh... alright. What was the score for your set?"
     hide p1 angry onlayer screens
-    show p1 happy at right onlayer screens
+    show p1 happy at left onlayer screens
     p1 "Oh! I won 2-0."
     n "I can't believe it. I've never met such a sore winner before."
-    m "Okay, I'll put that in for you"
+    m "Okay; I'll put that in for you."
 
     $ a_correct_gamecount = 0
     $ b_correct_gamecount = 2
     hide screen room_screen
     hide p3 onlayer screens
-    call screen bracket_screen
+    call screen venue_screen
     $ results = _return
     if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p1:
-        scene background 4
         s "Success! The score was recorded correctly." 
     else:
-        scene background 4
         f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
     
     return
