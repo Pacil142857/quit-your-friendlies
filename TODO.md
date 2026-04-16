@@ -5,6 +5,7 @@
 [x] Add a screen for looking at the setups
 [x] Add functionality for switching between the venue, setups, and bracket screens
 [ ] Extend the script to include more sets
+    [ ] Subtask: fix the tournament_management_loop
 [x] Make a background for the bracket screen
 [x] Make the tutorial
 [ ] Playtest the game

@@ -807,8 +807,6 @@ label start:
     else:
         f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
-    # show screen room_screen_with_button
-
     # 2nd set report (winners round 1, colorful)
     show p3 at left onlayer screens with dissolve
     p3 "Hey, I beat [p4.name] 2-0."
@@ -817,7 +815,6 @@ label start:
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
     $ a_correct_gamecount = 2
     $ b_correct_gamecount = 0
-    # hide screen room_screen
     hide p3 onlayer screens with dissolve
     call screen venue_screen
     $ results = _return
@@ -832,21 +829,31 @@ label start:
 
     # Waiting for losers r1
     label wait_for_losers_match:
-    show screen venue_screen
-    n "I should see if I can call any sets to fill the setups"
+        show screen venue_screen
+        $ current_match = find_setup(setups, p1, p4)
+        if current_match is None:
+            n "I should see if I can call any sets to fill the setups."
+        else:
+            jump third_set_report
     
     # This pauses the script and lets the player use the UI
-    call screen bracket_screen 
+    # call screen bracket_screen 
 
     # Check if the match has been started yet
     $ current_match = find_setup(setups, p1, p4)
+
     if current_match is None:
         n "I still need to get that Losers match between [p1.name] and [p4.name] started."
         jump wait_for_losers_match
-    
+    else:
+        hide screen bracket_screen
+        jump third_set_report
+
+    label third_set_report:
     # 3rd set report (losers round 1, red dot)
-    hide screen venue_screen
+    show screen venue_screen
     show p1 angry at left onlayer screens
+    m "Oh, looks like another set has finished. I sure hope he's a normal and reasonable person."
     p1 "{cps=50}Dang ZSS is so busted with her frame 1 jab, she gets away with WAY TOO MUCH{nw}{/cps}"
     p1 "{cps=60}And don't get me even started on flip kick having invulnerability. I don't know who's idea it was to add that {nw}{/cps}"
     p1 "{cps=70}I can't stand this stupid character, WE NEED TO BAN HER IMMEDIATELY AND GET RID OF ALL ZSS PLAYERS AT THIS TOURNAMENT {nw}{/cps}"
@@ -862,12 +869,56 @@ label start:
     $ a_correct_gamecount = 0
     $ b_correct_gamecount = 2
     hide screen room_screen
-    hide p3 onlayer screens
+    
+    hide p1 happy onlayer screens
     call screen venue_screen
     $ results = _return
     if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p1:
         s "Success! The score was recorded correctly." 
     else:
         f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
+
+    
+    # This loop keeps the player managing sets until the Grand Finals are reported
+    label tournament_management_loop:
+        python:
+            # Find matches that are on a setup (currently playing)
+            active_setups = [s for s in setups if not s.is_free()]
+            
+        if active_setups:
+            # Randomly pick a player from an active setup to "approach" you
+            $ reporting_setup = renpy.random.choice(active_setups)
+            $ reporter = reporting_setup.p1.player
+            $ opponent = reporting_setup.p2.player
+            
+            show expression player_pictures[reporter] at left with dissolve
+            reporter "Hey TO! I just finished my set against [opponent.name]. I won 2-1!"
+            m "Got it. Let me put that in the bracket."
+            hide expression player_pictures[reporter] with dissolve
+
+        if tf[0].winner is None:
+            n "I should check the bracket and see what sets are ready to be called or reported."
+            call screen venue_screen 
+            
+            # Catch any manual reports or starts
+            $ results = _return
+            
+            jump tournament_management_loop
+        else:
+            jump tournament_conclusion
+
+label tournament_conclusion:
+    hide screen venue_screen
+    scene background 2 with fade
+    
+    $ champion = tf[0].winner.name
+    n "And that's it! [champion] is our tournament champion!" 
+    
+    m "I... I actually did it. I ran the whole bracket without Reggie."
+    
+    show reggie at right with moveinright
+    r "I'm back! And I brought Shaq!"
+    
+    n "To be continued..."
     
     return
