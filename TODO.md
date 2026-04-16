@@ -8,7 +8,7 @@
 [x] Make a background for the bracket screen
 [x] Make the tutorial
 [ ] Playtest the game
-[ ] Have the winner and loser of a set be color coded (green and red)
+[x] Have the winner and loser of a set be color coded (green and red)
 
 ## Long-Term Tasks
 [ ] Implement a time limit

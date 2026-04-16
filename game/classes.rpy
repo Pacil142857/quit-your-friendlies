@@ -122,12 +122,22 @@ init python:
             self.loser = None
         
         def report(self, winner):
-            if winner.name == p1.name:
-                self.winner = p1
-                self.loser = p2
+            if winner == self.p1:
+                self.winner = self.p1
+                self.loser = self.p2
             else:
-                self.winner = p2
-                self.loser = p1
+                self.winner = self.p2
+                self.loser = self.p1
+
+        # For winner=green, loser=red functionality
+        def get_player_color(self, player):
+            if self.winner is None:
+                return "#000000"
+            if player == self.winner:
+                return "#28ad33"
+            if player == self.loser:
+                return "#c72424"
+            return "#000000"
         
         def get_p1_name(self):
             if self.p1 is None:

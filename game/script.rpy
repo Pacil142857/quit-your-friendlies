@@ -420,21 +420,25 @@ screen bracket_screen():
     
     # Winners Round 1
     for i, match in enumerate(wr1):
-        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (87, 115 + (115 * i) + (i * 3))
 
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
-                    advancement_data=BracketAdvancementDataHolder(True, 1, i, wr2, lr1)),
+                    advancement_data=BracketAdvancementDataHolder(True, 1, i, wr2, lr1), current_match=match), 
                     Hide("bracket_screen")
                 ]
     
     
     # Winners Round 2
     for i, match in enumerate(wr2):
-        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             # Y-position: Y-padding + Half the height of a set button + Half the height between set buttons
             # + (Height of set button + height between set buttons) * 2 * i
@@ -442,103 +446,117 @@ screen bracket_screen():
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
-                    advancement_data=BracketAdvancementDataHolder(True, 2, i, wf, lr2)),
+                    advancement_data=BracketAdvancementDataHolder(True, 2, i, wf, lr2), current_match=match), 
                     Hide("bracket_screen")
                 ]
     
     
     # Winners Finals
     for i, match in enumerate(wf):
-        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (45 + (315 * 2), 90 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 4 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
-                    advancement_data=BracketAdvancementDataHolder(True, 3, i, gf, lf)),
+                    advancement_data=BracketAdvancementDataHolder(True, 3, i, gf, lf), current_match=match),
                     Hide("bracket_screen")
                 ]
     
     
-    # Winners Finals
+    # Grand Finals
     for i, match in enumerate(gf):
-        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (10 + (315 * 3), 90 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 8 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
-                    advancement_data=BracketAdvancementDataHolder(True, 4, i, tf, tf)),
+                    advancement_data=BracketAdvancementDataHolder(True, 4, i, tf, tf), current_match=match),
                     Hide("bracket_screen")
                 ]
     
     
-    # Grand Finals (no grand finals reset currently)
+    # True Finals
     for i, match in enumerate(tf):
-        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (-20 + (315 * 4), 90 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 16 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
-                    advancement_data=BracketAdvancementDataHolder(True, 5, i, None, None)),
+                    advancement_data=BracketAdvancementDataHolder(True, 5, i, None, None), current_match=match),
                     Hide("bracket_screen")
                 ]
     
     
     # Losers Round 1
     for i, match in enumerate(lr1):
-        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (95, 50 + 60 + (130 * len(wr1)) + (120 * i))
 
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
-                    advancement_data=BracketAdvancementDataHolder(False, 1, i, lr2, lr2)),
+                    advancement_data=BracketAdvancementDataHolder(False, 1, i, lr2, lr2), current_match=match),
                     Hide("bracket_screen")
                 ]
     
     # Losers Round 2
     for i, match in enumerate(lr2):
-        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (75 + (315 * 1), 50 + 60 + (130 * len(wr1)) + (120 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
-                    advancement_data=BracketAdvancementDataHolder(False, 2, i, lr3, lr3)),
+                    advancement_data=BracketAdvancementDataHolder(False, 2, i, lr3, lr3), current_match=match),
                     Hide("bracket_screen")
                 ]
     
     
     # Losers Round 3
     for i, match in enumerate(lr3):
-        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (45 + (315 * 2), 50 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
-                    advancement_data=BracketAdvancementDataHolder(False, 3, i, lf, lf)),
+                    advancement_data=BracketAdvancementDataHolder(False, 3, i, lf, lf), current_match=match),
                     Hide("bracket_screen")
                 ]
     
     
     # Losers Finals
     for i, match in enumerate(lf):
-        textbutton "{size=23}{color=#000000}[match.get_p1_name()]\n{size=15}vs.{/size}\n[match.get_p2_name()]{/color}{/size}":
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
             style "set_button"
             pos (5 + (315 * 3), 50 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
             if match.is_callable():
                 action [
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
-                    advancement_data=BracketAdvancementDataHolder(False, 4, i, gf, gf)),
+                    advancement_data=BracketAdvancementDataHolder(False, 4, i, gf, gf), current_match=match),
                     Hide("bracket_screen")
                 ]
 
 # Screen for reporting the matches. Pass the players as arguments
-screen match_report_screen(player_a, player_b, advancement_data):
+screen match_report_screen(player_a, player_b, advancement_data, current_match):
     key "mouseup_1" action NullAction()
     add "match_report":
         align(0.5, 0.5)
@@ -630,6 +648,8 @@ screen match_report_screen(player_a, player_b, advancement_data):
             SetVariable("player_b_active_button", None),
             SetVariable("a_selected_gamecount", None),
             SetVariable("b_selected_gamecount", None),
+            Function(current_match.report, 
+                    winner=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount)),
             Function(clear_setup, setups=setups, p1=player_a, p2=player_b),
             Function(advance_in_bracket, player=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
             Function(send_to_losers, player=determine_loser(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
@@ -677,87 +697,86 @@ label start:
 
 
     # Script
-    n "Why did I come here again?"
-    n "I was just supposed to be playing Super Smash Bros, and I ended up getting roped into coming to a tournament."
-    scene background 2
-    n "My friends told me this would be fun, but I haven't seen much happen yet."
-    n "There's just a bunch of people playing and talking about things like \"frame data\" that I don't understand."
-    n "Where's the tournament organizer anyways? Aren't they supposed to be here by now?"
-    n "Wait, I feel like a new challenger is approaching..."
-    show expression Solid("#fff") as flash
-    with dissolve
-    pause 0.1
-    hide flash
-    with dissolve
-    show reggie at right with moveinright
-    with vpunch
-    r "My body is ready!"
-    r "Hello! It's me, Reggie Fils-Aimé, former CEO of Nintendo, and also the tournament organizer of this competition, or TO for short."
-    r "Thanks for showing up, we're going to make this the greatest tournament ever held for this children's party game."
-    r "Hopefully you came prepared, as today's performance will determine the future of your gaming career."
-    r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your friendlies!"
-    r "I'm gonna have [p1.name] and [p2.name] on setup 1, [p3.name] and [p4.name] on setup 2,..."
-    r "...[p5.name] and [p6.name] on setup 3, and [p7.name] and [p8.name] on setup 4. Okay everyone, good luck and have f—"
-    # REMOVED FOR NOW
-    # $ call_set(setups, PlayerPicture(p1, player_pictures[p1]), PlayerPicture(p2, player_pictures[p2]))
-    # $ call_set(setups, PlayerPicture(p3, player_pictures[p3]), PlayerPicture(p4, player_pictures[p4]))
-    # $ call_set(setups, PlayerPicture(p5, player_pictures[p5]), PlayerPicture(p6, player_pictures[p6]))
-    # $ call_set(setups, PlayerPicture(p7, player_pictures[p7]), PlayerPicture(p8, player_pictures[p8]))
-    hide reggie
-    # TODO: Play phone ringing noise
-    e "{cps=5}Ring... Ring... Ring...{nw}{/cps}"
-    show reggie at left with moveinleft
-    r "Hello? What's that, Mr. Sakurai? You need me back at Nintendo headquarters immediately in order to promote Mario Kart 14 featuring Shaquille O'Neal?"
-    r "Well I suppose that does sound pretty important. I'll be there right away!"
-    show reggie at center with move
-    r "It seems I've been called away on very important business. I'll have to have someone else run this tournament for me."
-    r "{cps=10}How about... you there?{/cps}"
-    with hpunch
-    m "Me?!"
-    m "No way, this is my first tournament and I don't even know how to-"
-    r "Perfect! I'm sure you'll do great. Ta-ta now!"
-    hide reggie with moveoutleft
+    # n "Why did I come here again?"
+    # n "I was just supposed to be playing Super Smash Bros, and I ended up getting roped into coming to a tournament."
+    # scene background 2
+    # n "My friends told me this would be fun, but I haven't seen much happen yet."
+    # n "There's just a bunch of people playing and talking about things like \"frame data\" that I don't understand."
+    # n "Where's the tournament organizer anyways? Aren't they supposed to be here by now?"
+    # n "Wait, I feel like a new challenger is approaching..."
+    # show expression Solid("#fff") as flash
+    # with dissolve
+    # pause 0.1
+    # hide flash
+    # with dissolve
+    # show reggie at right with moveinright
+    # with vpunch
+    # r "My body is ready!"
+    # r "Hello! It's me, Reggie Fils-Aimé, former CEO of Nintendo, and also the tournament organizer of this competition, or TO for short."
+    # r "Thanks for showing up, we're going to make this the greatest tournament ever held for this children's party game."
+    # r "Hopefully you came prepared, as today's performance will determine the future of your gaming career."
+    # r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your friendlies!"
+    # r "I'm gonna have [p1.name] and [p2.name] on setup 1, [p3.name] and [p4.name] on setup 2,..."
+    # r "...[p5.name] and [p6.name] on setup 3, and [p7.name] and [p8.name] on setup 4. Okay everyone, good luck and have f—"
+    # # REMOVED FOR NOW
+    # # $ call_set(setups, PlayerPicture(p1, player_pictures[p1]), PlayerPicture(p2, player_pictures[p2]))
+    # # $ call_set(setups, PlayerPicture(p3, player_pictures[p3]), PlayerPicture(p4, player_pictures[p4]))
+    # # $ call_set(setups, PlayerPicture(p5, player_pictures[p5]), PlayerPicture(p6, player_pictures[p6]))
+    # # $ call_set(setups, PlayerPicture(p7, player_pictures[p7]), PlayerPicture(p8, player_pictures[p8]))
+    # hide reggie
+    # # TODO: Play phone ringing noise
+    # e "{cps=5}Ring... Ring... Ring...{nw}{/cps}"
+    # show reggie at left with moveinleft
+    # r "Hello? What's that, Mr. Sakurai? You need me back at Nintendo headquarters immediately in order to promote Mario Kart 14 featuring Shaquille O'Neal?"
+    # r "Well I suppose that does sound pretty important. I'll be there right away!"
+    # show reggie at center with move
+    # r "It seems I've been called away on very important business. I'll have to have someone else run this tournament for me."
+    # r "{cps=10}How about... you there?{/cps}"
+    # with hpunch
+    # m "Me?!"
+    # m "No way, this is my first tournament and I don't even know how to-"
+    # r "Perfect! I'm sure you'll do great. Ta-ta now!"
+    # hide reggie with moveoutleft
 
-    n "Good grief, how did I get myself into this situation?"
-    n "I could just leave, but that doesn't feel right. Didn't Reggie say that today would decide the future of my gaming career? That sounds pretty important."
-    n "I think I've seen one of my friends do something like this before. How hard could it be?"
-    n "Alright, I can make it through this. I can do this."
-    with hpunch
-    m "Everyone, quit your friendlies!"
+    # n "Good grief, how did I get myself into this situation?"
+    # n "I could just leave, but that doesn't feel right. Didn't Reggie say that today would decide the future of my gaming career? That sounds pretty important."
+    # n "I think I've seen one of my friends do something like this before. How hard could it be?"
+    # n "Alright, I can make it through this. I can do this."
+    # with hpunch
+    # m "Everyone, quit your friendlies!"
 
-    # Tutorial
-    scene black with fade
-    e "Welcome to the TO's Chair. Since Reggie is off promoting Mario Kart 14, you're in charge of the bracket."
-    e "Here is how a Smash Tournament works:"
-    show screen venue_screen with dissolve
-    e "From the {b}Venue{/b}, you'll access the core of the tournament."
-    e "The buttons on the right allow you to jump between the {b}Bracket{/b} and the {b}Setups{/b}."
-    hide screen venue_screen
-    show screen setups_screen with dissolve
-    e "{b}Assigning Setups{/b}: When players approach you to start a set, you'll need to find them an open setup in the room."
+    # # Tutorial
+    # scene black with fade
+    # e "Welcome to the TO's Chair. Since Reggie is off promoting Mario Kart 14, you're in charge of the bracket."
+    # e "Here is how a Smash Tournament works:"
+    # show screen venue_screen with dissolve
+    # e "From the {b}Venue{/b}, you'll access the core of the tournament."
+    # e "The buttons on the right allow you to jump between the {b}Bracket{/b} and the {b}Setups{/b}."
+    # hide screen venue_screen
+    # show screen setups_screen with dissolve
+    # e "{b}Assigning Setups{/b}: When players approach you to start a set, you'll need to find them an open setup in the room."
 
-    e "A 'setup' is just a TV and a console ready for a match."
-    e "You'll be able to see who is playing at what setup on this screen. During the tournament, you'll need to assign players to open setups so that players can start their sets."
-    e "You can start matches from the bracket screen by clicking on a set and then clicking the \"Start Match\" button."
-    hide screen setups_screen with dissolve
-    e "{b}Double Elimination{/b}: Most Smash events are 'Double Elimination'. Lose once, and you go to the Losers Bracket. Lose twice, and you're out! In a tournament bracket, it'll look like this."
-    show bracketTemplate at truecenter with dissolve
-    e "{b}The Bracket{/b}: This is the map of the tournament. This will be shown at appropriate times throoughout the game, and those white boxes will be filled in with players' names."
-    e "Players are paired in 'Sets'. Clicking a set button will let you report the outcome."
-    hide bracketTemplate with dissolve
-    show match_report at truecenter with dissolve
-    e "{b}Reporting Scores{/b}: When a set finishes, a player will come to you with their score." 
-    e "You'll use this screen to input the games won by each player. Accuracy is key!"
-    e "This is also where you'll start sets."
-    hide match_report with dissolve
-    e "{b}Your Goal{/b}: Keep the tournament moving! If a set is ready to be played, make sure the players find a setup."
-    m "Okay... bracket, scores, winners, losers. I think I've got the hang of it."
-    $ tutorial_active = False
+    # e "A 'setup' is just a TV and a console ready for a match."
+    # e "You'll be able to see who is playing at what setup on this screen. During the tournament, you'll need to assign players to open setups so that players can start their sets."
+    # e "You can start matches from the bracket screen by clicking on a set and then clicking the \"Start Match\" button."
+    # hide screen setups_screen with dissolve
+    # e "{b}Double Elimination{/b}: Most Smash events are 'Double Elimination'. Lose once, and you go to the Losers Bracket. Lose twice, and you're out! In a tournament bracket, it'll look like this."
+    # show bracketTemplate at truecenter with dissolve
+    # e "{b}The Bracket{/b}: This is the map of the tournament. This will be shown at appropriate times throoughout the game, and those white boxes will be filled in with players' names."
+    # e "Players are paired in 'Sets'. Clicking a set button will let you report the outcome."
+    # hide bracketTemplate with dissolve
+    # show match_report at truecenter with dissolve
+    # e "{b}Reporting Scores{/b}: When a set finishes, a player will come to you with their score." 
+    # e "You'll use this screen to input the games won by each player. Accuracy is key!"
+    # e "This is also where you'll start sets."
+    # hide match_report with dissolve
+    # e "{b}Your Goal{/b}: Keep the tournament moving! If a set is ready to be played, make sure the players find a setup."
+    # m "Okay... bracket, scores, winners, losers. I think I've got the hang of it."
+    # $ tutorial_active = False
+
     scene background 2 with fade
-    
     n "The room is buzzing with energy. It's time to get this bracket moving."
     n "I should check the bracket and see which sets are ready to be played."
-
     # Show the bracket and have the player choose 4 1st round matches to start
     python:
         # Reset the counter before starting this segment
@@ -838,7 +857,7 @@ label start:
     show p1 happy at left onlayer screens
     p1 "Oh! I won 2-0."
     n "I can't believe it. I've never met such a sore winner before."
-    m "Okay; I'll put that in for you."
+    m "Okay I'll put that in for you."
 
     $ a_correct_gamecount = 0
     $ b_correct_gamecount = 2
