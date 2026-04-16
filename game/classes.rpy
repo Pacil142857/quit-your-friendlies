@@ -93,12 +93,14 @@ init python:
         setup.set_players(p1, p2)
         return None
 
+    # Gets the setup p1 and p2 are playing on
     def find_setup(setups, p1, p2):
         for setup in setups:
             if (setup.get_p1() == p1 and setup.get_p2() == p2) or (setup.get_p1() == p2 and setup.get_p2() == p1):
                 return setup
         return None
     
+    # Frees hte setup that p1 and p2 are playing on
     def clear_setup(setups, p1, p2):
         setup = find_setup(setups, p1, p2)
         if setup is not None:
