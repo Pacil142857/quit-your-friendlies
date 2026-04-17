@@ -3,6 +3,7 @@ image reggie = "images/reggie.png"
 image bracketTemplate = "images/bracketTemplate.png"
 default tutorial_active = True
 default matches_started = 0
+default completed_sets = 0
 # Characters
 define n = Character(None) # Narrator
 define e = Character(None, what_italic=True, what_color="#58eafd") # Special events. Emphasis.
@@ -644,6 +645,7 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
         style "submit_result_button"
         align(0.87, 0.95)
         action [
+            SetVariable("completed_sets", completed_sets + 1), 
             SetVariable("player_a_active_button", None),
             SetVariable("player_b_active_button", None),
             SetVariable("a_selected_gamecount", None),
@@ -829,25 +831,16 @@ label start:
 
     # Waiting for losers r1
     label wait_for_losers_match:
-        show screen venue_screen
-        $ current_match = find_setup(setups, p1, p4)
-        if current_match is None:
-            n "I should see if I can call any sets to fill the setups."
-        else:
-            jump third_set_report
-    
-    # This pauses the script and lets the player use the UI
-    # call screen bracket_screen 
-
-    # Check if the match has been started yet
+    show screen venue_screen
     $ current_match = find_setup(setups, p1, p4)
-
-    if current_match is None:
-        n "I still need to get that Losers match between [p1.name] and [p4.name] started."
+    $ matches_started = 0
+    if (matches_started < 2) and ((find_setup(setups, p1, p4) is None) or (find_setup(setups, p2, p3) is None)):
+        n "I should see if I can call any sets to fill the setups."
         jump wait_for_losers_match
     else:
         hide screen bracket_screen
         jump third_set_report
+    
 
     label third_set_report:
     # 3rd set report (losers round 1, red dot)
@@ -878,47 +871,118 @@ label start:
     else:
         f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
-    
-    # This loop keeps the player managing sets until the Grand Finals are reported
-    label tournament_management_loop:
-        python:
-            # Find matches that are on a setup (currently playing)
-            active_setups = [s for s in setups if not s.is_free()]
-            
-        if active_setups:
-            # Randomly pick a player from an active setup to "approach" you
-            $ reporting_setup = renpy.random.choice(active_setups)
-            $ reporter = reporting_setup.p1.player
-            $ opponent = reporting_setup.p2.player
-            
-            show expression player_pictures[reporter] at left with dissolve
-            reporter "Hey TO! I just finished my set against [opponent.name]. I won 2-1!"
-            m "Got it. Let me put that in the bracket."
-            hide expression player_pictures[reporter] with dissolve
+    # Nyramyss vs Kitsch (wr1). Nyramyss wins
+    label nyramyss_kitsch:
+    n "Looks like that winners round 1 set has finally wrapped up."
+    show p5 at left onlayer screens with dissolve
+    p5 "Heyo, I lost 1-2 to [p6.name]"
+    m "Understood."
+    show screen venue_screen
+    $ a_correct_gamecount = 1
+    $ b_correct_gamecount = 2
+    hide p5 onlayer screens with dissolve
+    call screen venue_screen
+    $ results = _return
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p6:
+        s "Success! The score was recorded correctly." 
+    else:
+        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
-        if tf[0].winner is None:
-            n "I should check the bracket and see what sets are ready to be called or reported."
-            call screen venue_screen 
-            
-            # Catch any manual reports or starts
-            $ results = _return
-            
-            jump tournament_management_loop
-        else:
-            jump tournament_conclusion
+    # Ford vs Pacil (wr1). Pacil wins
+    label ford_pacil:
+    n "This looks like the last winners round 1 match being reported."
+    show p7 at left onlayer screens with dissolve
+    p7 "Heyo, I lost 1-2 to [p8.name]"
+    m "Understood."
+    show screen venue_screen
+    $ a_correct_gamecount = 1
+    $ b_correct_gamecount = 2
+    hide p7 onlayer screens with dissolve
+    call screen venue_screen
+    $ results = _return
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p8:
+        s "Success! The score was recorded correctly." 
+    else:
+        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set." 
 
-label tournament_conclusion:
-    hide screen venue_screen
-    scene background 2 with fade
+    # Prompt player to start another 2 sets (nyramyss vs pacil and kitsch vs ford). p5 vs p8, p6 vs p7
+    # TODO: Bug around here.
+    label wait_68_57:
+    show screen venue_screen
+    # $ current_match = find_setup(setups, p6, p8)
+    # $ matches_started = 0
+    n "Looks like there's some downtime to call another set. Let's see if anything can be started."
+    call screen venue_screen
+    if (find_setup(setups, p6, p8) is None or find_setup(setups, p7, p5) is None):
+        jump wait_68_57
+    else:
+        jump report_23
+
+    # Saggy vs colorful wr2. colorful wins 2-0. p2 vs p3. p3 wins 2-0
+    label report_23:
+    hide screen bracket_screen
+    show screen venue_screen
+    n "The first match of winners round 2 is being reported now."
+    show p3 at left onlayer screens with dissolve
+    p3 "Hi, I won 2-0 against [p2.name]"
+    m "Understood."
+    show screen venue_screen
+    $ a_correct_gamecount = 0
+    $ b_correct_gamecount = 2
+    hide p3 onlayer screens with dissolve
+    call screen venue_screen
+    $ results = _return
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p3:
+        s "Success! The score was recorded correctly." 
+    else:
+        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
+
+    # Nyramyss vs Ford Ford wins 2-1. p7 vs p5 p7 wins 2-1
+    label report_57:
+    hide screen bracket_screen
+    show screen venue_screen
+    n "A losers round 1 match is being reported."
+    show p7 at left onlayer screens with dissolve
+    p7 "Hi, I won 2-0 against [p5.name]"
+    m "Understood."
+    show screen venue_screen
+    $ a_correct_gamecount = 0
+    $ b_correct_gamecount = 2
+    hide p7 onlayer screens with dissolve
+    call screen venue_screen
+    $ results = _return
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p7:
+        s "Success! The score was recorded correctly." 
+    else:
+        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
+
+    # Prompt player to start saggy vs ford. p2 vs p7
+    show screen venue_screen
+    label wait_27:
+    $ current_match = find_setup(setups, p2, p7)
+    $ matches_started = 0
+    n "Looks like there's some downtime to call another set. Let's see if anything can be started."
+    call screen venue_screen
+    if (matches_started < 2) and current_match is None:
+        jump wait_27
+    else:
+        jump report_68
+
+    # Report Kitsch vs Pacil Kitsch wins 2-1. p6 vs p8 p6 wins 2-1.
+    label report_68:
+    n "The final winners round 2 match is being reported now."
+    show p6 at left onlayer screens with dissolve
+    p6 "Hi, I won 2-1 against [p8.name]"
+    m "Understood."
+    show screen venue_screen
+    $ a_correct_gamecount = 2
+    $ b_correct_gamecount = 1
+    hide p6 onlayer screens with dissolve
+    call screen venue_screen
+    $ results = _return
+    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p6:
+        s "Success! The score was recorded correctly." 
+    else:
+        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
     
-    $ champion = tf[0].winner.name
-    n "And that's it! [champion] is our tournament champion!" 
-    
-    m "I... I actually did it. I ran the whole bracket without Reggie."
-    
-    show reggie at right with moveinright
-    r "I'm back! And I brought Shaq!"
-    
-    n "To be continued..."
-    
-    return
+     
