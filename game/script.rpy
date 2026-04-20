@@ -833,7 +833,8 @@ label start:
     scene background 2 with fade
     n "The room is buzzing with energy. It's time to get this bracket moving."
     n "I should check the bracket and see which sets are ready to be played."
-    # Show the bracket and have the player choose 4 1st round matches to start
+    
+# Show the bracket and have the player choose 4 1st round matches to start
 label match_starting_loop:
     if matches_in_progress < 4:
         if matches_in_progress < 3:
@@ -871,7 +872,7 @@ label reporting_sets:
     show screen venue_screen
     n "I should see if I can call any sets to fill the setups."
 
-    # Waiting for losers r1
+# Waiting for losers r1
 label wait_for_losers_match:
     show screen venue_screen
     $ current_match = find_setup(setups, p1, p4)
