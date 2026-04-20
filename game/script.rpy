@@ -930,17 +930,19 @@ label ford_pacil:
     call screen venue_screen
 
 # Prompt player to start another 2 sets (nyramyss vs pacil and kitsch vs ford). p5 vs p8, p6 vs p7
-# TODO: Bug around here.
-label wait_68_57:
-    show screen venue_screen
-    # $ current_match = find_setup(setups, p6, p8)
-    # $ matches_started = 0
-    n "Looks like there's some downtime to call another set. Let's see if anything can be started."
-    call screen venue_screen
-    if (find_setup(setups, p6, p8) is None or find_setup(setups, p7, p5) is None):
-        jump wait_68_57
+label start_loop_68_57:
+    # Note: The numbers here are 3 and 2 instead of 4 and 3 because only THREE sets can be active right now!
+    # You'll have to change the numbers depending on how many sets can be called
+    if matches_in_progress < 3:
+        if matches_in_progress < 2:
+            n "I need to get at least [4 - matches_in_progress] more sets running."
+        else:
+            n "I need to get just one more set running."
+        call screen bracket_screen
+        # When the player clicks "Start Match", the screen returns here
+        jump start_loop_68_57
     else:
-        jump report_23
+        n "All of the setups are in use now."
 
 # Saggy vs colorful wr2. colorful wins 2-0. p2 vs p3. p3 wins 2-0
 label report_23:
