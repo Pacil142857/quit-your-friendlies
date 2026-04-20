@@ -913,8 +913,8 @@ label nyramyss_kitsch:
     show p5 at left onlayer screens with dissolve
     p5 "Heyo, I lost 1-2 to [p6.name]."
     m "Understood."
-    show screen venue_screen
     hide p5 onlayer screens with dissolve
+    show screen venue_screen
     $ expected_result = {"winner": p6, "loser": p5, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
     
@@ -924,23 +924,23 @@ label ford_pacil:
     show p7 at left onlayer screens with dissolve
     p7 "I lost 1-2 to [p8.name] because I'm a TERRIBLE player with NO REDEEMING QUALITIES."
     m "Sorry to hear that. I'll report the set."
-    show screen venue_screen
     hide p7 onlayer screens with dissolve
+    show screen venue_screen
     $ expected_result = {"winner": p8, "loser": p7, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
 
 # Prompt player to start another 2 sets (nyramyss vs pacil and kitsch vs ford). p5 vs p8, p6 vs p7
-label start_loop_68_57:
+label start_loop_23_57:
     # Note: The numbers here are 3 and 2 instead of 4 and 3 because only THREE sets can be active right now!
     # You'll have to change the numbers depending on how many sets can be called
     if matches_in_progress < 3:
         if matches_in_progress < 2:
-            n "I need to get at least [4 - matches_in_progress] more sets running."
+            n "I need to get at least [3 - matches_in_progress] more sets running."
         else:
             n "I need to get just one more set running."
         call screen bracket_screen
         # When the player clicks "Start Match", the screen returns here
-        jump start_loop_68_57
+        jump start_loop_23_57
     else:
         n "All of the setups are in use now."
 
@@ -971,16 +971,25 @@ label report_57:
     call screen venue_screen
 
 # Prompt player to start saggy vs ford. p2 vs p7
-label wait_27:
-    show screen venue_screen
-    $ current_match = find_setup(setups, p2, p7)
-    $ matches_started = 0
-    n "Looks like there's some downtime to call another set. Let's see if anything can be started."
-    call screen venue_screen
-    if (matches_started < 2) and current_match is None:
-        jump wait_27
-    else:
-        jump report_68
+# label wait_27:
+#     show screen venue_screen
+#     $ current_match = find_setup(setups, p2, p7)
+#     $ matches_started = 0
+#     n "Looks like there's some downtime to call another set. Let's see if anything can be started."
+#     call screen venue_screen
+#     if (matches_started < 2) and current_match is None:
+#         jump wait_27
+#     else:
+#         jump report_68
+
+label start_loop_27:
+    # You'll have to change the numbers depending on how many sets can be called
+    n "I ought to call a set while I wait for bracket to continue."
+    if matches_in_progress < 2:
+        n "I need to call the next set."
+        call screen bracket_screen
+        # When the player clicks "Start Match", the screen returns here
+        jump start_loop_27
 
 # Report Kitsch vs Pacil Kitsch wins 2-1. p6 vs p8 p6 wins 2-1.
 label report_68:
