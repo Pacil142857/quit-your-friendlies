@@ -21,6 +21,9 @@ define p8 = Character(name="Pacil", color="#9cffbb") # Currently does not have a
 # Give each character a profile picture
 define player_pictures = {p1: "p1 cropped", p2: "p2 cropped", p3: "p3 cropped", p4: "p4 cropped", p5: "p5 cropped", p6: "p6 cropped", p7: "p7 cropped", p8: "p8 cropped"}
 
+# Keep track of how many matches are occurring at any given point
+define matches_in_progress = 0
+
 # Success and failure "characters"
 define s = Character(None, what_italic=True, what_color="#0cff20")
 define f = Character(None, what_italic=True, what_color="#ff0c0c")
@@ -119,6 +122,16 @@ style submit_result_button_text:
     align (0.5, 0.5)
     color "#000000"
     hover_color "#ffffff"
+
+style submit_result_button_disabled is button:
+    xysize(700, 70)
+    background Frame(Solid("#cecece"))
+    align (0.5, 0.5)
+
+style submit_result_button_disabled_text:
+    size 30
+    align (0.5, 0.5)
+    color "#000000"
 
 style start_set_button is button:
     xysize(700, 70)
@@ -618,6 +631,7 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
                 SetVariable("player_b_active_button", None),
                 SetVariable("a_selected_gamecount", None),
                 SetVariable("b_selected_gamecount", None),
+                SetVariable("matches_in_progress", matches_in_progress + 1),
                 Show("bracket_screen"),
                 Hide("match_report_screen"), 
                 Return()
@@ -641,28 +655,35 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
         ]
 
     # Submit result button
-    textbutton "Submit Result":
-        style "submit_result_button"
-        align(0.87, 0.95)
-        action [
-            SetVariable("completed_sets", completed_sets + 1), 
-            SetVariable("player_a_active_button", None),
-            SetVariable("player_b_active_button", None),
-            SetVariable("a_selected_gamecount", None),
-            SetVariable("b_selected_gamecount", None),
-            Function(current_match.report, 
-                    winner=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount)),
-            Function(clear_setup, setups=setups, p1=player_a, p2=player_b),
-            Function(advance_in_bracket, player=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
-            Function(send_to_losers, player=determine_loser(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
-            Return((a_selected_gamecount, b_selected_gamecount, determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount))),
-            Hide("match_report_screen")
-        ]
-        # action [
-        #     Show("post_match_report_screen", selected_agmc=a_selected_gamecount, selected_bgmc=b_selected_gamecount, 
-        #                                     agmc=a_correct_gamecount, bgmc=b_correct_gamecount), 
-        #     Hide("match_report_screen")
-        # ]
+    if find_setup(setups, player_a, player_b) is not None:
+        textbutton "Submit Result":
+            style "submit_result_button"
+            align(0.87, 0.95)
+            action [
+                SetVariable("completed_sets", completed_sets + 1), 
+                SetVariable("player_a_active_button", None),
+                SetVariable("player_b_active_button", None),
+                SetVariable("a_selected_gamecount", None),
+                SetVariable("b_selected_gamecount", None),
+                SetVariable("matches_in_progress", matches_in_progress - 1),
+                Function(current_match.report, 
+                        winner=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount)),
+                Function(clear_setup, setups=setups, p1=player_a, p2=player_b),
+                Function(advance_in_bracket, player=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
+                Function(send_to_losers, player=determine_loser(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
+                Return((a_selected_gamecount, b_selected_gamecount, determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount))),
+                Hide("match_report_screen")
+            ]
+            # action [
+            #     Show("post_match_report_screen", selected_agmc=a_selected_gamecount, selected_bgmc=b_selected_gamecount, 
+            #                                     agmc=a_correct_gamecount, bgmc=b_correct_gamecount), 
+            #     Hide("match_report_screen")
+            # ]
+    else:
+        # Disabled submit results button
+        textbutton "Cannot Submit Results":
+            style "submit_result_button_disabled"
+            align (0.87, 0.95)
 
 
 # Shown after the player submits the game score
@@ -697,6 +718,8 @@ label start:
     # $ setups[3].set_players(PlayerPicture(p7, "p7 cropped"), PlayerPicture(p8, "p8 cropped"))
     # call screen setups_screen
 
+    $ matches_in_progress = 0
+    $ setups = [Setup(1), Setup(2), Setup(3), Setup(4)]
 
     # Script
     # n "Why did I come here again?"
@@ -780,12 +803,12 @@ label start:
     n "The room is buzzing with energy. It's time to get this bracket moving."
     n "I should check the bracket and see which sets are ready to be played."
     # Show the bracket and have the player choose 4 1st round matches to start
-    python:
-        # Reset the counter before starting this segment
-        matches_started = 0
     label match_starting_loop:
-        if matches_started < 4:
-            n "I need to get at least [4 - matches_started] more matches running."
+        if matches_in_progress < 4:
+            if matches_in_progress < 3:
+                n "I need to get at least [4 - matches_in_progress] more sets running."
+            else:
+                n "I need to get just one more set running."
             call screen bracket_screen
             # When the player clicks "Start Match", the screen returns here
             jump match_starting_loop
