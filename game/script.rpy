@@ -24,6 +24,9 @@ define player_pictures = {p1: "p1 cropped", p2: "p2 cropped", p3: "p3 cropped", 
 # Keep track of how many matches are occurring at any given point
 define matches_in_progress = 0
 
+# The expected result that the player has to report
+define expected_result = {"winner": p2, "loser": p1, "winner_games": -999, "loser_games": -999}
+
 # Success and failure "characters"
 define s = Character(None, what_italic=True, what_color="#0cff20")
 define f = Character(None, what_italic=True, what_color="#ff0c0c")
@@ -112,7 +115,7 @@ style game_count_button_text:
     selected_color "#ffffff"
 
 style submit_result_button is button:
-    xysize(700, 70)
+    xysize (700, 70)
     background Frame(Solid("#e2e2e2"))
     hover_background Frame(Solid("#2727ec"))
     align (0.5, 0.5)
@@ -124,7 +127,7 @@ style submit_result_button_text:
     hover_color "#ffffff"
 
 style submit_result_button_disabled is button:
-    xysize(700, 70)
+    xysize (700, 70)
     background Frame(Solid("#cecece"))
     align (0.5, 0.5)
 
@@ -132,6 +135,18 @@ style submit_result_button_disabled_text:
     size 30
     align (0.5, 0.5)
     color "#000000"
+
+style submit_result_button_wrong is button:
+    xysize (700, 70)
+    background Frame(Solid("#cecece"))
+    hover_background Frame(Solid("#2727ec"))
+    selected_background Frame(Solid("#ec2727"))
+    align (0.5, 0.5)
+
+style submit_result_button_wrong_text:
+    size 30
+    align (0.5, 0.5)
+    color "#ffffff"
 
 style start_set_button is button:
     xysize(700, 70)
@@ -656,29 +671,45 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
 
     # Submit result button
     if find_setup(setups, player_a, player_b) is not None:
-        textbutton "Submit Result":
-            style "submit_result_button"
-            align(0.87, 0.95)
-            action [
-                SetVariable("completed_sets", completed_sets + 1), 
-                SetVariable("player_a_active_button", None),
-                SetVariable("player_b_active_button", None),
-                SetVariable("a_selected_gamecount", None),
-                SetVariable("b_selected_gamecount", None),
-                SetVariable("matches_in_progress", matches_in_progress - 1),
-                Function(current_match.report, 
-                        winner=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount)),
-                Function(clear_setup, setups=setups, p1=player_a, p2=player_b),
-                Function(advance_in_bracket, player=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
-                Function(send_to_losers, player=determine_loser(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
-                Return((a_selected_gamecount, b_selected_gamecount, determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount))),
-                Hide("match_report_screen")
-            ]
-            # action [
-            #     Show("post_match_report_screen", selected_agmc=a_selected_gamecount, selected_bgmc=b_selected_gamecount, 
-            #                                     agmc=a_correct_gamecount, bgmc=b_correct_gamecount), 
-            #     Hide("match_report_screen")
-            # ]
+        $ winner = determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount)
+        $ loser = determine_loser(player_a, player_b, a_selected_gamecount, b_selected_gamecount)
+        if expected_result["winner"] == winner and expected_result["loser"] == loser and \
+        expected_result["winner_games"] == max(a_selected_gamecount, b_selected_gamecount) and \
+        expected_result["loser_games"] == min(a_selected_gamecount, b_selected_gamecount):
+            textbutton "Submit Result":
+                style "submit_result_button"
+                align (0.87, 0.95)
+                action [
+                    SetVariable("completed_sets", completed_sets + 1), 
+                    SetVariable("player_a_active_button", None),
+                    SetVariable("player_b_active_button", None),
+                    SetVariable("a_selected_gamecount", None),
+                    SetVariable("b_selected_gamecount", None),
+                    SetVariable("matches_in_progress", matches_in_progress - 1),
+                    Function(current_match.report, 
+                            winner=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount)),
+                    Function(clear_setup, setups=setups, p1=player_a, p2=player_b),
+                    Function(advance_in_bracket, player=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
+                    Function(send_to_losers, player=determine_loser(player_a, player_b, a_selected_gamecount, b_selected_gamecount), advancement_data=advancement_data),
+                    Return((a_selected_gamecount, b_selected_gamecount, determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount))),
+                    Hide("match_report_screen")
+                ]
+                # action [
+                #     Show("post_match_report_screen", selected_agmc=a_selected_gamecount, selected_bgmc=b_selected_gamecount, 
+                #                                     agmc=a_correct_gamecount, bgmc=b_correct_gamecount), 
+                #     Hide("match_report_screen")
+                # ]
+        else:
+            default fake_submit_text = "Submit Result"
+            textbutton "[fake_submit_text]":
+                style "submit_result_button_wrong"
+                align (0.87, 0.95)
+                action [
+                    SetScreenVariable("fake_submit_text", "Wrong Results!")
+                ]
+                unhovered [
+                    SetScreenVariable("fake_submit_text", "Submit Result")
+                ]
     else:
         # Disabled submit results button
         textbutton "Cannot Submit Results":
@@ -803,18 +834,19 @@ label start:
     n "The room is buzzing with energy. It's time to get this bracket moving."
     n "I should check the bracket and see which sets are ready to be played."
     # Show the bracket and have the player choose 4 1st round matches to start
-    label match_starting_loop:
-        if matches_in_progress < 4:
-            if matches_in_progress < 3:
-                n "I need to get at least [4 - matches_in_progress] more sets running."
-            else:
-                n "I need to get just one more set running."
-            call screen bracket_screen
-            # When the player clicks "Start Match", the screen returns here
-            jump match_starting_loop
+label match_starting_loop:
+    if matches_in_progress < 4:
+        if matches_in_progress < 3:
+            n "I need to get at least [4 - matches_in_progress] more sets running."
         else:
-            n "That looks like a good start. The setups are mostly full now."
-    
+            n "I need to get just one more set running."
+        call screen bracket_screen
+        # When the player clicks "Start Match", the screen returns here
+        jump match_starting_loop
+    else:
+        n "That looks like a good start. The setups are mostly full now."
+
+label reporting_sets:    
     n "Oh! It looks like someone's finished playing their set."
     show p2 at left onlayer screens with dissolve
     p2 "Hello, I beat [p1.name] 2-1. They got DESTROYED hahaha."
@@ -822,38 +854,25 @@ label start:
 
     # 1st set report (winners round 1, SaggyMilkJug)
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
-    $ a_correct_gamecount = 1
-    $ b_correct_gamecount = 2
     hide p2 onlayer screens with dissolve
+    $ expected_result = {"winner": p2, "loser": p1, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
-    $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p2:
-        s "Success! The score was recorded correctly." 
-    else:
-        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
     # 2nd set report (winners round 1, colorful)
     show p3 at left onlayer screens with dissolve
     p3 "Hey, I beat [p4.name] 2-0."
     m "Sounds good! I'll input that for you now."
 
-    # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
-    $ a_correct_gamecount = 2
-    $ b_correct_gamecount = 0
     hide p3 onlayer screens with dissolve
+    $ expected_result = {"winner": p3, "loser": p4, "winner_games": 2, "loser_games": 0}
     call screen venue_screen
-    $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p3:
-        s "Success! The score was recorded correctly." 
-    else:
-        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
     n "Two sets have just finished, which means that there's currently two empty setups."
     show screen venue_screen
     n "I should see if I can call any sets to fill the setups."
 
     # Waiting for losers r1
-    label wait_for_losers_match:
+label wait_for_losers_match:
     show screen venue_screen
     $ current_match = find_setup(setups, p1, p4)
     $ matches_started = 0
@@ -865,7 +884,7 @@ label start:
         jump third_set_report
     
 
-    label third_set_report:
+label third_set_report:
     # 3rd set report (losers round 1, red dot)
     show screen venue_screen
     show p1 angry at left onlayer screens
@@ -882,55 +901,37 @@ label start:
     n "I can't believe it. I've never met such a sore winner before."
     m "Okay I'll put that in for you."
 
-    $ a_correct_gamecount = 0
-    $ b_correct_gamecount = 2
     hide screen room_screen
     
     hide p1 happy onlayer screens
+    $ expected_result = {"winner": p1, "loser": p4, "winner_games": 2, "loser_games": 0}
     call screen venue_screen
-    $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p1:
-        s "Success! The score was recorded correctly." 
-    else:
-        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
-    # Nyramyss vs Kitsch (wr1). Nyramyss wins
-    label nyramyss_kitsch:
+# Nyramyss vs Kitsch (wr1). Nyramyss wins
+label nyramyss_kitsch:
     n "Looks like that winners round 1 set has finally wrapped up."
     show p5 at left onlayer screens with dissolve
-    p5 "Heyo, I lost 1-2 to [p6.name]"
+    p5 "Heyo, I lost 1-2 to [p6.name]."
     m "Understood."
     show screen venue_screen
-    $ a_correct_gamecount = 1
-    $ b_correct_gamecount = 2
     hide p5 onlayer screens with dissolve
+    $ expected_result = {"winner": p6, "loser": p5, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
-    $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p6:
-        s "Success! The score was recorded correctly." 
-    else:
-        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
-
-    # Ford vs Pacil (wr1). Pacil wins
-    label ford_pacil:
+    
+# Ford vs Pacil (wr1). Pacil wins
+label ford_pacil:
     n "This looks like the last winners round 1 match being reported."
     show p7 at left onlayer screens with dissolve
-    p7 "Heyo, I lost 1-2 to [p8.name]"
-    m "Understood."
+    p7 "I lost 1-2 to [p8.name] because I'm a TERRIBLE player with NO REDEEMING QUALITIES."
+    m "Sorry to hear that. I'll report the set."
     show screen venue_screen
-    $ a_correct_gamecount = 1
-    $ b_correct_gamecount = 2
     hide p7 onlayer screens with dissolve
+    $ expected_result = {"winner": p8, "loser": p7, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
-    $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p8:
-        s "Success! The score was recorded correctly." 
-    else:
-        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set." 
 
-    # Prompt player to start another 2 sets (nyramyss vs pacil and kitsch vs ford). p5 vs p8, p6 vs p7
-    # TODO: Bug around here.
-    label wait_68_57:
+# Prompt player to start another 2 sets (nyramyss vs pacil and kitsch vs ford). p5 vs p8, p6 vs p7
+# TODO: Bug around here.
+label wait_68_57:
     show screen venue_screen
     # $ current_match = find_setup(setups, p6, p8)
     # $ matches_started = 0
@@ -941,47 +942,35 @@ label start:
     else:
         jump report_23
 
-    # Saggy vs colorful wr2. colorful wins 2-0. p2 vs p3. p3 wins 2-0
-    label report_23:
+# Saggy vs colorful wr2. colorful wins 2-0. p2 vs p3. p3 wins 2-0
+label report_23:
     hide screen bracket_screen
     show screen venue_screen
     n "The first match of winners round 2 is being reported now."
     show p3 at left onlayer screens with dissolve
-    p3 "Hi, I won 2-0 against [p2.name]"
+    p3 "Hi, I won 2-0 against [p2.name]."
     m "Understood."
     show screen venue_screen
-    $ a_correct_gamecount = 0
-    $ b_correct_gamecount = 2
     hide p3 onlayer screens with dissolve
+    $ expected_result = {"winner": p3, "loser": p2, "winner_games": 2, "loser_games": 0}
     call screen venue_screen
-    $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p3:
-        s "Success! The score was recorded correctly." 
-    else:
-        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
-
-    # Nyramyss vs Ford Ford wins 2-1. p7 vs p5 p7 wins 2-1
-    label report_57:
+    
+# Nyramyss vs Ford Ford wins 2-0. p7 vs p5 p7 wins 2-0
+label report_57:
     hide screen bracket_screen
     show screen venue_screen
     n "A losers round 1 match is being reported."
     show p7 at left onlayer screens with dissolve
-    p7 "Hi, I won 2-0 against [p5.name]"
+    p7 "Hi, I won 2-0 against [p5.name]."
     m "Understood."
     show screen venue_screen
-    $ a_correct_gamecount = 0
-    $ b_correct_gamecount = 2
     hide p7 onlayer screens with dissolve
+    $ expected_result = {"winner": p7, "loser": p5, "winner_games": 2, "loser_games": 0}
     call screen venue_screen
-    $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p7:
-        s "Success! The score was recorded correctly." 
-    else:
-        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
 
-    # Prompt player to start saggy vs ford. p2 vs p7
+# Prompt player to start saggy vs ford. p2 vs p7
+label wait_27:
     show screen venue_screen
-    label wait_27:
     $ current_match = find_setup(setups, p2, p7)
     $ matches_started = 0
     n "Looks like there's some downtime to call another set. Let's see if anything can be started."
@@ -991,21 +980,13 @@ label start:
     else:
         jump report_68
 
-    # Report Kitsch vs Pacil Kitsch wins 2-1. p6 vs p8 p6 wins 2-1.
-    label report_68:
+# Report Kitsch vs Pacil Kitsch wins 2-1. p6 vs p8 p6 wins 2-1.
+label report_68:
     n "The final winners round 2 match is being reported now."
     show p6 at left onlayer screens with dissolve
-    p6 "Hi, I won 2-1 against [p8.name]"
+    p6 "Hi, I won 2-1 against [p8.name]."
     m "Understood."
     show screen venue_screen
-    $ a_correct_gamecount = 2
-    $ b_correct_gamecount = 1
     hide p6 onlayer screens with dissolve
+    $ expected_result = {"winner": p6, "loser": p8, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
-    $ results = _return
-    if results[0] == a_correct_gamecount and results[1] == b_correct_gamecount and results[2] == p6:
-        s "Success! The score was recorded correctly." 
-    else:
-        f "Failure. That wasn't the correct score, or perhaps you reported the wrong set."
-    
-     
