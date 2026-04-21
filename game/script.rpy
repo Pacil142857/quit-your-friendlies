@@ -138,7 +138,7 @@ style submit_result_button_disabled_text:
 
 style submit_result_button_wrong is button:
     xysize (700, 70)
-    background Frame(Solid("#cecece"))
+    background Frame(Solid("#e2e2e2"))
     hover_background Frame(Solid("#2727ec"))
     selected_background Frame(Solid("#ec2727"))
     align (0.5, 0.5)
@@ -146,7 +146,8 @@ style submit_result_button_wrong is button:
 style submit_result_button_wrong_text:
     size 30
     align (0.5, 0.5)
-    color "#ffffff"
+    color "#000000"
+    hover_color "#ffffff"
 
 style start_set_button is button:
     xysize(700, 70)
