@@ -579,20 +579,32 @@ screen setups_screen(show_navigation=True):
                         ysize 50
                         xalign 0.5
                         # ypadding 10
-<<<<<<< HEAD
-                        textbutton "{color=#000000}Ask to hop off{/color}":
-                            style "quit_friendlies_button"
-                            # Old logic; this raised an error. I used an inline if statement to fix this.
-                            # $ label_to_jump_to = "quit_friendlies"
-                            # if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket):
-                            #     $ label_to_jump_to = "quit_bracket"
-                            action [
-                                SetVariable("setup_player", setup.get_p1()),
-                                SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
-                                SetVariable("cur_label", store.current_label),
-                                Hide(),
-                                Jump("quit_bracket" if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket) else "quit_friendlies")
-                            ]
+                        # Case: This set is a bracket set
+                        if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket):
+                            textbutton "{color=#000000}Ask to hop off{/color}":
+                                style "quit_friendlies_button"
+                                action [
+                                    # Function(setup.clear_setup), # don't clear the setup; it's bracket
+                                    SetVariable("setup_player", setup.get_p1()),
+                                    SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
+                                    SetVariable("cur_label", store.current_label),
+                                    Hide(),
+                                    Jump("quit_bracket"),
+                                    Return()
+                                ]
+                        # Friendlies set
+                        else:
+                            textbutton "{color=#000000}Ask to hop off{/color}":
+                                style "quit_friendlies_button"
+                                action [
+                                    Function(setup.clear_setup),
+                                    SetVariable("setup_player", setup.get_p1()),
+                                    SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
+                                    SetVariable("cur_label", store.current_label),
+                                    Hide(),
+                                    Jump("quit_friendlies"),
+                                    Return()
+                                ]
 
 # For tutorial. Only one match will be clickable
 screen tutorial_bracket_screen(show_navigation=True):
@@ -762,36 +774,7 @@ screen tutorial_bracket_screen(show_navigation=True):
                     Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
                     advancement_data=BracketAdvancementDataHolder(False, 4, i, gf, gf), current_match=match),
                     Hide("bracket_screen")
-                ]
-=======
-                        # Case: This set is a bracket set
-                        if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket):
-                            textbutton "{color=#000000}Ask to hop off{/color}":
-                                style "quit_friendlies_button"
-                                action [
-                                    # Function(setup.clear_setup), # don't clear the setup; it's bracket
-                                    SetVariable("setup_player", setup.get_p1()),
-                                    SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
-                                    SetVariable("cur_label", store.current_label),
-                                    Hide(),
-                                    Jump("quit_bracket"),
-                                    Return()
-                                ]
-                        # Friendlies set
-                        else:
-                            textbutton "{color=#000000}Ask to hop off{/color}":
-                                style "quit_friendlies_button"
-                                action [
-                                    Function(setup.clear_setup),
-                                    SetVariable("setup_player", setup.get_p1()),
-                                    SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
-                                    SetVariable("cur_label", store.current_label),
-                                    Hide(),
-                                    Jump("quit_friendlies"),
-                                    Return()
-                                ]
->>>>>>> bef263060fc1bcfbe67b6e869bfd4396bee608f4
-                                
+                ]                                
 
 screen bracket_screen(show_navigation=True):
     # Set buttons should be (315, 130) pixels away from each other
