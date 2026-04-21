@@ -52,7 +52,7 @@ define tf = [BracketSet()] # true finals / grand finals reset
 # Tutorial vars
 define clicked_setups = False # Has the player clicked "Setups" in the tutorial?
 define clicked_2 = False # Has the player clicked back to the venue from setups?
-
+define bracket = [wr1, wr2, wf, gf, lr1, lr2, lr3, lf, tf]
 
 # Style vars
 style venue_button is button:
@@ -503,26 +503,27 @@ screen setups_screen():
         key "mouseup_1" action NullAction()
 
     # Buttons to transition to the venue and bracket screens
-    textbutton "{color=#000000}Venue{/color}":
-        style "venue_button"
-        align (0.95, 0.825)
-        text_align 1.0
-        xsize 200
+    if show_navigation:
+        textbutton "{color=#000000}Venue{/color}":
+            style "venue_button"
+            align (0.95, 0.825)
+            text_align 1.0
+            xsize 200
 
-        action [
-            Hide("setups_screen"),
-            Show("venue_screen")
-        ]
-    textbutton "{color=#000000}Bracket{/color}":
-        style "bracket_button"
-        align (0.95, 0.95)
-        text_align 1.0
-        xsize 200
+            action [
+                Hide("setups_screen"),
+                Show("venue_screen")
+            ]
+        textbutton "{color=#000000}Bracket{/color}":
+            style "bracket_button"
+            align (0.95, 0.95)
+            text_align 1.0
+            xsize 200
 
-        action [
-            Show("bracket_screen"),
-            Hide("setups_screen")
-        ]
+            action [
+                Show("bracket_screen"),
+                Hide("setups_screen")
+            ]
 
     # The setups and players
     $ alignments = [(0.25, 0.1), (0.75, 0.1), (0.25, 0.9), (0.75, 0.9)]
@@ -579,12 +580,16 @@ screen setups_screen():
                         # ypadding 10
                         textbutton "{color=#000000}Ask to hop off{/color}":
                             style "quit_friendlies_button"
+                            # Old logic; this raised an error. I used an inline if statement to fix this.
+                            # $ label_to_jump_to = "quit_friendlies"
+                            # if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket):
+                            #     $ label_to_jump_to = "quit_bracket"
                             action [
                                 SetVariable("setup_player", setup.get_p1()),
                                 SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
                                 SetVariable("cur_label", store.current_label),
                                 Hide(),
-                                Jump("quit_friendlies")
+                                Jump("quit_bracket" if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket) else "quit_friendlies")
                             ]
                                 
 
@@ -1049,7 +1054,7 @@ label quit_bracket:
     m "[setup_player.name], quit your friendlies. I need to keep bracket moving."
     show expression setup_player_picture at left
     with dissolve
-    setup_player "This {emph}{bold}is{/bold}{/emph} bracket, dingus!"
+    setup_player "This {i}{b}is{/b}{/i} bracket, dingus!"
     $ renpy.hide(setup_player_picture)
     with dissolve
     n "...oops."
@@ -1090,6 +1095,14 @@ label reporting_sets:
     call screen venue_screen
 
     n "Two sets have just finished, which means that there's currently two empty setups."
+    $ setups[0].set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p4, "p4 cropped"))
+    n "...or at least, there {i}should{/i} be two empty setups, but it looks like two people are playing friendlies at setup 1."
+    n "I need to ask them to hop off the setup so I can run bracket."
+    jump hop_off_1
+
+label hop_off_1:
+    call screen setups_screen(show_navigation=False)
+    n "I need to implement an if/jump loop here to make sure that I can only progress after I've stopped friendlies."
 
 # Waiting for losers r1
 label losers_r1_starting_loop:
