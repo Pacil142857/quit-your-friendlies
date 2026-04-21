@@ -52,6 +52,8 @@ define tf = [BracketSet()] # true finals / grand finals reset
 # Tutorial vars
 define clicked_setups = False # Has the player clicked "Setups" in the tutorial?
 define clicked_2 = False # Has the player clicked back to the venue from setups?
+
+
 define bracket = [wr1, wr2, wf, gf, lr1, lr2, lr3, lf, tf]
 
 # Style vars
@@ -396,13 +398,12 @@ screen tutorial_venue_screen_1():
 
         action [
             Hide("venue_screen"),
-            Show("setups_screen"), 
+            Show("tutorial_setups_screen"), 
             SetVariable("clicked_setups", True)
         ]
 
 # For tutorial. Only "Venue" button is active
 screen tutorial_setups_screen():
-    screen setups_screen():
     add Solid("#000000")
 
     if not tutorial_active:
@@ -591,6 +592,176 @@ screen setups_screen():
                                 Hide(),
                                 Jump("quit_bracket" if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket) else "quit_friendlies")
                             ]
+
+# For tutorial. Only one match will be clickable
+screen tutorial_bracket_screen(show_navigation=True):
+    # Set buttons should be (315, 130) pixels away from each other
+    # For a sample 12-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-34/event/ultimate-singles/brackets/1868263/2751603
+    # For a sample 8-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-44/event/ultimate-singles/brackets/1940157/2849091
+    # This will be an 8-person bracket screen
+
+    add "bracketTemplate"
+    key "mouseup_1" action NullAction()
+
+    # Buttons to transition to the venue and setups screens
+    if show_navigation:
+        textbutton "{color=#000000}Venue{/color}":
+            style "venue_button"
+            align (0.95, 0.825)
+            text_align 0.5
+            xsize 200
+
+            action [
+                Hide("bracket_screen"),
+                Show("venue_screen")
+            ]
+        textbutton "{color=#000000}Setups{/color}":
+            style "setups_button"
+            align (0.95, 0.95)
+            text_align 0.5
+            xsize 200
+
+            action [
+                Show("setups_screen"),
+                Hide("bracket_screen")
+            ]
+    
+    # Winners Round 1
+    for i, match in enumerate(wr1):
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (87, 115 + (115 * i) + (i * 3))
+
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 1, i, wr2, lr1), current_match=match), 
+                    Hide("bracket_screen")
+                ]
+    
+    
+    # Winners Round 2
+    for i, match in enumerate(wr2):
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            # Y-position: Y-padding + Half the height of a set button + Half the height between set buttons
+            # + (Height of set button + height between set buttons) * 2 * i
+            pos (75 + (315 * 1), 100 + (90 // 2) + ((130 - 90) // 2) + (120 * 2 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 2, i, wf, lr2), current_match=match), 
+                    Hide("bracket_screen")
+                ]
+    
+    
+    # Winners Finals
+    for i, match in enumerate(wf):
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (45 + (315 * 2), 90 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 4 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 3, i, gf, lf), current_match=match),
+                    Hide("bracket_screen")
+                ]
+    
+    
+    # Grand Finals
+    for i, match in enumerate(gf):
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (10 + (315 * 3), 90 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 8 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 4, i, tf, tf), current_match=match),
+                    Hide("bracket_screen")
+                ]
+    
+    
+    # True Finals
+    for i, match in enumerate(tf):
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (-20 + (315 * 4), 90 + ((90 // 2) + ((130 - 90) // 2)) * 3 + (130 * 16 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(True, 5, i, None, None), current_match=match),
+                    Hide("bracket_screen")
+                ]
+    
+    
+    # Losers Round 1
+    for i, match in enumerate(lr1):
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (95, 50 + 60 + (130 * len(wr1)) + (120 * i))
+
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(False, 1, i, lr2, lr2), current_match=match),
+                    Hide("bracket_screen")
+                ]
+    
+    # Losers Round 2
+    for i, match in enumerate(lr2):
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (75 + (315 * 1), 50 + 60 + (130 * len(wr1)) + (120 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(False, 2, i, lr3, lr3), current_match=match),
+                    Hide("bracket_screen")
+                ]
+    
+    
+    # Losers Round 3
+    for i, match in enumerate(lr3):
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (45 + (315 * 2), 50 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(False, 3, i, lf, lf), current_match=match),
+                    Hide("bracket_screen")
+                ]
+    
+    
+    # Losers Finals
+    for i, match in enumerate(lf):
+        $ p1_color = match.get_player_color(match.get_p1())
+        $ p2_color = match.get_player_color(match.get_p2())
+        textbutton "{size=23}{color=[p1_color]}[match.get_p1_name()]{/color}\n{size=15}{color=#000}vs.{/color}{/size}\n{color=[p2_color]}[match.get_p2_name()]{/color}{/size}":
+            style "set_button"
+            pos (5 + (315 * 3), 50 + 60 + (130 // 2) + (130 * len(wr1)) + (130 * i))
+            if match.is_callable():
+                action [
+                    Show("match_report_screen", player_a=match.get_p1(), player_b=match.get_p2(),
+                    advancement_data=BracketAdvancementDataHolder(False, 4, i, gf, gf), current_match=match),
+                    Hide("bracket_screen")
+                ]
                                 
 
 screen bracket_screen(show_navigation=True):
@@ -1008,18 +1179,20 @@ label start:
         e "Click the {b}Setups{/b} button."
         if not clicked_setups:
             jump wait_for_setups_click
-
-
-
-
-  
-    show screen setups_screen with dissolve
+    
+    hide screen tutorial_venue_screen_1
     e "{b}Assigning Setups{/b}: When players approach you to start a set, you'll need to find them an open setup in the room."
 
     e "A 'setup' is just a TV and a console ready for a match."
     e "You'll be able to see who is playing at what setup on this screen. During the tournament, you'll need to assign players to open setups so that players can start their sets."
     e "You can start matches from the bracket screen by clicking on a set and then clicking the \"Start Match\" button."
-    hide screen setups_screen with dissolve
+    label wait_for_venue_click_1:
+        e "Go back to the venue by clicking the {b}Venue{/b} button."
+        if not clicked_2:
+            jump wait_for_venue_click_1
+
+    hide screen tutorial_setups_screen
+    show screen tutorial_venue_screen_1 with dissolve
     e "{b}Double Elimination{/b}: Most Smash events are 'Double Elimination'. Lose once, and you go to the Losers Bracket. Lose twice, and you're out! In a tournament bracket, it'll look like this."
     show bracketTemplate at truecenter with dissolve
     e "{b}The Bracket{/b}: This is the map of the tournament. This will be shown at appropriate times throoughout the game, and those white boxes will be filled in with players' names."
