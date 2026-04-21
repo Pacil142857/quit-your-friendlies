@@ -803,6 +803,9 @@ label start:
     $ matches_in_progress = 0
     $ setups = [Setup(1), Setup(2), Setup(3), Setup(4)]
 
+    # dev skip
+    scene background 2
+    jump match_starting_loop
     # Script
     n "Why did I come here again?"
     n "I was just supposed to be playing Super Smash Bros, and I ended up getting roped into coming to a tournament."
