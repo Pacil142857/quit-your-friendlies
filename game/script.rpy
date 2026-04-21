@@ -1087,8 +1087,11 @@ label match_starting_loop:
 
 label reporting_sets:    
     n "Oh! It looks like someone's finished playing their set."
-    show p2 at left onlayer screens with dissolve
-    p2 "Hello, I beat [p1.name] 2-1. They got DESTROYED hahaha."
+    show p2 popoff2 at left onlayer screens with dissolve
+    p2 "{b}{size=40}YEAH!{/size}{/b} You'll {b}{i}never{/i}{/b} beat me!"
+    hide p2 popoff2
+    show p2 happy at left onlayer screens
+    p2 "I beat [p1.name] 2-1. This is more proof that Ken is the worst shoto."
     m "Okay, I'll have to input that into the bracket."
 
     # 1st set report (winners round 1, SaggyMilkJug)
