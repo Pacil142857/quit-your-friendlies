@@ -430,7 +430,7 @@ screen setups_screen():
                             yalign 0.5
 
 
-screen bracket_screen():
+screen bracket_screen(show_navigation=True):
     # Set buttons should be (315, 130) pixels away from each other
     # For a sample 12-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-34/event/ultimate-singles/brackets/1868263/2751603
     # For a sample 8-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-44/event/ultimate-singles/brackets/1940157/2849091
@@ -440,26 +440,27 @@ screen bracket_screen():
     key "mouseup_1" action NullAction()
 
     # Buttons to transition to the venue and setups screens
-    textbutton "{color=#000000}Venue{/color}":
-        style "venue_button"
-        align (0.95, 0.825)
-        text_align 0.5
-        xsize 200
+    if show_navigation:
+        textbutton "{color=#000000}Venue{/color}":
+            style "venue_button"
+            align (0.95, 0.825)
+            text_align 0.5
+            xsize 200
 
-        action [
-            Hide("bracket_screen"),
-            Show("venue_screen")
-        ]
-    textbutton "{color=#000000}Setups{/color}":
-        style "setups_button"
-        align (0.95, 0.95)
-        text_align 0.5
-        xsize 200
+            action [
+                Hide("bracket_screen"),
+                Show("venue_screen")
+            ]
+        textbutton "{color=#000000}Setups{/color}":
+            style "setups_button"
+            align (0.95, 0.95)
+            text_align 0.5
+            xsize 200
 
-        action [
-            Show("setups_screen"),
-            Hide("bracket_screen")
-        ]
+            action [
+                Show("setups_screen"),
+                Hide("bracket_screen")
+            ]
     
     # Winners Round 1
     for i, match in enumerate(wr1):
@@ -877,7 +878,7 @@ label match_starting_loop:
             n "I need to get at least [4 - matches_in_progress] more sets running."
         else:
             n "I need to get just one more set running."
-        call screen bracket_screen
+        call screen bracket_screen(show_navigation=False)
         # When the player clicks "Start Match", the screen returns here
         jump match_starting_loop
     else:
@@ -913,7 +914,7 @@ label losers_r1_starting_loop:
             n "I need to get at least [4 - matches_in_progress] more sets running."
         else:
             n "I need to get just one more set running."
-        call screen bracket_screen
+        call screen bracket_screen(show_navigation=False)
         # When the player clicks "Start Match", the screen returns here
         jump losers_r1_starting_loop
     else:
@@ -974,7 +975,7 @@ label start_loop_23_57:
             n "I need to get at least [3 - matches_in_progress] more sets running."
         else:
             n "I need to get just one more set running."
-        call screen bracket_screen
+        call screen bracket_screen(show_navigation=False)
         # When the player clicks "Start Match", the screen returns here
         jump start_loop_23_57
     else:
@@ -1037,7 +1038,7 @@ label start_loop_27_18_36:
             n "I need to get at least [3 - matches_in_progress] more sets running."
         else:
             n "I need to get just one more set running."
-        call screen bracket_screen
+        call screen bracket_screen(show_navigation=False)
         # When the player clicks "Start Match", the screen returns here
         jump start_loop_27_18_36
     else:
