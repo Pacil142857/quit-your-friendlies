@@ -414,7 +414,7 @@ screen setups_screen(show_navigation=True):
                             style "setup_box"
                             vbox:
                                 xsize 150
-                                ysize 350
+                                ysize 375
                                 text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
                                     xalign 0.5
                                     yalign 0.5
@@ -441,7 +441,7 @@ screen setups_screen(show_navigation=True):
                             style "setup_box"
                             vbox:
                                 xsize 150
-                                ysize 350
+                                ysize 375
                                 text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
                                     xalign 0.5
                                     yalign 0.5
@@ -452,19 +452,32 @@ screen setups_screen(show_navigation=True):
                         ysize 50
                         xalign 0.5
                         # ypadding 10
-                        textbutton "{color=#000000}Ask to hop off{/color}":
-                            style "quit_friendlies_button"
-                            # Old logic; this raised an error. I used an inline if statement to fix this.
-                            # $ label_to_jump_to = "quit_friendlies"
-                            # if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket):
-                            #     $ label_to_jump_to = "quit_bracket"
-                            action [
-                                SetVariable("setup_player", setup.get_p1()),
-                                SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
-                                SetVariable("cur_label", store.current_label),
-                                Hide(),
-                                Jump("quit_bracket" if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket) else "quit_friendlies")
-                            ]
+                        # Case: This set is a bracket set
+                        if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket):
+                            textbutton "{color=#000000}Ask to hop off{/color}":
+                                style "quit_friendlies_button"
+                                action [
+                                    # Function(setup.clear_setup), # don't clear the setup; it's bracket
+                                    SetVariable("setup_player", setup.get_p1()),
+                                    SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
+                                    SetVariable("cur_label", store.current_label),
+                                    Hide(),
+                                    Jump("quit_bracket"),
+                                    Return()
+                                ]
+                        # Friendlies set
+                        else:
+                            textbutton "{color=#000000}Ask to hop off{/color}":
+                                style "quit_friendlies_button"
+                                action [
+                                    Function(setup.clear_setup),
+                                    SetVariable("setup_player", setup.get_p1()),
+                                    SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
+                                    SetVariable("cur_label", store.current_label),
+                                    Hide(),
+                                    Jump("quit_friendlies"),
+                                    Return()
+                                ]
                                 
 
 screen bracket_screen(show_navigation=True):
@@ -958,14 +971,15 @@ label reporting_sets:
     call screen venue_screen
 
     n "Two sets have just finished, which means that there's currently two empty setups."
-    $ setups[0].set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p4, "p4 cropped"))
+    $ setups[0].set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p3, "p3 cropped"))
     n "...or at least, there {i}should{/i} be two empty setups, but it looks like two people are playing friendlies at setup 1."
-    n "I need to ask them to hop off the setup so I can run bracket."
     jump hop_off_1
 
 label hop_off_1:
-    call screen setups_screen(show_navigation=False)
-    n "I need to implement an if/jump loop here to make sure that I can only progress after I've stopped friendlies."
+    if not (find_setup(setups, p1, p3) is None):
+        n "I need to ask [p1.name] and [p3.name] to hop off setup 1 so I can run bracket."
+        call screen setups_screen(show_navigation=False)
+    n "Now that I have two free setups, I should start calling sets."
 
 # Waiting for losers r1
 label losers_r1_starting_loop:
