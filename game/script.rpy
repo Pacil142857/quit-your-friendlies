@@ -391,10 +391,9 @@ screen setups_screen():
 
         hbox:
             align alignment
-            if i % 2 == 0:
-                # Box that says "Setup X"
-                vbox:
-                    hbox:
+            vbox:
+                hbox:
+                    if i % 2 == 0:
                         frame:
                             style "setup_box"
                             vbox:
@@ -412,19 +411,7 @@ screen setups_screen():
                                     xysize (150, 150)
                                 text "{color=#ffffff}[name]{/color}":
                                     xalign 0.5
-                    frame:
-                        style "setup_box"
-                        xalign 0.5
-                        ypadding 10
-                        vbox:
-                            xsize 300
-                            ysize 50
-                            text "{color=#000000}Ask to hop off{/color}":
-                                xalign 0.5
-                                yalign 0.5
-            else:
-                vbox:
-                    hbox:
+                    else:
                         vbox:
                             xsize 150
                             ysize 350
@@ -442,7 +429,8 @@ screen setups_screen():
                                 text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
                                     xalign 0.5
                                     yalign 0.5
-                    
+                if not setup.is_free():
+                    # quit friendlies button
                     frame:
                         style "setup_box"
                         xalign 0.5
