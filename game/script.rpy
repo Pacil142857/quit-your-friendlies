@@ -12,11 +12,11 @@ define r = Character(name="Reggie", color="#32f35c")
 define p1 = Character(name="red dot", color="#ffe449")
 define p2 = Character(name="SaggyMilkJug", color="#c7ffcf")
 define p3 = Character(name="colorfulʚɞ", color="#ee89e0")
-define p4 = Character(name="Blue Line", color="#f77c7c")
+define p4 = Character(name="Subzero", color="#f77c7c")
 define p5 = Character(name="Nyramyss", color="#778af7")
 define p6 = Character(name="Kitsch", color="#5ddbf1")
 define p7 = Character(name="Ford", color="#f89451")
-define p8 = Character(name="Pacil", color="#9cffbb") # Currently does not have an image
+define p8 = Character(name="Pacil", color="#9cffbb")
 
 # Give each character a profile picture
 define player_pictures = {p1: "p1 cropped", p2: "p2 cropped", p3: "p3 cropped", p4: "p4 cropped", p5: "p5 cropped", p6: "p6 cropped", p7: "p7 cropped", p8: "p8 cropped"}
@@ -393,42 +393,66 @@ screen setups_screen():
             align alignment
             if i % 2 == 0:
                 # Box that says "Setup X"
-                frame:
-                    style "setup_box"
-                    vbox:
-                        xsize 150
-                        ysize 400
-                        text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
-                            xalign 0.5
-                            yalign 0.5
                 vbox:
-                    xsize 150
-                    ysize 400
-                    for name, picture in setup.get_player_names_and_pictures():
-                        add picture:
-                            xalign 0.5
-                            xysize (150, 150)
-                        text "{color=#ffffff}[name]{/color}":
-                            xalign 0.5
+                    hbox:
+                        frame:
+                            style "setup_box"
+                            vbox:
+                                xsize 150
+                                ysize 350
+                                text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
+                                    xalign 0.5
+                                    yalign 0.5
+                        vbox:
+                            xsize 150
+                            ysize 350
+                            for name, picture in setup.get_player_names_and_pictures():
+                                add picture:
+                                    xalign 0.5
+                                    xysize (150, 150)
+                                text "{color=#ffffff}[name]{/color}":
+                                    xalign 0.5
+                    frame:
+                        style "setup_box"
+                        xalign 0.5
+                        ypadding 10
+                        vbox:
+                            xsize 300
+                            ysize 50
+                            text "{color=#000000}Ask to hop off{/color}":
+                                xalign 0.5
+                                yalign 0.5
             else:
                 vbox:
-                    xsize 150
-                    ysize 400
-                    for name, picture in setup.get_player_names_and_pictures():
-                        add picture:
-                            xalign 0.5
-                            xysize (150, 150)
-                        text "{color=#ffffff}[name]{/color}":
-                            xalign 0.5
-                frame:
-                    style "setup_box"
-                    vbox:
-                        xsize 150
-                        ysize 400
-                        text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
-                            xalign 0.5
-                            yalign 0.5
-
+                    hbox:
+                        vbox:
+                            xsize 150
+                            ysize 350
+                            for name, picture in setup.get_player_names_and_pictures():
+                                add picture:
+                                    xalign 0.5
+                                    xysize (150, 150)
+                                text "{color=#ffffff}[name]{/color}":
+                                    xalign 0.5
+                        frame:
+                            style "setup_box"
+                            vbox:
+                                xsize 150
+                                ysize 350
+                                text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
+                                    xalign 0.5
+                                    yalign 0.5
+                    
+                    frame:
+                        style "setup_box"
+                        xalign 0.5
+                        ypadding 10
+                        vbox:
+                            xsize 300
+                            ysize 50
+                            text "{color=#000000}Ask to hop off{/color}":
+                                xalign 0.5
+                                yalign 0.5
 
 screen bracket_screen(show_navigation=True):
     # Set buttons should be (315, 130) pixels away from each other
