@@ -49,6 +49,10 @@ define lr3 = [BracketSet()]
 define lf = [BracketSet()] # losers finals
 define tf = [BracketSet()] # true finals / grand finals reset
 
+# Tutorial vars
+define clicked_setups = False # Has the player clicked "Setups" in the tutorial?
+define clicked_2 = False # Has the player clicked back to the venue from setups?
+
 
 # Style vars
 style venue_button is button:
@@ -369,6 +373,128 @@ screen venue_screen():
             Hide("venue_screen"),
             Show("setups_screen")
         ]
+
+# For tutorial. Only "Setups" button is active
+screen tutorial_venue_screen_1():
+    add "background 2"
+    # Buttons to transition to the bracket and setups screens
+    textbutton "{color=#000000}Bracket{/color}":
+        style "bracket_button"
+        align (0.95, 0.825)
+        text_align 1.0
+        xsize 200
+
+        # action [
+        #     Show("bracket_screen"),
+        #     Hide("venue_screen")
+        # ]
+    textbutton "{color=#000000}Setups{/color}":
+        style "setups_button"
+        align (0.95, 0.95)
+        text_align 1.0
+        xsize 200
+
+        action [
+            Hide("venue_screen"),
+            Show("setups_screen"), 
+            SetVariable("clicked_setups", True)
+        ]
+
+# For tutorial. Only "Venue" button is active
+screen tutorial_setups_screen():
+    screen setups_screen():
+    add Solid("#000000")
+
+    if not tutorial_active:
+        key "mouseup_1" action NullAction()
+
+    # Buttons to transition to the venue and bracket screens
+    textbutton "{color=#000000}Venue{/color}":
+        style "venue_button"
+        align (0.95, 0.825)
+        text_align 1.0
+        xsize 200
+
+        action [
+            Hide("setups_screen"),
+            Show("venue_screen"), 
+            SetVariable("clicked_2", True)
+        ]
+    textbutton "{color=#000000}Bracket{/color}":
+        style "bracket_button"
+        align (0.95, 0.95)
+        text_align 1.0
+        xsize 200
+
+        # action [
+        #     Show("bracket_screen"),
+        #     Hide("setups_screen")
+        # ]
+
+    # The setups and players
+    $ alignments = [(0.25, 0.1), (0.75, 0.1), (0.25, 0.9), (0.75, 0.9)]
+    for i in range(4):
+        $ setup = setups[i]
+        $ alignment = alignments[i]
+
+        hbox:
+            align alignment
+            vbox:
+                hbox:
+                    if i % 2 == 0:
+                        frame:
+                            style "setup_box"
+                            vbox:
+                                xsize 150
+                                ysize 350
+                                text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
+                                    xalign 0.5
+                                    yalign 0.5
+                        vbox:
+                            xsize 150
+                            ysize 350
+                            for name, picture in setup.get_player_names_and_pictures():
+                                add picture:
+                                    xalign 0.5
+                                    xysize (150, 150)
+                                text "{color=#ffffff}[name]{/color}":
+                                    xalign 0.5
+                    else:
+                        vbox:
+                            xsize 150
+                            ysize 350
+                            for name, picture in setup.get_player_names_and_pictures():
+                                add picture:
+                                    xalign 0.5
+                                    xysize (150, 150)
+                                text "{color=#ffffff}[name]{/color}":
+                                    xalign 0.5
+                        frame:
+                            style "setup_box"
+                            vbox:
+                                xsize 150
+                                ysize 350
+                                text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
+                                    xalign 0.5
+                                    yalign 0.5
+                if not setup.is_free():
+                    # quit friendlies button
+                    vbox:
+                        xsize 300
+                        ysize 50
+                        xalign 0.5
+                        # ypadding 10
+                        textbutton "{color=#000000}Ask to hop off{/color}":
+                            style "quit_friendlies_button"
+                            # action [
+                            #     SetVariable("setup_player", setup.get_p1()),
+                            #     SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
+                            #     SetVariable("cur_label", store.current_label),
+                            #     Hide(),
+                            #     Jump("quit_friendlies")
+                            # ]
+
+
 
 screen setups_screen():
     add Solid("#000000")
@@ -811,57 +937,58 @@ label start:
     $ matches_in_progress = 0
     $ setups = [Setup(1), Setup(2), Setup(3), Setup(4)]
 
-    # dev skip
-    scene background 2
-    jump match_starting_loop
-    # Script
-    n "Why did I come here again?"
-    n "I was just supposed to be playing Super Smash Bros, and I ended up getting roped into coming to a tournament."
-    scene background 2
-    n "My friends told me this would be fun, but I haven't seen much happen yet."
-    n "There's just a bunch of people playing and talking about things like \"frame data\" that I don't understand."
-    n "Where's the tournament organizer anyways? Aren't they supposed to be here by now?"
-    n "Wait, I feel like a new challenger is approaching..."
-    show expression Solid("#fff") as flash
-    with dissolve
-    pause 0.1
-    hide flash
-    with dissolve
-    show reggie at right with moveinright
-    with vpunch
-    r "My body is ready!"
-    r "Hello! It's me, Reggie Fils-Aimé, former CEO of Nintendo, and also the tournament organizer of this competition, or TO for short."
-    r "Thanks for showing up, we're going to make this the greatest tournament ever held for this children's party game."
-    r "Hopefully you came prepared, as today's performance will determine the future of your gaming career."
-    r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your friendlies!"
-    r "I'm gonna have [p1.name] and [p2.name] on setup 1, [p3.name] and [p4.name] on setup 2,..."
-    r "...[p5.name] and [p6.name] on setup 3, and [p7.name] and [p8.name] on setup 4. Okay everyone, good luck and have f—"
-    # REMOVED FOR NOW
-    # $ call_set(setups, PlayerPicture(p1, player_pictures[p1]), PlayerPicture(p2, player_pictures[p2]))
-    # $ call_set(setups, PlayerPicture(p3, player_pictures[p3]), PlayerPicture(p4, player_pictures[p4]))
-    # $ call_set(setups, PlayerPicture(p5, player_pictures[p5]), PlayerPicture(p6, player_pictures[p6]))
-    # $ call_set(setups, PlayerPicture(p7, player_pictures[p7]), PlayerPicture(p8, player_pictures[p8]))
-    hide reggie
-    # TODO: Play phone ringing noise
-    e "{cps=5}Ring... Ring... Ring...{nw}{/cps}"
-    show reggie at left with moveinleft
-    r "Hello? What's that, Mr. Sakurai? You need me back at Nintendo headquarters immediately in order to promote Mario Kart 14 featuring Shaquille O'Neal?"
-    r "Well I suppose that does sound pretty important. I'll be there right away!"
-    show reggie at center with move
-    r "It seems I've been called away on very important business. I'll have to have someone else run this tournament for me."
-    r "{cps=10}How about... you there?{/cps}"
-    with hpunch
-    m "Me?!"
-    m "No way, this is my first tournament and I don't even know how to-"
-    r "Perfect! I'm sure you'll do great. Ta-ta now!"
-    hide reggie with moveoutleft
+    # # dev skip
+    # scene background 2
+    # jump match_starting_loop
 
-    n "Good grief, how did I get myself into this situation?"
-    n "I could just leave, but that doesn't feel right. Didn't Reggie say that today would decide the future of my gaming career? That sounds pretty important."
-    n "I think I've seen one of my friends do something like this before. How hard could it be?"
-    n "Alright, I can make it through this. I can do this."
-    with hpunch
-    m "Everyone, quit your friendlies!"
+    # # Script
+    # n "Why did I come here again?"
+    # n "I was just supposed to be playing Super Smash Bros, and I ended up getting roped into coming to a tournament."
+    # scene background 2
+    # n "My friends told me this would be fun, but I haven't seen much happen yet."
+    # n "There's just a bunch of people playing and talking about things like \"frame data\" that I don't understand."
+    # n "Where's the tournament organizer anyways? Aren't they supposed to be here by now?"
+    # n "Wait, I feel like a new challenger is approaching..."
+    # show expression Solid("#fff") as flash
+    # with dissolve
+    # pause 0.1
+    # hide flash
+    # with dissolve
+    # show reggie at right with moveinright
+    # with vpunch
+    # r "My body is ready!"
+    # r "Hello! It's me, Reggie Fils-Aimé, former CEO of Nintendo, and also the tournament organizer of this competition, or TO for short."
+    # r "Thanks for showing up, we're going to make this the greatest tournament ever held for this children's party game."
+    # r "Hopefully you came prepared, as today's performance will determine the future of your gaming career."
+    # r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your friendlies!"
+    # r "I'm gonna have [p1.name] and [p2.name] on setup 1, [p3.name] and [p4.name] on setup 2,..."
+    # r "...[p5.name] and [p6.name] on setup 3, and [p7.name] and [p8.name] on setup 4. Okay everyone, good luck and have f—"
+    # # REMOVED FOR NOW
+    # # $ call_set(setups, PlayerPicture(p1, player_pictures[p1]), PlayerPicture(p2, player_pictures[p2]))
+    # # $ call_set(setups, PlayerPicture(p3, player_pictures[p3]), PlayerPicture(p4, player_pictures[p4]))
+    # # $ call_set(setups, PlayerPicture(p5, player_pictures[p5]), PlayerPicture(p6, player_pictures[p6]))
+    # # $ call_set(setups, PlayerPicture(p7, player_pictures[p7]), PlayerPicture(p8, player_pictures[p8]))
+    # hide reggie
+    # # TODO: Play phone ringing noise
+    # e "{cps=5}Ring... Ring... Ring...{nw}{/cps}"
+    # show reggie at left with moveinleft
+    # r "Hello? What's that, Mr. Sakurai? You need me back at Nintendo headquarters immediately in order to promote Mario Kart 14 featuring Shaquille O'Neal?"
+    # r "Well I suppose that does sound pretty important. I'll be there right away!"
+    # show reggie at center with move
+    # r "It seems I've been called away on very important business. I'll have to have someone else run this tournament for me."
+    # r "{cps=10}How about... you there?{/cps}"
+    # with hpunch
+    # m "Me?!"
+    # m "No way, this is my first tournament and I don't even know how to-"
+    # r "Perfect! I'm sure you'll do great. Ta-ta now!"
+    # hide reggie with moveoutleft
+
+    # n "Good grief, how did I get myself into this situation?"
+    # n "I could just leave, but that doesn't feel right. Didn't Reggie say that today would decide the future of my gaming career? That sounds pretty important."
+    # n "I think I've seen one of my friends do something like this before. How hard could it be?"
+    # n "Alright, I can make it through this. I can do this."
+    # with hpunch
+    # m "Everyone, quit your friendlies!"
 
     # Tutorial
     scene black with fade
@@ -871,6 +998,16 @@ label start:
     e "From the {b}Venue{/b}, you'll access the core of the tournament."
     e "The buttons on the right allow you to jump between the {b}Bracket{/b} and the {b}Setups{/b}."
     hide screen venue_screen
+    show screen tutorial_venue_screen_1
+    label wait_for_setups_click:
+        e "Click the {b}Setups{/b} button."
+        if not clicked_setups:
+            jump wait_for_setups_click
+
+
+
+
+  
     show screen setups_screen with dissolve
     e "{b}Assigning Setups{/b}: When players approach you to start a set, you'll need to find them an open setup in the room."
 
