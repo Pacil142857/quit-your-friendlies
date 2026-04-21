@@ -496,7 +496,7 @@ screen tutorial_setups_screen():
 
 
 
-screen setups_screen():
+screen setups_screen(show_navigation=True):
     add Solid("#000000")
 
     if not tutorial_active:
