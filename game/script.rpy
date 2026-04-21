@@ -767,7 +767,6 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
         action [Hide("post_match_report_screen"), Show("room_screen_with_button")]
 
 # The game starts here.
-
 label start:
     # call screen bracket_screen
     # $ setups[0].set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p2, "p2 cropped"))
@@ -775,6 +774,16 @@ label start:
     # $ setups[2].set_players(PlayerPicture(p5, "p5 cropped"), PlayerPicture(p6, "p6 cropped"))
     # $ setups[3].set_players(PlayerPicture(p7, "p7 cropped"), PlayerPicture(p8, "p8 cropped"))
     # call screen setups_screen
+
+    $ wr1 = [BracketSet(p1, p2), BracketSet(p3, p4), BracketSet(p5, p6), BracketSet(p7, p8)] # winners round 1
+    $ wr2 = [BracketSet(), BracketSet()]
+    $ wf = [BracketSet()] # winners finals (wr3)
+    $ gf = [BracketSet()] # grand finals
+    $ lr1 =[BracketSet(), BracketSet()] # losers round 1
+    $ lr2 = [BracketSet(), BracketSet()]
+    $ lr3 = [BracketSet()]
+    $ lf = [BracketSet()] # losers finals
+    $ tf = [BracketSet()] # true finals / grand finals reset
 
     $ matches_in_progress = 0
     $ setups = [Setup(1), Setup(2), Setup(3), Setup(4)]
@@ -997,10 +1006,21 @@ label report_57:
     $ expected_result = {"winner": p7, "loser": p5, "winner_games": 2, "loser_games": 0}
     call screen venue_screen
 
-n "I ought to call a set while I wait for bracket to continue."
+# Prompt player to start saggy vs ford. p2 vs p7
+# label wait_27:
+#     show screen venue_screen
+#     $ current_match = find_setup(setups, p2, p7)
+#     $ matches_started = 0
+#     n "Looks like there's some downtime to call another set. Let's see if anything can be started."
+#     call screen venue_screen
+#     if (matches_started < 2) and current_match is None:
+#         jump wait_27
+#     else:
+#         jump report_68
+
 label start_loop_27:
     # You'll have to change the numbers depending on how many sets can be called
-    
+    n "I ought to call a set while I wait for bracket to continue."
     if matches_in_progress < 2:
         n "I need to call the next set."
         call screen bracket_screen
@@ -1017,171 +1037,3 @@ label report_68:
     hide p6 onlayer screens with dissolve
     $ expected_result = {"winner": p6, "loser": p8, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
-
-# Report Ford vs Saggy Ford wins 2-0. p7 vs p2, p7 wins 2-0.
-label report_27:
-    n "That losers round 2 match just finished!"
-    show p7 at left onlayer screens with dissolve
-    p7 "Hello I won 2-0 against [p2.name]"
-    m "Indubitably my good sir"
-    show screen venue_screen
-    hide p7 onlayer screens with dissolve
-    $ expected_result = {"winner": p7, "loser": p2, "winner_games": 2, "loser_games": 0}
-    call screen venue_screen
-
-n "There's another set to call. I should start it while everyone else is playing."
-label start_loop_18:
-    # You'll have to change the numbers depending on how many sets can be called
-    if matches_in_progress < 1:
-        n "I need to call the next set."
-        call screen bracket_screen
-        # When the player clicks "Start Match", the screen returns here
-        jump start_loop_18
-
-# Report red dot vs Pacil, red dot wins 2-1. p1 vs p8, p1 wins 2-1.
-label report_18:
-    n "An ashamed individual seems to be approaching me."
-    show p8 shame at right onlayer screens with dissolve
-    p8 "How embarassing. I shieldbroke him and he mashed out before I could charge a smash attack."
-    p8 "I lost 1-2 to [p1.name]"
-    m "Geezaloo, that sucks. I'll input your score."
-    show screen venue_screen
-    hide p8 shame onlayer screens with dissolve
-    $ expected_result = {"winner": p1, "loser": p8, "winner_games": 2, "loser_games": 1}
-    call screen venue_screen
-
-
-# Prompt player to start winners finals and losers semifinals. Top 4 so BO5
-n "Jimminy crickets! It's top 4 now so all matches from here on out will be best of 5!"
-n "Let's start both sets that can be played."
-label start_loop_36_17:  
-    if matches_in_progress == 0:
-        n "I need to get at least [2 - matches_in_progress] more sets running."
-    elif matches_in_progress == 1:
-        n "I need to get just one more set running."
-    call screen bracket_screen
-    # When the player clicks "Start Match", the screen returns here
-    if matches_in_progress < 2:
-        jump start_loop_36_17
-
-# Report red dot vs Ford red dot wins 3-0. p1 vs p7 p1 wins 3-0.
-label report_17:
-    n "Losers semifinals have finished!"
-    show p1 happy at left onlayer screens with dissolve
-    p1 "I won 3-0 against [p7.name]"
-    show p7 at right onlayer screens with dissolve
-    p7 "But it was close! 🤓☝️"
-    m "Close only counts in horseshoes and handgrenades, sorry."
-    show screen venue_screen
-    hide p7 onlayer screens with dissolve
-    hide p1 onlayer screens with dissolve
-    $ expected_result = {"winner": p1, "loser": p7, "winner_games": 3, "loser_games": 0}
-    call screen venue_screen
-
-# Waiting...
-n "Seems like that winner's set is taking a while. Good thing that everyone here is patient and respectful, though!"
-show p1 angry at center onlayer screens with dissolve
-p1 "When am I playing my next match??? I've got 8 seasons of Smash n Splash to catch up on tonight."
-m "Please be patient, winner's finals is just taking a while."
-p1 "All you TO's are the same, wait for this, quit your friendlies that, I've about had it up to HERE with you!!"
-m "Well there's nothing I can do. You can always watch their match if you want. You might get some insight into your next opponent."
-p1 "Watch a CLOUD DITTO are you kidding me?!?! Might as well watch paint dry and calculus lectures more like!   {nw}"
-p1 "Matter of fact, ban both ZSS and Cloud. While you're at it, ban all the sword characters   {nw}"
-p1 "{cps=70}Things were better when we had frame perfect links and Akuma as a top tier! Bring back the good old days, I say!! This tyranny cannot go on! ¡Viva la revolución! I hate projectiles I hate Steve I hate Cloud I hate this game gwaaarrrrrrr!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{nw}{/cps}"
-n "Wow, I think he's actually lost it. I feel like we should make a documentary out of his life."
-m "Hey, well that's just like... your opinion man..."
-hide p1 angry onlayer screens
-show p1 happy at center onlayer screens
-p1 "Fair enough! Glad we could have this discussion."
-n "I have no words."
-hide p1 happy onlayer screens with dissolve
-
-# Report colorful vs Kitsch, Kitsch wins 3-2. p3 vs p6, p6 wins 3-2
-label report_36:
-    n "Winner's finals are done!"
-    show p6 at left onlayer screens with dissolve
-    p6 "I love the Cloud ditto! I won 3-2 against [p3.name]."
-    m "Don't go saying that too loud, but congrats!"
-    show screen venue_screen
-    hide p6 onlayer screens with dissolve
-    $ expected_result = {"winner": p6, "loser": p3, "winner_games": 3, "loser_games": 2}
-    call screen venue_screen
-
-# Start loser's finals
-label start_loop_13:
-    n "Time to start another set."
-    call screen bracket_screen
-    # When the player clicks "Start Match", the screen returns here
-    if matches_in_progress < 1:
-        jump start_loop_13
-    else:
-        n "All the sets are started now."
-
-# Report colorful vs red dot, colorful wins 3-1. p3 vs p1, p3 wins 3-1.
-label report_31:
-    n "Another day, another set completion."
-    show p3 at left onlayer screens with dissolve
-    p3 "I won against [p1.name] 3-1."
-    m "Delightful. I'll report that for you."
-    show screen venue_screen
-    hide p3 onlayer screens with dissolve
-    $ expected_result = {"winner": p3, "loser": p1, "winner_games": 3, "loser_games": 1}
-    call screen venue_screen
-
-# Call Grand Finals
-label start_loop_gf:
-    n "Grand finals time! Let's start it :)"
-    call screen bracket_screen
-    # When the player clicks "Start Match", the screen returns here
-    if matches_in_progress < 1:
-        jump start_loop_gf
-    else:
-        n "All the sets are started now."
-
-# Report grand finals. p3 wins 3-0
-label report_gf:
-    n "Grands has wrapped up."
-    show p3 at left onlayer screens with dissolve
-    p3 "I won against [p6.name] 3-0."
-    m "Dang, nice. I'll put that in."
-    show screen venue_screen
-    hide p3 onlayer screens with dissolve
-    $ expected_result = {"winner": p3, "loser": p6, "winner_games": 3, "loser_games": 0}
-    call screen venue_screen
-
-# Call tf.
-n "Since the winner of the loser's bracket, [p3.name], won grand finals, we now have a \"bracket reset\". This means that the same players will play again. Whoever wins this set wins the tournament!"
-label start_loop_tf:
-    n "Call the grand finals reset."
-    call screen bracket_screen
-    # When the player clicks "Start Match", the screen returns here
-    if matches_in_progress < 1:
-        jump start_loop_tf
-    else:
-        n "All the sets are started now."
-
-# Report tf.
-label report_tf:
-    n "The last set has finished."
-    show p6 at left onlayer screens with dissolve
-    p6 "Let's gooooooo I beat [p3.name] 3-2."
-    m "Very nice. Congrats on the W! I'll submit that."
-    show screen venue_screen
-    hide p6 onlayer screens with dissolve
-    $ expected_result = {"winner": p6, "loser": p3, "winner_games": 3, "loser_games": 2}
-    call screen venue_screen
-
-
-# Ending
-hide screen venue_screen
-scene background 2 with fade
-    
-$ champion = tf[0].winner.name
-n "And that's it! [champion] is our tournament champion!" 
-
-m "I... I actually did it. I ran the whole bracket without Reggie."
-
-show reggie at right with moveinright
-play sound "audio/heheh.mp3"
-r "I'm back! And I brought Shaq!"
-n "Thanks for playing!"
