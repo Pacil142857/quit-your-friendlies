@@ -1205,6 +1205,8 @@ label start:
 
     hide screen tutorial_setups_screen
     show screen tutorial_venue_screen_1 with dissolve
+    hide screen tutorial_venue_screen_1
+    
     e "{b}Double Elimination{/b}: Most Smash events are 'Double Elimination'. Lose once, and you go to the Losers Bracket. Lose twice, and you're out! In a tournament bracket, it'll look like this."
     show bracketTemplate at truecenter with dissolve
     e "{b}The Bracket{/b}: This is the map of the tournament. This will be shown at appropriate times throoughout the game, and those white boxes will be filled in with players' names."
