@@ -402,7 +402,6 @@ screen tutorial_venue_screen_1():
 
 # For tutorial. Only "Venue" button is active
 screen tutorial_setups_screen():
-    screen setups_screen():
     add Solid("#000000")
 
     if not tutorial_active:
