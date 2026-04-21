@@ -814,82 +814,82 @@ label start:
     $ setups = [Setup(1), Setup(2), Setup(3), Setup(4)]
 
     # Script
-    # n "Why did I come here again?"
-    # n "I was just supposed to be playing Super Smash Bros, and I ended up getting roped into coming to a tournament."
-    # scene background 2
-    # n "My friends told me this would be fun, but I haven't seen much happen yet."
-    # n "There's just a bunch of people playing and talking about things like \"frame data\" that I don't understand."
-    # n "Where's the tournament organizer anyways? Aren't they supposed to be here by now?"
-    # n "Wait, I feel like a new challenger is approaching..."
-    # show expression Solid("#fff") as flash
-    # with dissolve
-    # pause 0.1
-    # hide flash
-    # with dissolve
-    # show reggie at right with moveinright
-    # with vpunch
-    # r "My body is ready!"
-    # r "Hello! It's me, Reggie Fils-Aimé, former CEO of Nintendo, and also the tournament organizer of this competition, or TO for short."
-    # r "Thanks for showing up, we're going to make this the greatest tournament ever held for this children's party game."
-    # r "Hopefully you came prepared, as today's performance will determine the future of your gaming career."
-    # r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your friendlies!"
-    # r "I'm gonna have [p1.name] and [p2.name] on setup 1, [p3.name] and [p4.name] on setup 2,..."
-    # r "...[p5.name] and [p6.name] on setup 3, and [p7.name] and [p8.name] on setup 4. Okay everyone, good luck and have f—"
-    # # REMOVED FOR NOW
-    # # $ call_set(setups, PlayerPicture(p1, player_pictures[p1]), PlayerPicture(p2, player_pictures[p2]))
-    # # $ call_set(setups, PlayerPicture(p3, player_pictures[p3]), PlayerPicture(p4, player_pictures[p4]))
-    # # $ call_set(setups, PlayerPicture(p5, player_pictures[p5]), PlayerPicture(p6, player_pictures[p6]))
-    # # $ call_set(setups, PlayerPicture(p7, player_pictures[p7]), PlayerPicture(p8, player_pictures[p8]))
-    # hide reggie
-    # # TODO: Play phone ringing noise
-    # e "{cps=5}Ring... Ring... Ring...{nw}{/cps}"
-    # show reggie at left with moveinleft
-    # r "Hello? What's that, Mr. Sakurai? You need me back at Nintendo headquarters immediately in order to promote Mario Kart 14 featuring Shaquille O'Neal?"
-    # r "Well I suppose that does sound pretty important. I'll be there right away!"
-    # show reggie at center with move
-    # r "It seems I've been called away on very important business. I'll have to have someone else run this tournament for me."
-    # r "{cps=10}How about... you there?{/cps}"
-    # with hpunch
-    # m "Me?!"
-    # m "No way, this is my first tournament and I don't even know how to-"
-    # r "Perfect! I'm sure you'll do great. Ta-ta now!"
-    # hide reggie with moveoutleft
+    n "Why did I come here again?"
+    n "I was just supposed to be playing Super Smash Bros, and I ended up getting roped into coming to a tournament."
+    scene background 2
+    n "My friends told me this would be fun, but I haven't seen much happen yet."
+    n "There's just a bunch of people playing and talking about things like \"frame data\" that I don't understand."
+    n "Where's the tournament organizer anyways? Aren't they supposed to be here by now?"
+    n "Wait, I feel like a new challenger is approaching..."
+    show expression Solid("#fff") as flash
+    with dissolve
+    pause 0.1
+    hide flash
+    with dissolve
+    show reggie at right with moveinright
+    with vpunch
+    r "My body is ready!"
+    r "Hello! It's me, Reggie Fils-Aimé, former CEO of Nintendo, and also the tournament organizer of this competition, or TO for short."
+    r "Thanks for showing up, we're going to make this the greatest tournament ever held for this children's party game."
+    r "Hopefully you came prepared, as today's performance will determine the future of your gaming career."
+    r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your friendlies!"
+    r "I'm gonna have [p1.name] and [p2.name] on setup 1, [p3.name] and [p4.name] on setup 2,..."
+    r "...[p5.name] and [p6.name] on setup 3, and [p7.name] and [p8.name] on setup 4. Okay everyone, good luck and have f—"
+    # REMOVED FOR NOW
+    # $ call_set(setups, PlayerPicture(p1, player_pictures[p1]), PlayerPicture(p2, player_pictures[p2]))
+    # $ call_set(setups, PlayerPicture(p3, player_pictures[p3]), PlayerPicture(p4, player_pictures[p4]))
+    # $ call_set(setups, PlayerPicture(p5, player_pictures[p5]), PlayerPicture(p6, player_pictures[p6]))
+    # $ call_set(setups, PlayerPicture(p7, player_pictures[p7]), PlayerPicture(p8, player_pictures[p8]))
+    hide reggie
+    # TODO: Play phone ringing noise
+    e "{cps=5}Ring... Ring... Ring...{nw}{/cps}"
+    show reggie at left with moveinleft
+    r "Hello? What's that, Mr. Sakurai? You need me back at Nintendo headquarters immediately in order to promote Mario Kart 14 featuring Shaquille O'Neal?"
+    r "Well I suppose that does sound pretty important. I'll be there right away!"
+    show reggie at center with move
+    r "It seems I've been called away on very important business. I'll have to have someone else run this tournament for me."
+    r "{cps=10}How about... you there?{/cps}"
+    with hpunch
+    m "Me?!"
+    m "No way, this is my first tournament and I don't even know how to-"
+    r "Perfect! I'm sure you'll do great. Ta-ta now!"
+    hide reggie with moveoutleft
 
-    # n "Good grief, how did I get myself into this situation?"
-    # n "I could just leave, but that doesn't feel right. Didn't Reggie say that today would decide the future of my gaming career? That sounds pretty important."
-    # n "I think I've seen one of my friends do something like this before. How hard could it be?"
-    # n "Alright, I can make it through this. I can do this."
-    # with hpunch
-    # m "Everyone, quit your friendlies!"
+    n "Good grief, how did I get myself into this situation?"
+    n "I could just leave, but that doesn't feel right. Didn't Reggie say that today would decide the future of my gaming career? That sounds pretty important."
+    n "I think I've seen one of my friends do something like this before. How hard could it be?"
+    n "Alright, I can make it through this. I can do this."
+    with hpunch
+    m "Everyone, quit your friendlies!"
 
-    # # Tutorial
-    # scene black with fade
-    # e "Welcome to the TO's Chair. Since Reggie is off promoting Mario Kart 14, you're in charge of the bracket."
-    # e "Here is how a Smash Tournament works:"
-    # show screen venue_screen with dissolve
-    # e "From the {b}Venue{/b}, you'll access the core of the tournament."
-    # e "The buttons on the right allow you to jump between the {b}Bracket{/b} and the {b}Setups{/b}."
-    # hide screen venue_screen
-    # show screen setups_screen with dissolve
-    # e "{b}Assigning Setups{/b}: When players approach you to start a set, you'll need to find them an open setup in the room."
+    # Tutorial
+    scene black with fade
+    e "Welcome to the TO's Chair. Since Reggie is off promoting Mario Kart 14, you're in charge of the bracket."
+    e "Here is how a Smash Tournament works:"
+    show screen venue_screen with dissolve
+    e "From the {b}Venue{/b}, you'll access the core of the tournament."
+    e "The buttons on the right allow you to jump between the {b}Bracket{/b} and the {b}Setups{/b}."
+    hide screen venue_screen
+    show screen setups_screen with dissolve
+    e "{b}Assigning Setups{/b}: When players approach you to start a set, you'll need to find them an open setup in the room."
 
-    # e "A 'setup' is just a TV and a console ready for a match."
-    # e "You'll be able to see who is playing at what setup on this screen. During the tournament, you'll need to assign players to open setups so that players can start their sets."
-    # e "You can start matches from the bracket screen by clicking on a set and then clicking the \"Start Match\" button."
-    # hide screen setups_screen with dissolve
-    # e "{b}Double Elimination{/b}: Most Smash events are 'Double Elimination'. Lose once, and you go to the Losers Bracket. Lose twice, and you're out! In a tournament bracket, it'll look like this."
-    # show bracketTemplate at truecenter with dissolve
-    # e "{b}The Bracket{/b}: This is the map of the tournament. This will be shown at appropriate times throoughout the game, and those white boxes will be filled in with players' names."
-    # e "Players are paired in 'Sets'. Clicking a set button will let you report the outcome."
-    # hide bracketTemplate with dissolve
-    # show match_report at truecenter with dissolve
-    # e "{b}Reporting Scores{/b}: When a set finishes, a player will come to you with their score." 
-    # e "You'll use this screen to input the games won by each player. Accuracy is key!"
-    # e "This is also where you'll start sets."
-    # hide match_report with dissolve
-    # e "{b}Your Goal{/b}: Keep the tournament moving! If a set is ready to be played, make sure the players find a setup."
-    # m "Okay... bracket, scores, winners, losers. I think I've got the hang of it."
-    # $ tutorial_active = False
+    e "A 'setup' is just a TV and a console ready for a match."
+    e "You'll be able to see who is playing at what setup on this screen. During the tournament, you'll need to assign players to open setups so that players can start their sets."
+    e "You can start matches from the bracket screen by clicking on a set and then clicking the \"Start Match\" button."
+    hide screen setups_screen with dissolve
+    e "{b}Double Elimination{/b}: Most Smash events are 'Double Elimination'. Lose once, and you go to the Losers Bracket. Lose twice, and you're out! In a tournament bracket, it'll look like this."
+    show bracketTemplate at truecenter with dissolve
+    e "{b}The Bracket{/b}: This is the map of the tournament. This will be shown at appropriate times throoughout the game, and those white boxes will be filled in with players' names."
+    e "Players are paired in 'Sets'. Clicking a set button will let you report the outcome."
+    hide bracketTemplate with dissolve
+    show match_report at truecenter with dissolve
+    e "{b}Reporting Scores{/b}: When a set finishes, a player will come to you with their score." 
+    e "You'll use this screen to input the games won by each player. Accuracy is key!"
+    e "This is also where you'll start sets."
+    hide match_report with dissolve
+    e "{b}Your Goal{/b}: Keep the tournament moving! If a set is ready to be played, make sure the players find a setup."
+    m "Okay... bracket, scores, winners, losers. I think I've got the hang of it."
+    $ tutorial_active = False
 
     scene background 2 with fade
     n "The room is buzzing with energy. It's time to get this bracket moving."
