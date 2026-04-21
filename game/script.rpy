@@ -800,16 +800,6 @@ label start:
     # $ setups[3].set_players(PlayerPicture(p7, "p7 cropped"), PlayerPicture(p8, "p8 cropped"))
     # call screen setups_screen
 
-    $ wr1 = [BracketSet(p1, p2), BracketSet(p3, p4), BracketSet(p5, p6), BracketSet(p7, p8)] # winners round 1
-    $ wr2 = [BracketSet(), BracketSet()]
-    $ wf = [BracketSet()] # winners finals (wr3)
-    $ gf = [BracketSet()] # grand finals
-    $ lr1 =[BracketSet(), BracketSet()] # losers round 1
-    $ lr2 = [BracketSet(), BracketSet()]
-    $ lr3 = [BracketSet()]
-    $ lf = [BracketSet()] # losers finals
-    $ tf = [BracketSet()] # true finals / grand finals reset
-
     $ matches_in_progress = 0
     $ setups = [Setup(1), Setup(2), Setup(3), Setup(4)]
 
@@ -990,7 +980,7 @@ label ford_pacil:
     $ expected_result = {"winner": p8, "loser": p7, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
 
-# Prompt player to start another 2 sets (nyramyss vs pacil and kitsch vs ford). p5 vs p8, p6 vs p7
+# Prompt player to start another 2 sets (nyramyss vs ford and kitsch vs pacil). p5 vs p8, p6 vs p7
 label start_loop_23_57:
     # Note: The numbers here are 3 and 2 instead of 4 and 3 because only THREE sets can be active right now!
     # You'll have to change the numbers depending on how many sets can be called
