@@ -767,7 +767,6 @@ screen post_match_report_screen(selected_agmc, selected_bgmc, agmc, bgmc):
         action [Hide("post_match_report_screen"), Show("room_screen_with_button")]
 
 # The game starts here.
-
 label start:
     # call screen bracket_screen
     # $ setups[0].set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p2, "p2 cropped"))
@@ -775,6 +774,16 @@ label start:
     # $ setups[2].set_players(PlayerPicture(p5, "p5 cropped"), PlayerPicture(p6, "p6 cropped"))
     # $ setups[3].set_players(PlayerPicture(p7, "p7 cropped"), PlayerPicture(p8, "p8 cropped"))
     # call screen setups_screen
+
+    $ wr1 = [BracketSet(p1, p2), BracketSet(p3, p4), BracketSet(p5, p6), BracketSet(p7, p8)] # winners round 1
+    $ wr2 = [BracketSet(), BracketSet()]
+    $ wf = [BracketSet()] # winners finals (wr3)
+    $ gf = [BracketSet()] # grand finals
+    $ lr1 =[BracketSet(), BracketSet()] # losers round 1
+    $ lr2 = [BracketSet(), BracketSet()]
+    $ lr3 = [BracketSet()]
+    $ lf = [BracketSet()] # losers finals
+    $ tf = [BracketSet()] # true finals / grand finals reset
 
     $ matches_in_progress = 0
     $ setups = [Setup(1), Setup(2), Setup(3), Setup(4)]
@@ -1009,15 +1018,6 @@ label report_57:
 #     else:
 #         jump report_68
 
-label start_loop_27:
-    # You'll have to change the numbers depending on how many sets can be called
-    n "I ought to call a set while I wait for bracket to continue."
-    if matches_in_progress < 2:
-        n "I need to call the next set."
-        call screen bracket_screen
-        # When the player clicks "Start Match", the screen returns here
-        jump start_loop_27
-
 # Report Kitsch vs Pacil Kitsch wins 2-1. p6 vs p8 p6 wins 2-1.
 label report_68:
     n "The final winners round 2 match is being reported now."
@@ -1028,3 +1028,23 @@ label report_68:
     hide p6 onlayer screens with dissolve
     $ expected_result = {"winner": p6, "loser": p8, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
+    n "Looks like no more bracket matches are currently being played, so I ought to call some sets now."
+
+label start_loop_27_18_36:
+    # You'll have to change the numbers depending on how many sets can be called
+    if matches_in_progress < 3:
+        if matches_in_progress < 2:
+            n "I need to get at least [3 - matches_in_progress] more sets running."
+        else:
+            n "I need to get just one more set running."
+        call screen bracket_screen
+        # When the player clicks "Start Match", the screen returns here
+        jump start_loop_27_18_36
+    else:
+        n "Bracket should be able to continue now."
+
+# TODO: Report the following sets:
+# p8 vs p1 (LR2), p2 vs p7 (LR2), p3 vs p6 (WF)
+# After both LR2 sets are completed and reported, call LR3 (winner of LR2-a vs. winner of LR2-b)
+# After WF and LR3 are completed and reported, call LF (loser of WF vs. winner of LR3)
+# After LF is completed and reported, call Grand Finals (winner of WF vs. winner of LF)
