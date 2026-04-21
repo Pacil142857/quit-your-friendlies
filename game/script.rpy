@@ -10,11 +10,11 @@ define e = Character(None, what_italic=True, what_color="#58eafd") # Special eve
 define m = Character("Me")
 define r = Character(name="Reggie", color="#32f35c")
 define p1 = Character(name="red dot", color="#ffe449")
-define p2 = Character(name="SaggyMilkJug", color="#c7ffcf")
+define p2 = Character(name="Surume", color="#c7ffcf")
 define p3 = Character(name="colorfulʚɞ", color="#ee89e0")
 define p4 = Character(name="Subzero", color="#f77c7c")
 define p5 = Character(name="Nyramyss", color="#778af7")
-define p6 = Character(name="Kitsch", color="#5ddbf1")
+define p6 = Character(name="Flan", color="#5ddbf1")
 define p7 = Character(name="Ford", color="#f89451")
 define p8 = Character(name="Pacil", color="#9cffbb")
 
