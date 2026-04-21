@@ -149,6 +149,19 @@ style submit_result_button_wrong_text:
     color "#000000"
     hover_color "#ffffff"
 
+style submit_result_button_wrong_selected is button:
+    xysize (700, 70)
+    background Frame(Solid("#ec2727"))
+    # hover_background Frame(Solid("#2727ec"))
+    # selected_background Frame(Solid("#ec2727"))
+    align (0.5, 0.5)
+
+style submit_result_button_wrong_selected_text:
+    size 30
+    align (0.5, 0.5)
+    color "#ffffff"
+    hover_color "#ffffff"
+
 style start_set_button is button:
     xysize(700, 70)
     background Frame(Solid("#3870e0"))
@@ -590,7 +603,10 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
     key "mouseup_1" action NullAction()
     add "match_report":
         align(0.5, 0.5)
-
+    
+    default fake_submit_text = "Submit Result"
+    default fake_submit_style = "submit_result_button_wrong"
+    
     text player_a.name:
         color "#000"
         align(0.33, 0.175)
@@ -621,6 +637,8 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
                     action [
                         SetVariable("player_a_active_button", i), 
                         SetVariable("a_selected_gamecount", cur),
+                        SetScreenVariable("fake_submit_text", "Submit Result"),
+                        SetScreenVariable("fake_submit_style", "submit_result_button")
                     ]
 
                 else:
@@ -628,6 +646,8 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
                     action [
                         SetVariable("player_b_active_button", i), 
                         SetVariable("b_selected_gamecount", cur),
+                        SetScreenVariable("fake_submit_text", "Submit Result"),
+                        SetScreenVariable("fake_submit_style", "submit_result_button")
                     ]
 
     # Start a set button
@@ -647,6 +667,8 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
                 SetVariable("player_b_active_button", None),
                 SetVariable("a_selected_gamecount", None),
                 SetVariable("b_selected_gamecount", None),
+                SetScreenVariable("fake_submit_text", "Submit Result"),
+                SetScreenVariable("fake_submit_style", "submit_result_button"),
                 SetVariable("matches_in_progress", matches_in_progress + 1),
                 Show("bracket_screen"),
                 Hide("match_report_screen"), 
@@ -666,6 +688,8 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
             SetVariable("player_b_active_button", None),
             SetVariable("a_selected_gamecount", None),
             SetVariable("b_selected_gamecount", None),
+            SetScreenVariable("fake_submit_text", "Submit Result"),
+            SetScreenVariable("fake_submit_style", "submit_result_button"),
             Show("bracket_screen"),
             Hide("match_report_screen")
         ]
@@ -686,6 +710,8 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
                     SetVariable("player_b_active_button", None),
                     SetVariable("a_selected_gamecount", None),
                     SetVariable("b_selected_gamecount", None),
+                    SetScreenVariable("fake_submit_text", "Submit Result"),
+                    SetScreenVariable("fake_submit_style", "submit_result_button"),
                     SetVariable("matches_in_progress", matches_in_progress - 1),
                     Function(current_match.report, 
                             winner=determine_winner(player_a, player_b, a_selected_gamecount, b_selected_gamecount)),
@@ -701,15 +727,15 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
                 #     Hide("match_report_screen")
                 # ]
         else:
-            default fake_submit_text = "Submit Result"
             textbutton "[fake_submit_text]":
-                style "submit_result_button_wrong"
+                if fake_submit_style == "submit_result_button_wrong_selected":
+                    style "submit_result_button_wrong_selected"
+                else:
+                    style "submit_result_button_wrong"
                 align (0.87, 0.95)
                 action [
-                    SetScreenVariable("fake_submit_text", "Wrong Results!")
-                ]
-                unhovered [
-                    SetScreenVariable("fake_submit_text", "Submit Result")
+                    SetScreenVariable("fake_submit_text", "Wrong Result!"),
+                    SetScreenVariable("fake_submit_style", "submit_result_button_wrong_selected")
                 ]
     else:
         # Disabled submit results button
