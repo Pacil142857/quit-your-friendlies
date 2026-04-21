@@ -48,7 +48,7 @@ define lr2 = [BracketSet(), BracketSet()]
 define lr3 = [BracketSet()]
 define lf = [BracketSet()] # losers finals
 define tf = [BracketSet()] # true finals / grand finals reset
-
+define bracket = [wr1, wr2, wf, gf, lr1, lr2, lr3, lf, tf]
 
 # Style vars
 style venue_button is button:
@@ -453,12 +453,15 @@ screen setups_screen():
                         # ypadding 10
                         textbutton "{color=#000000}Ask to hop off{/color}":
                             style "quit_friendlies_button"
+                            $ label_to_jump_to = "quit_friendlies"
+                            if set_in_bracket(setup.get_p1(), setup.get_p2(), bracket):
+                                $ label_to_jump_to = "quit_bracket"
                             action [
                                 SetVariable("setup_player", setup.get_p1()),
                                 SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
                                 SetVariable("cur_label", store.current_label),
                                 Hide(),
-                                Jump("quit_friendlies")
+                                Jump(label_to_jump_to)
                             ]
                                 
 

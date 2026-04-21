@@ -104,13 +104,24 @@ init python:
                 return setup
         return None
     
-    # Frees hte setup that p1 and p2 are playing on
+    # Frees the setup that p1 and p2 are playing on
     def clear_setup(setups, p1, p2):
         setup = find_setup(setups, p1, p2)
         if setup is not None:
             setup.clear_setup()
             return None
         return None
+    
+    # Check if a set between two players is in bracket or not
+    def set_in_bracket(p1, p2, bracket):
+        for round_ in bracket:
+            for set_ in round_:
+                if (p1 in set_.get_players()) and (p2 in set_.get_players()) and (set_.get_p1() != set_.get_p2()):
+                    # This is an actual bracket set
+                    # Now check if the bracket set has ended or not
+                    if set_.winner is None and set_.loser is None:
+                        return True # This is a bracket set!
+        return False # This is just friendlies
 
     class BracketSet:
         def __init__(self, *players):
@@ -178,6 +189,9 @@ init python:
         def set_players(self, p1, p2):
             self.p1 = p1
             self.p2 = p2
+        
+        def get_players(self):
+            return (self.p1, self.p2)
         
         def set_p1(self, p1):
             self.p1 = p1
