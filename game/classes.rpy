@@ -1,4 +1,8 @@
 init python:
+    def label_callback(name, abnormal):
+        store.current_label = name
+    config.label_callback = label_callback
+
     class PlayerPicture:
         def __init__(self, player=None, picture_name=None):
             self.player = player

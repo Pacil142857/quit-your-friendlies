@@ -21,6 +21,10 @@ define p8 = Character(name="Pacil", color="#9cffbb")
 # Give each character a profile picture
 define player_pictures = {p1: "p1 cropped", p2: "p2 cropped", p3: "p3 cropped", p4: "p4 cropped", p5: "p5 cropped", p6: "p6 cropped", p7: "p7 cropped", p8: "p8 cropped"}
 
+# Keep track of where to return if you tell a setup to quit their friendlies
+define cur_label = "match_starting_loop"
+# define store.current_label = "match_starting_loop"
+
 # Keep track of how many matches are occurring at any given point
 define matches_in_progress = 0
 
@@ -184,6 +188,17 @@ style start_set_button_disabled_text:
 style setup_box is frame:
     background Frame(Solid("#ffffff"), 0, 0)
     padding (10, 0)
+
+# Quit friendlies button
+style quit_friendlies_button is button:
+    background Frame(Solid("#cecece"))
+    hover_background Frame(Solid("#8c8c8c"))
+    align (0.5, 0.5)
+
+style quit_friendlies_button_text:
+    size 30
+    align (0.5, 0.5)
+    color "#000000"
 
 # Speech bubble styles
 style speech_bubble is frame:
@@ -431,16 +446,21 @@ screen setups_screen():
                                     yalign 0.5
                 if not setup.is_free():
                     # quit friendlies button
-                    frame:
-                        style "setup_box"
+                    vbox:
+                        xsize 300
+                        ysize 50
                         xalign 0.5
-                        ypadding 10
-                        vbox:
-                            xsize 300
-                            ysize 50
-                            text "{color=#000000}Ask to hop off{/color}":
-                                xalign 0.5
-                                yalign 0.5
+                        # ypadding 10
+                        textbutton "{color=#000000}Ask to hop off{/color}":
+                            style "quit_friendlies_button"
+                            action [
+                                SetVariable("setup_player", setup.get_p1()),
+                                SetVariable("setup_player_picture", setup.get_p1_picture()[:2]),
+                                SetVariable("cur_label", store.current_label),
+                                Hide(),
+                                Jump("quit_friendlies")
+                            ]
+                                
 
 screen bracket_screen(show_navigation=True):
     # Set buttons should be (315, 130) pixels away from each other
@@ -875,6 +895,28 @@ label start:
     scene background 2 with fade
     n "The room is buzzing with energy. It's time to get this bracket moving."
     n "I should check the bracket and see which sets are ready to be played."
+    jump match_starting_loop
+
+label quit_friendlies:
+    show background 2
+    m "Hey, [setup_player.name], quit your friendlies! I have a bracket to run."
+    show expression setup_player_picture at left
+    with dissolve
+    setup_player "My bad; I thought we had time to play some friendlies."
+    $ renpy.hide(setup_player_picture) # normal hide statement doesn't work for some reason
+    with dissolve
+    jump expression cur_label
+
+label quit_bracket:
+    show background 2
+    m "[setup_player.name], quit your friendlies. I need to keep bracket moving."
+    show expression setup_player_picture at left
+    with dissolve
+    setup_player "This {emph}{bold}is{/bold}{/emph} bracket, dingus!"
+    $ renpy.hide(setup_player_picture)
+    with dissolve
+    n "...oops."
+    jump expression cur_label
 
 # Show the bracket and have the player choose 4 1st round matches to start
 label match_starting_loop:
