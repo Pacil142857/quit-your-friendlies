@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quit Your Friendlies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#top" class="wordmark">QUIT YOUR FRIENDLIES</a>
+    <nav class="nav">
+      <a href="#premise">Premise</a>
+      <a href="#audience">Audience &amp; Goals</a>
+      <a href="#mechanics">Concept &amp; Mechanics</a>
+      <a href="#theories">Theories</a>
+      <a href="#playtesting">Playtesting</a>
+      <a href="#play" class="nav-cta">Play it</a>
+    </nav>
+  </div>
+</header>
+
+<section id="top" class="hero">
+  <div class="hero-bg" style="background-image: url('images/01_venue_empty.png');"></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
+    <h1>Quit Your Friendlies</h1>
+    <p class="lede">How to be a tournament organizer.</p>
+    <p class="lede">By Austin McGregor, Tommy Skodje, and Ella McChesney</p>
+  </div>
+</section>
+
+<main>
+
+<section id="premise" class="section">
+  <div class="section-inner two-col">
+    <div class="col-text">
+      <h2>The premise</h2>
+      <p>You show up to a Smash tournament expecting to play. Reggie Fils-Aim&eacute; introduces the event, then gets a phone call from Mr. Sakurai and has to leave to promote Mario Kart 14 featuring Shaquille O&apos;Neal. He hands you the laptop mid-sentence.</p>
+      <p>You're running an 8-player double-elimination bracket on four setups, and the venue closes at 11pm. Between matches, players walk up with scores, complaints, and requests to keep playing friendlies on setups you need for bracket.</p>
+      <p>The underlying mechanics are modeled on what running a real Smash tournament actually looks like, and is expandable to any tournament organization experience.</p>
+    </div>
+    <div class="col-media">
+      <figure class="screenshot">
+        <img src="images/02_reggie_intro.png" alt="Reggie Fils-Aim&eacute; on the right of the venue, introducing himself as the former CEO of Nintendo and tournament organizer.">
+        <figcaption>Reggie introducing himself, moments before being pulled away.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="audience" class="section section-alt">
+  <div class="section-inner">
+    <h2>Audience &amp; learning goals</h2>
+
+    <div class="two-col audience-grid">
+      <div class="audience-block">
+        <h3>Who this is for</h3>
+        <dl class="kv">
+          <dt>Primary audience</dt>
+          <dd>Adults and older teens in the Smash / fighting-game community who are curious about running a tournament but have never organized one. References, jokes, and UI patterns assume/land better with familiarity with the scene.</dd>
+          <dt>Secondary audience</dt>
+          <dd>Anyone who runs bracket-format events in other communities. The mechanics translate to other games, grassroots sports leagues, and any single or double-elimination tournament format.</dd>
+          <dt>Prior experience</dt>
+          <dd>None required. Tournament organizing itself is the skill being taught; the game starts from zero.</dd>
+          <dt>Specific learning need</dt>
+          <dd>A low-stakes rehearsal for something that is normally learned mid-crisis when a real room of real people are waiting.</dd>
+        </dl>
+      </div>
+      <div class="audience-block">
+        <h3>Why these goals matter</h3>
+        <p>First-time TOs usually learn by being handed the laptop mid-event. A stalled bracket, a mis-seeded set, or an angry player can derail the whole day.</p>
+        <p>Smash communities also rely on people stepping up to TO. Many don&apos;t, and one reason isbecause the first time is scary, they are intimidated, andthere is no way to practice beforehand. <em>Quit Your Friendlies</em> gives someone a first run in a setting where no one is  or pressuring them.</p>
+      </div>
+    </div>
+
+    <h3 class="goals-header">Four measurable learning goals</h3>
+    <div class="goal-grid">
+      <article class="goal-card goal-bracket">
+        <header>
+          <span class="goal-num">01</span>
+          <h4>Bracket literacy</h4>
+        </header>
+        <p>Read and operate an 8-player double-elimination bracket. Route winners to the next round, route losers to the correct slot on the losers side, and recognize how the two sides converge at Grand Finals.</p>
+        <p class="goal-measure"><strong>Success:</strong> the player identifies the correct match slot on the bracket when a character reports a result, without needing to be told where it is.</p>
+      </article>
+
+      <article class="goal-card goal-score">
+        <header>
+          <span class="goal-num">02</span>
+          <h4>Accurate score reporting</h4>
+        </header>
+        <p>Translate what a player says out loud (&quot;I beat red dot 2-1&quot;) into the correct inputs on a start.gg-style report screen: right winner, right game counts, right order.</p>
+        <p class="goal-measure"><strong>Success:</strong> the player submits the correct score and advances the bracket. The submit button is gated, so incorrect submissions cannot progress.</p>
+      </article>
+
+      <article class="goal-card goal-logistics">
+        <header>
+          <span class="goal-num">03</span>
+          <h4>Logistics &amp; resource management</h4>
+        </header>
+        <p>Keep the tournament moving: call bracket matches onto open setups, track who is at which station, and recognize dependencies between rounds (losers sets that cannot fire until a winners set finishes).</p>
+        <p class="goal-measure"><strong>Success:</strong> when a setup frees up and a set is ready to call, the player calls it without being prompted.</p>
+      </article>
+
+      <article class="goal-card goal-culture">
+        <header>
+          <span class="goal-num">04</span>
+          <h4>Tournament culture &amp; communication</h4>
+        </header>
+        <p>Extract useful information from players who report scores with attitude, handle different personalities, and tell the difference between a setup running bracket and a setup running friendlies.</p>
+        <p class="goal-measure"><strong>Success:</strong> the player correctly identifies which setups are friendlies versus bracket and only asks the friendlies players to hop off.</p>
+      </article>
+    </div>
+
+    <div class="tailor-block">
+      <h3>How the game is tailored to this audience</h3>
+      <div class="tailor-grid">
+        <div>
+          <h4>Difficulty</h4>
+          <p>Turn-paced. No real-life reaction pressure. The cognitive load is on decision-making (which set to call, who to free up from a setup, whether a score sounds right) rather than dexterity. A countdown timer representing the tournament day is in development to add time pressure later.</p>
+        </div>
+        <div>
+          <h4>Content</h4>
+          <p>The player roster uses real tags and portraits from the Georgia Tech Super Smash Bros. community, with permission from the players. The match-report screen is a visual replica of start.gg, the bracket platform Smash tournaments actually run on, so the skill transfers directly.</p>
+        </div>
+        <div>
+          <h4>Engagement</h4>
+          <p>Character voice carries the pacing. Reggie leaves to promote a fake Mario Kart game. One player goes on a long rant about character balance before casually revealing he won. Another dismisses the TO with &quot;you&apos;re no fun.&quot; The humor covers the parts of the job that are otherwise tedious.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="mechanics" class="section">
+  <div class="section-inner">
+    <h2>Concept &amp; mechanics</h2>
+
+    <div class="concept-row">
+      <p class="concept-statement">A game that simulates running an 8-player double-elimination Smash bracket. Built in Ren&apos;Py 8.5. The player cycles between three connected screens, each of which mirrors an information source a real TO would be using.</p>
+    </div>
+
+    <div class="three-screens">
+      <div class="screen-card">
+        <h4>Venue</h4>
+        <p>The tournament room. This is where characters approach the player to report scores, complain about opponents, or make requests.</p>
+      </div>
+      <div class="screen-card">
+        <h4>Bracket</h4>
+        <p>The double-elimination diagram. Slots fill in as matches resolve. Completed sets color-code green (winner) and red (loser).</p>
+      </div>
+      <div class="screen-card">
+        <h4>Setups</h4>
+        <p>The four physical TV stations with current occupants. Each occupied setup has an &quot;Ask to hop off&quot; button.</p>
+      </div>
+    </div>
+
+    <div class="mechanic-block">
+      <div class="mechanic-text">
+        <h3>Match reporting</h3>
+        <p>When a character reports a score, the player navigates to the bracket, finds the correct match, and enters each player&apos;s game count. The report screen is a visual replica of start.gg&apos;s layout. Start.gg is the platform many Smash tournaments actually use, so the skill transfers directly.</p>
+        <p class="mechanic-highlight"><strong>Gated submit.</strong> If the entered result doesn&apos;t match what the reporting player said, the submit button flashes red and changes to &quot;Wrong Result!&quot; The player cannot advance until they fix it. This replaces an earlier version where anyone could submit anything and see a red or green feedback message.</p>
+      </div>
+      <figure class="mechanic-image">
+        <img src="images/09_match_report_wrong.png" alt="Match report screen with Surume and colorful&#x283;&#x25E1;, wrong scores entered, submit button showing &#39;Wrong Result!&#39; in red.">
+        <figcaption>A wrong result in the gated state. The red button blocks submission until the score matches what the player actually said.</figcaption>
+      </figure>
+    </div>
+
+    <div class="mechanic-block mechanic-block-reverse">
+      <div class="mechanic-text">
+        <h3>Setup management</h3>
+        <p>The player sees who is at each of the four TV stations. When a bracket set is callable (both players decided, no winner yet) and at least one setup is free, clicking the set opens an overlay with a <code>Start Match</code> action that assigns those players to the next open station.</p>
+        <p>If all four setups are busy, no new set can start. The player has to either wait for a set to finish or free up a setup by asking someone to stop playing friendlies on it.</p>
+      </div>
+      <figure class="mechanic-image">
+        <img src="images/07_setups_mixed.png" alt="Setups screen showing three occupied stations and one empty station.">
+        <figcaption>Three setups occupied, one free. The &quot;Ask to hop off&quot; buttons let the player free up stations.</figcaption>
+      </figure>
+    </div>
+
+    <div class="mechanic-block">
+      <div class="mechanic-text">
+        <h3>Quit Your Friendlies</h3>
+        <p>Some of the players on setups are running friendlies, not offical bracket matches. The TO can click &quot;Ask to hop off&quot; to scold them. The scolding line is randomized; each character has their own reaction. Surume deadpans <em>&quot;you&apos;re no fun.&quot;</em> Flan snaps <em>&quot;you didn&apos;t tell me I couldn&apos;t play friendlies.&quot;</em> Pacil has a three-variant reaction that includes sheepishly apologizing, arguing, or claiming they thought bracket was already over.</p>
+        <p>If the player accidentally targets two players who were actually running a <em>bracket</em> set, those players push back: <em>&quot;this is bracket, dingus.&quot;</em> The TO says <em>&quot;...oops,&quot;</em> and the social cost is the lesson.</p>
+      </div>
+      <figure class="mechanic-image">
+        <img src="images/12_quit_bracket_wrong.png" alt="red dot angry, captioned &#39;This is bracket, dingus!&#39;">
+        <figcaption>Asking someone to hop off a bracket set instead of a friendlies set.</figcaption>
+      </figure>
+    </div>
+
+    <div class="mechanic-block mechanic-block-reverse">
+      <div class="mechanic-text">
+        <h3>Bracket advancement &amp; feedback</h3>
+        <p>On a correct submission, the winner routes into the next round&apos;s slot, the loser either advances in losers or drops from winners into losers, and both players are cleared from their setup. The bracket updates visibly: completed sets turn green for the winner and red for the loser.</p>
+        <p>Over the course of the bracket, the player watches fourteen sets fill the diagram. By the third or fourth report, the structure of double elimination is internalized because the player has physically placed each winner and loser.</p>
+      </div>
+      <figure class="mechanic-image">
+        <img src="images/06_bracket_mid.png" alt="Mid-tournament bracket with Winners Round 1 resolved, showing green winner names and red loser names.">
+        <figcaption>Mid-tournament. Winners Round 1 is resolved; Losers Round 1 results are already feeding into Losers Round 2.</figcaption>
+      </figure>
+    </div>
+
+    <div class="mechanic-block">
+      <div class="mechanic-text">
+        <h3>Interactive tutorial</h3>
+        <p>The game opens with a visual-novel prologue, then hands off to an interactive tutorial in which Reggie directs the player click by click through their first match report. Each tutorial screen disables every UI element except the one the player is supposed to click next. The player cannot click the wrong thing.</p>
+        <p>Once the first match is reported, Reggie leaves and every screen unlocks. The scaffolding is removed all at once and the player runs the rest of the tournament on their own.</p>
+      </div>
+      <figure class="mechanic-image">
+        <img src="images/08_match_report_blank.png" alt="Match report screen, clean state, ready for player input.">
+        <figcaption>The match report screen, clean, at the moment the tutorial hands control over.</figcaption>
+      </figure>
+    </div>
+
+  </div>
+</section>
+
+<section id="theories" class="section section-alt">
+  <div class="section-inner">
+    <h2>Learning theories that informed the design</h2>
+    <p class="section-lede">Four theories shaped the game. Each one maps to a specific mechanic that is already in the build.</p>
+
+    <div class="theory-grid">
+      <article class="theory-card">
+        <h3>Situated learning</h3>        
+        <p class="theory-idea">Learning happens through authentic participation in a real practice, not through detached instruction. Situated learning is doing most of the work in this game. The whole pitch &mdash; play the TO to learn TO-ing &mdash; is situated learning from the start.</p>
+        <p class="theory-example"><strong>In the game:</strong>The player is the TO from the first scene. The match-report UI is a visual replica of start.gg, so reporting a score in the game is the same action as reporting one at a real tournament.</p>
+        <p class="theory-example">The red dot rant is a good example of how this plays out in dialogue. After a set finishes, red dot walks up and spends a long time complaining about Zero Suit Samus being broken before casually mentioning he won 2-0. The player has to wait him out and pick the score out of the rant. That is the kind of thing you only get good at by being in the room for it.</p>
+      </article>
+
+      <article class="theory-card">
+        <h3>Constructivism</h3>
+        <p class="theory-idea">Knowledge is built by the learner acting on and making sense of the environment.</p>
+        <p class="theory-example"><strong>In the game:</strong> rather than showing a labeled diagram of double elimination, the game has the player fill in a blank bracket over the course of fourteen matches. After three or four reports, the structure is internalized because the player physically placed the winners and losers.</p>
+      </article>
+
+      <article class="theory-card">
+        <h3>Behaviorism</h3>
+        <p class="theory-idea">Immediate, consistent feedback shapes behavior.</p>
+        <p class="theory-example"><strong>In the game:</strong> the gated submit button, the green-and-red winner/loser coloring on completed bracket slots, and the per-character reactions to being asked to quit friendlies (right ask = compliance, wrong ask = pushback) all implement this.</p>
+      </article>
+
+      <article class="theory-card">
+        <h3>Scaffolded learning</h3>
+        <p class="theory-idea">An expert guide holds the learner&apos;s hand through tasks they cannot yet do alone, then steps back as competence develops.</p>
+        <p class="theory-example"><strong>In the game:</strong> during the interactive tutorial, every screen except the correct next one is disabled and Reggie narrates each step. After the first match report, the scaffolding is removed all at once and the player runs the rest of the tournament independently.</p>
+      </article>
+    </div>
+
+  </div>
+</section>
+
+<section id="playtesting" class="section">
+  <div class="section-inner">
+    <h2>Playtesting &amp; user research</h2>
+
+    <div class="pt-method">
+      <div class="pt-stat">
+        <span class="big-number">6</span>
+        <span>playtesters</span>
+      </div>
+      <div class="pt-stat">
+        <span class="big-number">2</span>
+        <span>teams</span>
+      </div>
+      <div class="pt-stat">
+        <span class="big-number">1</span>
+        <span>session (April 13, 2026)</span>
+      </div>
+      <div class="pt-narrative">
+        <p>Each playtest session was observed by a team member who documented behavior, moments of confusion, moments of engagement, and post-play feedback. Participants had varied tournament-participation experience. None of them had ever organized one.</p>
+      </div>
+    </div>
+
+    <div class="two-col pt-findings">
+      <div>
+        <h3>What worked</h3>
+        <ul class="bullets">
+          <li><strong>Narrative and humor landed.</strong> Multiple testers laughed at Reggie&apos;s entrance and the red dot rant. One said she would keep playing the game in its current state.</li>
+          <li><strong>Learning goals came through without prompting.</strong> Testers identified bracket terminology, score reporting, and setup management as things the game was teaching.</li>
+          <li><strong>Emergent collaboration.</strong> In sessions with multiple testers, players discussed the bracket with each other to figure out which match to report. One tester used the Setups screen to look up a player&apos;s name, which was an unplanned but correct TO move.</li>
+        </ul>
+        <figure class="pt-thumb">
+          <img src="images/14_red_dot_rant.png" alt="red dot angry, mid-rant about banning ZSS">
+          <figcaption>The red dot rant, which got the biggest laugh in testing.</figcaption>
+        </figure>
+      </div>
+      <div>
+        <h3>What got stuck</h3>
+        <ul class="bullets">
+          <li>The tutorial was described as &quot;long and boring&quot; and the scaffolding dropped off too sharply when gameplay began.</li>
+          <li>Several testers clicked on UI buttons that were visible but weren&apos;t meant to be interactive yet, which interrupted the tutorial flow.</li>
+          <li>Multiple testers said the lack of consequences for incorrect reports reduced the stakes. There was no reason not to guess.</li>
+          <li>One tester reported the wrong match entirely. Another forgot the score a player had told them and had no way to see it again.</li>
+          <li>The &quot;Start Match&quot; button was a recurring source of confusion. One tester didn&apos;t recognize it as a button at all.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="changes-header">What changed in response</h3>
+    <div class="changes-table">
+      <div class="change-row change-header-row">
+        <div>Playtest finding</div>
+        <div>Change in the current build</div>
+      </div>
+      <div class="change-row">
+        <div>Tutorial long and text-heavy; scaffolding collapsed too fast</div>
+        <div>Replaced with an interactive tutorial. Reggie walks every click; non-target UI is disabled. The scaffolding is removed all at once after the first match report, by design.</div>
+      </div>
+      <div class="change-row">
+        <div>Visible buttons that shouldn&apos;t be clickable yet</div>
+        <div>Tutorial variants of each screen explicitly disable every non-target button, so the only clickable thing is the thing the player is being asked to click.</div>
+      </div>
+      <div class="change-row">
+        <div>No consequence for guessing a wrong score</div>
+        <div>The submit button is gated. A wrong score cannot be submitted; the button flashes red &quot;Wrong Result!&quot; until the score matches what the player actually said.</div>
+      </div>
+      <div class="change-row">
+        <div>Only three set reports in the prototype</div>
+        <div>The full 8-player double-elimination bracket now plays end to end, from Winners Round 1 through a possible bracket-reset True Finals. Fourteen set reports across winners and losers sides.</div>
+      </div>
+      <div class="change-row">
+        <div>No way to practice the social side of TO&apos;ing</div>
+        <div>Added the Quit Your Friendlies flow, where the player reads the Setups screen and decides who to ask off. Mistargeting a bracket set triggers the &quot;this is bracket, dingus&quot; pushback.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="play" class="section section-play">
+  <div class="section-inner center">
+    <h2>Play it</h2>
+    <p class="play-lede">The playtest build is publicly downloadable. Runs on macOS and Windows through the Ren&apos;Py runtime included in the archive.</p>
+    <div class="play-buttons">
+      <a class="btn btn-pink" href="https://drive.google.com/drive/folders/1Pvafuk9unaf5dGNXxQlG8S_ZLLqN9mb3">Download the build</a>
+    </div>
+    <figure class="play-final">
+      <img src="images/15_ending_reggie.png" alt="Reggie returning to the venue at the end of the tournament.">
+    </figure>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <p>Austin McGregor &middot; Tommy Skodje &middot; Ella McChesney</p>
+      <p class="footer-meta">Georgia Tech &middot; Educational Video Games Course</p>
+    </div>
+    <p class="footer-meta footer-meta-right">Player portraits used with permission from the Georgia Tech Super Smash Bros. community.</p>
+  </div>
+</footer>
+
+</body>
+</html>
