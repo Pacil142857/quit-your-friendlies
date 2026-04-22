@@ -1038,7 +1038,7 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
     # Once started, a set cannot be stopped
     if find_setup(setups, player_a, player_b) is not None:
         # The set is currently being played
-        textbutton "{color=#ffffff}Match Started{/color}":
+        textbutton "Match Started":
             align(0.5, 0.75)
             style "start_set_button_disabled"
     elif (find_open_setup(setups) is not None) and \
@@ -1064,7 +1064,7 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
     else:
         # Something prevents the match from being started
         # e.g., one of the required players is playing friendlies, the set has already been completed
-        textbutton "{color=#ffffff}Cannot Start Match{/color}":
+        textbutton "Cannot Start Match":
             align(0.5, 0.75)
             style "start_set_button_disabled"
 
@@ -1760,6 +1760,7 @@ label start_loop_tf:
 
 # Report tf.
 label report_tf:
+    show background 2 with fade
     n "I was too busy scrolling Twitter that I missed the entire set. I wonder who won."
     show p6 happy at left onlayer screens with dissolve
     p6 "Let's gooooooo I beat [p3.name] 3-2."
