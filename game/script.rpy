@@ -9,12 +9,12 @@ define n = Character(None) # Narrator
 define e = Character(None, what_italic=True, what_color="#58eafd") # Special events. Emphasis.
 define m = Character("Me")
 define r = Character(name="Reggie", color="#32f35c")
-define p1 = Character(name="red dot", color="#ffe449")
+define p1 = Character(name="red dot", color="#f77c7c")
 define p2 = Character(name="Surume", color="#c7ffcf")
 define p3 = Character(name="colorfulʚɞ", color="#ee89e0")
-define p4 = Character(name="Subzero", color="#f77c7c")
-define p5 = Character(name="Nyramyss", color="#778af7")
-define p6 = Character(name="Flan", color="#5ddbf1")
+define p4 = Character(name="Subzero", color="#778af7")
+define p5 = Character(name="Nyramyss", color="#5ddbf1")
+define p6 = Character(name="Flan", color="#ffe449")
 define p7 = Character(name="Ford", color="#f89451")
 define p8 = Character(name="Pacil", color="#9cffbb")
 
@@ -1203,8 +1203,8 @@ label start:
     r "Thanks for showing up, we're going to make this the greatest tournament ever held for this children's party game."
     r "Hopefully you came prepared, as today's performance will determine the future of your gaming career."
     r "With that being said, let's get started. Good luck, have fun. Alright everyone, quit your friendlies!"
-    r "I'm gonna have [p1.name] and [p2.name] on setup 1, [p3.name] and [p4.name] on setup 2,..."
-    r "...[p5.name] and [p6.name] on setup 3, and [p7.name] and [p8.name] on setup 4. Okay everyone, good luck and have f—"
+    r "I'm gonna have {color=[p1.who_args['color']]}[p1.name]{/color} and {color=[p2.who_args['color']]}[p2.name]{/color} on setup 1, {color=[p3.who_args['color']]}[p3.name]{/color} and {color=[p4.who_args['color']]}[p4.name]{/color} on setup 2,..."
+    r "...{color=[p5.who_args['color']]}[p5.name]{/color} and {color=[p6.who_args['color']]}[p6.name]{/color} on setup 3, and {color=[p7.who_args['color']]}[p7.name]{/color} and {color=[p8.who_args['color']]}[p8.name]{/color} on setup 4. Okay everyone, good luck and have f—"
     # # REMOVED FOR NOW
     # # $ call_set(setups, PlayerPicture(p1, player_pictures[p1]), PlayerPicture(p2, player_pictures[p2]))
     # # $ call_set(setups, PlayerPicture(p3, player_pictures[p3]), PlayerPicture(p4, player_pictures[p4]))
