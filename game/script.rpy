@@ -1396,20 +1396,107 @@ label start:
 
 label quit_friendlies:
     show background 2
-    m "Hey, [setup_player.name], quit your friendlies! I have a bracket to run."
-    show expression setup_player_picture at left
-    with dissolve
-    setup_player "My bad; I thought we had time to play some friendlies."
-    $ renpy.hide(setup_player_picture) # normal hide statement doesn't work for some reason
-    with dissolve
+    $ interaction_num = renpy.random.randint(1, 5)
+    if interaction_num == 1:
+        m "Hey, [setup_player.name], quit your friendlies! I have a bracket to run."
+    elif interaction_num == 2:
+        m "Can someone in this venue tell me why [setup_player.name] is playing {i}FRIENDLIES{/i} and holding up {b}ALL OF BRACKET?{/b}"
+    elif interaction_num == 3:
+        m "Hmmm, that's strange. I've triple-checked bracket, and yet it seems that you're not supposed to be playing this person, [setup_player.name]. Are you playing friendlies at my tournament?"
+    elif interaction_num == 4:
+        m "[setup_player.name]. Quit your friendlies. I will not ask again."
+    elif interaction_num == 5:
+        m "If you do not quit your friendlies {b}this instant{/b} [setup_player.name], I am going to DQ you."
+
+    if setup_player == p8:
+        $ interaction_p8 = renpy.random.randint(1, 3)
+        if interaction_p8 == 1:
+            show p8 shame at left
+            with dissolve
+            p8 "I... may not have realized that we needed this setup for bracket."
+            hide p8 with dissolve
+        elif interaction_p8 == 2:
+            show p8 surprised at left
+            with dissolve
+            p8 "Wait, bracket's still going on? I thought it ended an hour ago."
+            hide p8 with dissolve
+        elif interaction_p8 == 3:
+            show p8 angry at left
+            with dissolve
+            p8 "Shut up! I was about to make to make a sick comeback!"
+            n "{cps=20}. . . {/cps}"
+            hide p8 angry
+            show p8 shame at left
+            p8 "...okay, I may have overreacted. Sorry. I'll get off the setup."
+            hide p8 with dissolve
+    elif setup_player == p2:
+        show p2 angry at left
+        with dissolve
+        p2 "You're no fun."
+        hide p2 with dissolve
+    elif setup_player == p6:
+        show p6 angry at left
+        with dissolve
+        p6 "You didn't tell me I couldn't play friendlies!"
+        hide p6 with dissolve
+    else:
+        show expression setup_player_picture at left
+        with dissolve
+        $ interaction_num2 = renpy.random.randint(1, 5)
+        if interaction_num2 == 1:
+            setup_player "Dang; I thought we had time to play some friendlies."
+        elif interaction_num2 == 2:
+            setup_player "Fine, but you don't have to be so rude about it."
+        elif interaction_num2 == 3:
+            setup_player "{i}sigh{/i}"
+        elif interaction_num2 == 4:
+            setup_player "Wait, does that mean I have a set to play?"
+            m "It means someone—maybe you—has to play a set on your setup. Now go!"
+        elif interaction_num2 == 5:
+            setup_player "My B."
+        $ renpy.hide(setup_player_picture) # normal hide statement doesn't work for some reason
+        with dissolve
     jump expression cur_label
 
 label quit_bracket:
     show background 2
-    m "[setup_player.name], quit your friendlies. I need to keep bracket moving."
-    show expression setup_player_picture at left
-    with dissolve
-    setup_player "This {i}{b}is{/b}{/i} bracket, dingus!"
+    $ interaction_num = renpy.random.randint(1, 5)
+    if interaction_num == 1:
+        m "Hey, [setup_player.name], quit your friendlies! I have a bracket to run."
+    elif interaction_num == 2:
+        m "Can someone in this venue tell me why [setup_player.name] is playing {i}FRIENDLIES{/i} and holding up {b}ALL OF BRACKET?{/b}"
+    elif interaction_num == 3:
+        m "Hmmm, that's strange. I've triple-checked bracket, and yet it seems that you're not supposed to be playing this person, [setup_player.name]. Are you playing friendlies at my tournament?"
+    elif interaction_num == 4:
+        m "[setup_player.name]. Quit your friendlies. I will not ask again."
+    elif interaction_num == 5:
+        m "If you do not quit your friendlies {b}this instant{/b} [setup_player.name], I am going to DQ you."
+    
+    if setup_player == p8:
+        show p8 angry at left
+        with dissolve
+    elif setup_player == p6:
+        show p6 angry at left
+        with dissolve
+    elif setup_player == p2:
+        show p2 angry at left
+        with dissolve
+    elif setup_player == p1:
+        show p1 angry at left
+        with dissolve
+    else:
+        show expression setup_player_picture at left
+        with dissolve
+    
+    $ interaction_num3 = renpy.random.randint(1, 4)
+    if interaction_num3 == 1:
+        setup_player "This is {i}{b}bracket{/b}{/i}, dingus!"
+    elif interaction_num3 == 2:
+        setup_player "Hey, I'm in the middle of a set right now!"
+    elif interaction_num3 == 3:
+        setup_player "You have the wrong person—I'm playing in bracket right now!"
+    elif interaction_num3 == 4:
+        setup_player "You just called this set a minute ago!"
     $ renpy.hide(setup_player_picture)
     with dissolve
     n "...oops."
@@ -1497,8 +1584,6 @@ label third_set_report:
     n "I can't believe it. I've never met such a sore winner before."
     m "Okay, I'll put that in for you."
 
-    # hide screen room_screen
-    
     hide p1 happy onlayer screens
     $ expected_result = {"winner": p1, "loser": p4, "winner_games": 2, "loser_games": 0}
     $ reporting = True
@@ -1709,7 +1794,7 @@ label red_dot_crashout:
 # Report colorful vs Flan, Flan wins 3-2. p3 vs p6, p6 wins 3-2
 label report_36:
     n "Winner's Finals seem to be done."
-    show p6 at left onlayer screens with dissolve
+    show p6 happy3 at left onlayer screens with dissolve
     p6 "I love the Cloud matchup! I won 3-2 against [p3.name]."
     m "Don't go saying that too loud, but congrats!"
     hide p6 onlayer screens
