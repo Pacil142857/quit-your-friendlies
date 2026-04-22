@@ -104,6 +104,17 @@ init python:
                 return setup
         return None
     
+    # Check if a player is currently at a setup
+    def is_at_setup(player, setups):
+        for setup in setups:
+            if player in (setup.get_p1(), setup.get_p2()):
+                return True
+        return False
+    
+    # Check if two players are currently not at setups
+    def are_able_to_play_set(p1, p2, setups):
+        return (not is_at_setup(p1, setups)) and (not is_at_setup(p2, setups))
+    
     # Frees the setup that p1 and p2 are playing on
     def clear_setup(setups, p1, p2):
         setup = find_setup(setups, p1, p2)

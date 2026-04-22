@@ -1151,10 +1151,13 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
     # Start a set button
     # Once started, a set cannot be stopped
     if find_setup(setups, player_a, player_b) is not None:
+        # The set is currently being played
         textbutton "{color=#ffffff}Match Started{/color}":
             align(0.5, 0.75)
             style "start_set_button_disabled"
-    elif find_open_setup(setups) is not None:
+    elif (find_open_setup(setups) is not None) and \
+    are_able_to_play_set(player_a, player_b, setups) and set_in_bracket(player_a, player_b, setups):
+        # The set is able to be started
         textbutton "{color=#ffffff}Start Match{/color}":
             align(0.5, 0.75)        
             style "start_set_button"
@@ -1173,6 +1176,8 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
                 Return()
             ]
     else:
+        # Something prevents the match from being started
+        # e.g., one of the required players is playing friendlies, the set has already been completed
         textbutton "{color=#ffffff}Cannot Start Match{/color}":
             align(0.5, 0.75)
             style "start_set_button_disabled"
