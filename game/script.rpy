@@ -1441,7 +1441,9 @@ label reporting_sets:
     # Copyable logic for reporting a set. Use this format when you want the player to input a score after a set finishes
     hide p2 onlayer screens
     $ expected_result = {"winner": p2, "loser": p1, "winner_games": 2, "loser_games": 1}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
     # 2nd set report (winners round 1, colorful)
     show p3 at left onlayer screens with dissolve
@@ -1450,7 +1452,9 @@ label reporting_sets:
 
     hide p3 onlayer screens
     $ expected_result = {"winner": p3, "loser": p4, "winner_games": 2, "loser_games": 0}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
     n "Two sets have just finished, which means that there's currently two empty setups."
     $ setups[0].set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p3, "p3 cropped"))
@@ -1497,7 +1501,9 @@ label third_set_report:
     
     hide p1 happy onlayer screens
     $ expected_result = {"winner": p1, "loser": p4, "winner_games": 2, "loser_games": 0}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
 # Nyramyss vs Flan (wr1). Flan wins
 label nyramyss_flan:
@@ -1507,7 +1513,9 @@ label nyramyss_flan:
     m "Understood."
     hide p5 onlayer screens
     $ expected_result = {"winner": p6, "loser": p5, "winner_games": 2, "loser_games": 1}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
     
 # Ford vs Pacil (wr1). Pacil wins
 label ford_pacil:
@@ -1517,7 +1525,9 @@ label ford_pacil:
     m "Sorry to hear that. I'll report the set."
     hide p7 onlayer screens
     $ expected_result = {"winner": p8, "loser": p7, "winner_games": 2, "loser_games": 1}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
     $ find_open_setup(setups).set_players(PlayerPicture(p8, "p8 cropped"), PlayerPicture(p4, "p4 cropped"))
     $ find_open_setup(setups).set_players(PlayerPicture(p6, "p6 cropped"), PlayerPicture(p1, "p1 cropped"))
 
@@ -1544,7 +1554,9 @@ label report_23:
     m "Alright, I'll put that in."
     hide p3 onlayer screens
     $ expected_result = {"winner": p3, "loser": p2, "winner_games": 2, "loser_games": 0}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
     
 # Nyramyss vs Ford Ford wins 2-0. p7 vs p5 p7 wins 2-0
 label report_57:
@@ -1556,7 +1568,9 @@ label report_57:
     m "Blame Reggie, not me."
     hide p7 onlayer screens
     $ expected_result = {"winner": p7, "loser": p5, "winner_games": 2, "loser_games": 0}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
 # Prompt player to start saggy vs ford. p2 vs p7
 # label wait_27:
@@ -1564,7 +1578,9 @@ label report_57:
 #     $ current_match = find_setup(setups, p2, p7)
 #     $ matches_started = 0
 #     n "Looks like there's some downtime to call another set. Let's see if anything can be started."
+#     $ reporting = True
 #     call screen venue_screen
+#     $ reporting = False
 #     if (matches_started < 2) and current_match is None:
 #         jump wait_27
 #     else:
@@ -1578,7 +1594,9 @@ label report_68:
     m "Good job!"
     hide p6 happy3 onlayer screens
     $ expected_result = {"winner": p6, "loser": p8, "winner_games": 2, "loser_games": 1}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
     n "Looks like no more bracket matches are currently being played, so I ought to call some sets now."
 
     # LOAD UP ON FRIENDLIES
@@ -1613,7 +1631,9 @@ label report_27:
     m "Yeah, that checks."
     hide p7 onlayer screens
     $ expected_result = {"winner": p7, "loser": p2, "winner_games": 2, "loser_games": 0}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
 label start_loop_18:
     # You'll have to change the numbers depending on how many sets can be called
@@ -1634,7 +1654,9 @@ label report_18:
     m "By golly, that sucks. I'll input your score."
     hide p8 shame onlayer screens
     $ expected_result = {"winner": p1, "loser": p8, "winner_games": 2, "loser_games": 1}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
 
 # Prompt player to start winners finals and losers semifinals. Top 4 so BO5
@@ -1661,7 +1683,9 @@ label report_17:
     hide p7 onlayer screens
     hide p1 onlayer screens
     $ expected_result = {"winner": p1, "loser": p7, "winner_games": 3, "loser_games": 0}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
 # Waiting...
 label red_dot_crashout:
@@ -1690,7 +1714,9 @@ label report_36:
     m "Don't go saying that too loud, but congrats!"
     hide p6 onlayer screens
     $ expected_result = {"winner": p6, "loser": p3, "winner_games": 3, "loser_games": 2}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
 # Start loser's finals
 label start_loop_13:
@@ -1710,7 +1736,9 @@ label report_31:
     m "Delightful. I'll report that for you."
     hide p3 onlayer screens
     $ expected_result = {"winner": p3, "loser": p1, "winner_games": 3, "loser_games": 1}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
 # Call Grand Finals
 label start_loop_gf:
@@ -1730,7 +1758,9 @@ label report_gf:
     m "Dang, nice. I'll put that in."
     hide p3 onlayer screens
     $ expected_result = {"winner": p3, "loser": p6, "winner_games": 3, "loser_games": 0}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
 # Call tf.
 n "Since the winner of the loser's bracket, [p3.name], won grand finals, we now have a \"bracket reset\". This means that the same players will play again. Whoever wins this set wins the tournament!"
@@ -1751,7 +1781,9 @@ label report_tf:
     m "Very nice. Congrats on the W! I'll submit that for you."
     hide p6 onlayer screens
     $ expected_result = {"winner": p6, "loser": p3, "winner_games": 3, "loser_games": 2}
+    $ reporting = True
     call screen venue_screen
+    $ reporting = False
 
 
 # Ending
