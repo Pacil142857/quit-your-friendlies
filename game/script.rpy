@@ -1788,8 +1788,8 @@ label report_tf:
 label ending:
     scene background 2 with fade
         
-    $ champion = tf[0].winner.name
-    n "And that's it! [champion] is our tournament champion!" 
+    $ champion = tf[0].winner
+    n "And that's it! {color=[champion.who_args['color']]}[champion.name]{/color} is our tournament champion!" 
 
     m "I... I actually did it. I ran the whole bracket without Reggie."
 
