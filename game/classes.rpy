@@ -211,7 +211,7 @@ init python:
             self.p2 = p2
         
         def is_callable(self):
-            return self.p1 is not None and self.p2 is not None
+            return self.p1 is not None and self.p2 is not None and self.winner is None and self.loser is None
 
     class BracketAdvancementDataHolder:
         def __init__(self, in_winners, round_number, set_number, next_sets, losers_sets):
