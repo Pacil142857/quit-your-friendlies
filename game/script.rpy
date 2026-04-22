@@ -575,13 +575,19 @@ screen tutorial_match_report_screen(player_a, player_b, advancement_data, curren
     default fake_submit_text = "Submit Result"
     default fake_submit_style = "submit_result_button_wrong"
     
-    text player_a.name:
-        color "#000"
-        align(0.33, 0.175)
+    hbox:
+        align(0.285, 0.173)
+        xsize 200
+        text player_a.name:
+            color "#000"
+            xalign 1.0
 
-    text player_b.name:
-        color "#000"
-        align(0.69, 0.175)
+    hbox:
+        align(0.71, 0.173)
+        xsize 200
+        text player_b.name:
+            color "#000"
+            xalign 0.0
 
     text player_a.name:
         color "#000"
@@ -991,13 +997,19 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
     default fake_submit_text = "Submit Result"
     default fake_submit_style = "submit_result_button_wrong"
     
-    text player_a.name:
-        color "#000"
-        align(0.33, 0.175)
+    hbox:
+        align(0.285, 0.173)
+        xsize 200
+        text player_a.name:
+            color "#000"
+            xalign 1.0
 
-    text player_b.name:
-        color "#000"
-        align(0.69, 0.175)
+    hbox:
+        align(0.71, 0.173)
+        xsize 200
+        text player_b.name:
+            color "#000"
+            xalign 0.0
 
     text player_a.name:
         color "#000"
@@ -1167,7 +1179,7 @@ label start:
     $ matches_in_progress = 0
     $ setups = [Setup(1), Setup(2), Setup(3), Setup(4)]
 
-    # # dev skip
+    # dev skip
     # scene background 2
     # jump match_starting_loop
 
