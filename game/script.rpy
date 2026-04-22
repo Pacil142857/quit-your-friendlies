@@ -927,8 +927,6 @@ screen setups_screen(show_navigation=True):
                                     Jump("quit_friendlies")
                                 ]   
 
-       
-
 screen bracket_screen(show_navigation=True):
     # Set buttons should be (315, 130) pixels away from each other
     # For a sample 12-person bracket, see https://www.start.gg/tournament/ultimate-tech-chase-34/event/ultimate-singles/brackets/1868263/2751603
@@ -939,7 +937,7 @@ screen bracket_screen(show_navigation=True):
     key "mouseup_1" action NullAction()
 
     # Buttons to transition to the venue and setups screens
-    if show_navigation:
+    if True:
         textbutton "{color=#000000}Venue{/color}":
             style "venue_button"
             align (0.95, 0.825)
