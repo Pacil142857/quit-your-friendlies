@@ -1156,7 +1156,7 @@ screen match_report_screen(player_a, player_b, advancement_data, current_match):
             align(0.5, 0.75)
             style "start_set_button_disabled"
     elif (find_open_setup(setups) is not None) and \
-    are_able_to_play_set(player_a, player_b, setups) and set_in_bracket(player_a, player_b, setups):
+    are_able_to_play_set(player_a, player_b, setups) and set_in_bracket(player_a, player_b, bracket):
         # The set is able to be started
         textbutton "{color=#ffffff}Start Match{/color}":
             align(0.5, 0.75)        
@@ -1482,7 +1482,7 @@ label losers_r1_starting_loop:
 
 label third_set_report:
     # 3rd set report (losers round 1, red dot)
-    show p1 angry at left onlayer screens
+    show p1 angry at left onlayer screens with dissolve
     m "Oh, looks like another set has finished. I sure hope this guy is a normal and reasonable person."
     p1 "{cps=50}Dang ZSS is so busted with her frame 1 jab, she gets away with WAY TOO MUCH{nw}{/cps}"
     p1 "{cps=60}And don't get me even started on flip kick having invulnerability. I don't know who's idea it was to add that {nw}{/cps}"
@@ -1541,8 +1541,6 @@ label start_loop_23_57:
 
 # Surume vs colorful wr2. colorful wins 2-0. p2 vs p3. p3 wins 2-0
 label report_23:
-    hide screen bracket_screen
-    show screen venue_screen
     n "The first match of winners round 2 is being reported now."
     show p3 at left onlayer screens with dissolve
     p3 "Hi, I won 2-0 against [p2.name]. He's, uh, not that good."
@@ -1553,8 +1551,6 @@ label report_23:
     
 # Nyramyss vs Ford Ford wins 2-0. p7 vs p5 p7 wins 2-0
 label report_57:
-    hide screen bracket_screen
-    show screen venue_screen
     n "A losers round 1 match is being reported."
     show p7 at left onlayer screens with dissolve
     p7 "Hi, I won 2-0 against [p5.name]."
