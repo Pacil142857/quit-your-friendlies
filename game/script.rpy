@@ -25,6 +25,10 @@ define player_pictures = {p1: "p1 cropped", p2: "p2 cropped", p3: "p3 cropped", 
 define cur_label = "match_starting_loop"
 # define store.current_label = "match_starting_loop"
 
+# Keep track of whether the player is currently trying to report a set or not
+# If they are trying to report a set, the "quit friendlies" buttons are disabled
+define reporting = False
+
 # Keep track of how many matches are occurring at any given point
 define matches_in_progress = 0
 
@@ -894,7 +898,7 @@ screen setups_screen(show_navigation=True):
                                 text "{color=#000000}Setup [setup.get_setup_number()]{/color}":
                                     xalign 0.5
                                     yalign 0.5
-                if not setup.is_free():
+                if (not setup.is_free()) and (not reporting):
                     # quit friendlies button
                     vbox:
                         xsize 300
@@ -974,7 +978,6 @@ screen bracket_screen(show_navigation=True):
                     Hide("bracket_screen")
                 ]
     
-    
     # Winners Round 2
     for i, match in enumerate(wr2):
         $ p1_color = match.get_player_color(match.get_p1())
@@ -991,7 +994,6 @@ screen bracket_screen(show_navigation=True):
                     Hide("bracket_screen")
                 ]
     
-    
     # Winners Finals
     for i, match in enumerate(wf):
         $ p1_color = match.get_player_color(match.get_p1())
@@ -1005,7 +1007,6 @@ screen bracket_screen(show_navigation=True):
                     advancement_data=BracketAdvancementDataHolder(True, 3, i, gf, lf), current_match=match),
                     Hide("bracket_screen")
                 ]
-    
     
     # Grand Finals
     for i, match in enumerate(gf):
@@ -1021,7 +1022,6 @@ screen bracket_screen(show_navigation=True):
                     Hide("bracket_screen")
                 ]
     
-    
     # True Finals
     for i, match in enumerate(tf):
         $ p1_color = match.get_player_color(match.get_p1())
@@ -1035,7 +1035,6 @@ screen bracket_screen(show_navigation=True):
                     advancement_data=BracketAdvancementDataHolder(True, 5, i, None, None), current_match=match),
                     Hide("bracket_screen")
                 ]
-    
     
     # Losers Round 1
     for i, match in enumerate(lr1):
@@ -1066,7 +1065,6 @@ screen bracket_screen(show_navigation=True):
                     Hide("bracket_screen")
                 ]
     
-    
     # Losers Round 3
     for i, match in enumerate(lr3):
         $ p1_color = match.get_player_color(match.get_p1())
@@ -1080,7 +1078,6 @@ screen bracket_screen(show_navigation=True):
                     advancement_data=BracketAdvancementDataHolder(False, 3, i, lf, lf), current_match=match),
                     Hide("bracket_screen")
                 ]
-    
     
     # Losers Finals
     for i, match in enumerate(lf):
@@ -1583,6 +1580,12 @@ label report_68:
     $ expected_result = {"winner": p6, "loser": p8, "winner_games": 2, "loser_games": 1}
     call screen venue_screen
     n "Looks like no more bracket matches are currently being played, so I ought to call some sets now."
+
+    # LOAD UP ON FRIENDLIES
+    $ find_open_setup(setups).set_players(PlayerPicture(p3, "p3 cropped"), PlayerPicture(p4, "p4 cropped"))
+    $ find_open_setup(setups).set_players(PlayerPicture(p1, "p1 cropped"), PlayerPicture(p7, "p7 cropped"))
+    $ find_open_setup(setups).set_players(PlayerPicture(p8, "p8 cropped"), PlayerPicture(p5, "p5 cropped"))
+    $ find_open_setup(setups).set_players(PlayerPicture(p2, "p2 cropped"), PlayerPicture(p6, "p6 cropped"))
 
 label start_loop_27_18_36:
     # You'll have to change the numbers depending on how many sets can be called
