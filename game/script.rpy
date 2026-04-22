@@ -1310,15 +1310,15 @@ label quit_friendlies:
     show background 2
     $ interaction_num = renpy.random.randint(1, 5)
     if interaction_num == 1:
-        m "Hey, [setup_player.name], quit your friendlies! I have a bracket to run."
+        m "Hey, {color=[setup_player.who_args['color']]}[setup_player.name]{/color}, quit your friendlies! I have a bracket to run."
     elif interaction_num == 2:
-        m "Can someone in this venue tell me why [setup_player.name] is playing {i}FRIENDLIES{/i} and holding up {b}ALL OF BRACKET?{/b}"
+        m "Can someone in this venue tell me why {color=[setup_player.who_args['color']]}[setup_player.name]{/color} is playing {i}FRIENDLIES{/i} and holding up {b}ALL OF BRACKET?{/b}"
     elif interaction_num == 3:
-        m "Hmmm, that's strange. I've triple-checked bracket, and yet it seems that you're not supposed to be playing this person, [setup_player.name]. Are you playing friendlies at my tournament?"
+        m "Hmmm, that's strange. I've triple-checked bracket, and yet it seems that you're not supposed to be playing this person, {color=[setup_player.who_args['color']]}[setup_player.name]{/color}. Are you playing friendlies at my tournament?"
     elif interaction_num == 4:
-        m "[setup_player.name]. Quit your friendlies. I will not ask again."
+        m "{color=[setup_player.who_args['color']]}[setup_player.name]{/color}. Quit your friendlies. I will not ask again."
     elif interaction_num == 5:
-        m "If you do not quit your friendlies {b}this instant{/b} [setup_player.name], I am going to DQ you."
+        m "If you do not quit your friendlies {b}this instant{/b} {color=[setup_player.who_args['color']]}[setup_player.name]{/color}, I am going to DQ you."
 
     if setup_player == p8:
         $ interaction_p8 = renpy.random.randint(1, 3)
@@ -1374,15 +1374,15 @@ label quit_bracket:
     show background 2
     $ interaction_num = renpy.random.randint(1, 5)
     if interaction_num == 1:
-        m "Hey, [setup_player.name], quit your friendlies! I have a bracket to run."
+        m "Hey, {color=[setup_player.who_args['color']]}[setup_player.name]{/color}, quit your friendlies! I have a bracket to run."
     elif interaction_num == 2:
-        m "Can someone in this venue tell me why [setup_player.name] is playing {i}FRIENDLIES{/i} and holding up {b}ALL OF BRACKET?{/b}"
+        m "Can someone in this venue tell me why {color=[setup_player.who_args['color']]}[setup_player.name]{/color} is playing {i}FRIENDLIES{/i} and holding up {b}ALL OF BRACKET?{/b}"
     elif interaction_num == 3:
-        m "Hmmm, that's strange. I've triple-checked bracket, and yet it seems that you're not supposed to be playing this person, [setup_player.name]. Are you playing friendlies at my tournament?"
+        m "Hmmm, that's strange. I've triple-checked bracket, and yet it seems that you're not supposed to be playing this person, {color=[setup_player.who_args['color']]}[setup_player.name]{/color}. Are you playing friendlies at my tournament?"
     elif interaction_num == 4:
-        m "[setup_player.name]. Quit your friendlies. I will not ask again."
+        m "{color=[setup_player.who_args['color']]}[setup_player.name]{/color}. Quit your friendlies. I will not ask again."
     elif interaction_num == 5:
-        m "If you do not quit your friendlies {b}this instant{/b} [setup_player.name], I am going to DQ you."
+        m "If you do not quit your friendlies {b}this instant{/b} {color=[setup_player.who_args['color']]}[setup_player.name]{/color}, I am going to DQ you."
     
     if setup_player == p8:
         show p8 angry at left
@@ -1433,7 +1433,7 @@ label reporting_sets:
     p2 "{b}{size=40}YEAH!{/size}{/b} You'll {b}{i}never{/i}{/b} beat me!"
     hide p2 popoff2
     show p2 happy at left onlayer screens
-    p2 "I beat [p1.name] 2-1. This is more proof that Ken is the worst shoto."
+    p2 "I beat {color=[p1.who_args['color']]}[p1.name]{/color} 2-1. This is more proof that Ken is the worst shoto."
     m "Okay, I'll have to input that into the bracket."
 
     # 1st set report (winners round 1, SaggyMilkJug)
@@ -1446,7 +1446,7 @@ label reporting_sets:
 
     # 2nd set report (winners round 1, colorful)
     show p3 at left onlayer screens with dissolve
-    p3 "Hey, I beat [p4.name] 2-0."
+    p3 "Hey, I beat {color=[p4.who_args['color']]}[p4.name]{/color} 2-0."
     m "Sounds good! I'll input that for you now."
 
     hide p3 onlayer screens
@@ -1462,7 +1462,7 @@ label reporting_sets:
 
 label hop_off_1:
     if not (find_setup(setups, p1, p3) is None):
-        n "I need to ask [p1.name] and [p3.name] to hop off setup 1 so I can run bracket."
+        n "I need to ask {color=[p1.who_args['color']]}[p1.name]{/color} and {color=[p3.who_args['color']]}[p3.name]{/color} to hop off setup 1 so I can run bracket."
         call screen setups_screen(show_navigation=False)
     n "Now that I have two free setups, I should start calling sets."
 
@@ -1506,7 +1506,7 @@ label third_set_report:
 label nyramyss_flan:
     n "Looks like that winners round 1 set has finally wrapped up."
     show p5 at left onlayer screens with dissolve
-    p5 "Heyo, I lost 1-2 to [p6.name]."
+    p5 "Heyo, I lost 1-2 to {color=[p6.who_args['color']]}[p6.name]{/color}."
     m "Understood."
     hide p5 onlayer screens
     $ expected_result = {"winner": p6, "loser": p5, "winner_games": 2, "loser_games": 1}
@@ -1518,7 +1518,7 @@ label nyramyss_flan:
 label ford_pacil:
     n "This looks like the last winners round 1 match being reported."
     show p7 at left onlayer screens with dissolve
-    p7 "I lost 1-2 to [p8.name] because I'm a TERRIBLE player with NO REDEEMING QUALITIES."
+    p7 "I lost 1-2 to {color=[p8.who_args['color']]}[p8.name]{/color} because I'm a TERRIBLE player with NO REDEEMING QUALITIES."
     m "Sorry to hear that. I'll report the set."
     hide p7 onlayer screens
     $ expected_result = {"winner": p8, "loser": p7, "winner_games": 2, "loser_games": 1}
@@ -1547,7 +1547,7 @@ label start_loop_23_57:
 label report_23:
     n "The first match of winners round 2 is being reported now."
     show p3 at left onlayer screens with dissolve
-    p3 "Hi, I won 2-0 against [p2.name]. He's, uh, not that good."
+    p3 "Hi, I won 2-0 against {color=[p2.who_args['color']]}[p2.name]{/color}. He's, uh, not that good."
     m "Alright, I'll put that in."
     hide p3 onlayer screens
     $ expected_result = {"winner": p3, "loser": p2, "winner_games": 2, "loser_games": 0}
@@ -1559,7 +1559,7 @@ label report_23:
 label report_57:
     n "A losers round 1 match is being reported."
     show p7 at left onlayer screens with dissolve
-    p7 "Hi, I won 2-0 against [p5.name]."
+    p7 "Hi, I won 2-0 against {color=[p5.who_args['color']]}[p5.name]{/color}."
     m "Understood."
     p7 "This is, like, the seventh time in a week we played each other. Can you stop seeding us into each other?"
     m "Blame Reggie, not me."
@@ -1587,7 +1587,7 @@ label report_57:
 label report_68:
     n "The final winners round 2 match is being reported now."
     show p6 happy3 at left onlayer screens with dissolve
-    p6 "I managed to beat [p8.name] 2-1."
+    p6 "I managed to beat {color=[p8.who_args['color']]}[p8.name]{/color} 2-1."
     m "Good job!"
     hide p6 happy3 onlayer screens
     $ expected_result = {"winner": p6, "loser": p8, "winner_games": 2, "loser_games": 1}
@@ -1624,7 +1624,7 @@ label start_loop_27_18_36:
 label report_27:
     n "Looks like that losers round 2 match just finished."
     show p7 at left onlayer screens with dissolve
-    p7 "I won 2-0 against [p2.name]. He kept complaining about his character for some reason and how back air never kills."
+    p7 "I won 2-0 against {color=[p2.who_args['color']]}[p2.name]{/color}. He kept complaining about his character for some reason and how back air never kills."
     m "Yeah, that checks."
     hide p7 onlayer screens
     $ expected_result = {"winner": p7, "loser": p2, "winner_games": 2, "loser_games": 0}
@@ -1647,7 +1647,7 @@ label report_18:
     p8 "I'm so {i}baaaaaaaad{/i}. I shieldbroke him and he mashed out before I could charge a smash attack."
     m "...respectfully, how does that happen?"
     p8 "I may or may not have tried to do resource management before charging my attack."
-    p8 "In any case, I lost 1-2 to [p1.name]."
+    p8 "In any case, I lost 1-2 to {color=[p1.who_args['color']]}[p1.name]{/color}."
     m "By golly, that sucks. I'll input your score."
     hide p8 shame onlayer screens
     $ expected_result = {"winner": p1, "loser": p8, "winner_games": 2, "loser_games": 1}
@@ -1673,7 +1673,7 @@ label start_loop_36_17:
 label report_17:
     n "Losers semifinals have finished!"
     show p1 happy at left onlayer screens with dissolve
-    p1 "I won 3-0 against [p7.name]."
+    p1 "I won 3-0 against {color=[p7.who_args['color']]}[p7.name]{/color}."
     show p7 at right onlayer screens with dissolve
     p7 "But it was close! 🤓☝️"
     m "Close only counts in horseshoes and hand grenades."
@@ -1707,7 +1707,7 @@ label red_dot_crashout:
 label report_36:
     n "Winner's Finals seem to be done."
     show p6 happy3 at left onlayer screens with dissolve
-    p6 "I love the Cloud matchup! I won 3-2 against [p3.name]."
+    p6 "I love the Cloud matchup! I won 3-2 against {color=[p3.who_args['color']]}[p3.name]{/color}."
     m "Don't go saying that too loud, but congrats!"
     hide p6 onlayer screens
     $ expected_result = {"winner": p6, "loser": p3, "winner_games": 3, "loser_games": 2}
@@ -1729,7 +1729,7 @@ label start_loop_13:
 label report_31:
     n "Another day, another set completion."
     show p3 at left onlayer screens with dissolve
-    p3 "I won against [p1.name] 3-1."
+    p3 "I won against {color=[p1.who_args['color']]}[p1.name]{/color} 3-1."
     m "Delightful. I'll report that for you."
     hide p3 onlayer screens
     $ expected_result = {"winner": p3, "loser": p1, "winner_games": 3, "loser_games": 1}
@@ -1751,7 +1751,7 @@ label start_loop_gf:
 label report_gf:
     n "Grands has now wrapped up."
     show p3 at left onlayer screens with dissolve
-    p3 "I won against [p6.name] 3-0."
+    p3 "I won against {color=[p6.who_args['color']]}[p6.name]{/color} 3-0."
     m "Dang, nice. I'll put that in."
     hide p3 onlayer screens
     $ expected_result = {"winner": p3, "loser": p6, "winner_games": 3, "loser_games": 0}
@@ -1760,7 +1760,7 @@ label report_gf:
     $ reporting = False
 
 # Call tf.
-n "Since the winner of the loser's bracket, [p3.name], won grand finals, we now have a \"bracket reset\". This means that the same players will play again. Whoever wins this set wins the tournament!"
+n "Since the winner of the loser's bracket, {color=[p3.who_args['color']]}[p3.name]{/color}, won grand finals, we now have a \"bracket reset\". This means that the same players will play again. Whoever wins this set wins the tournament!"
 label start_loop_tf:
     n "Time for me to call the grand finals reset."
     call screen bracket_screen
@@ -1775,7 +1775,7 @@ label report_tf:
     show background 2 with fade
     n "I was too busy scrolling Twitter that I missed the entire set. I wonder who won."
     show p6 happy at left onlayer screens with dissolve
-    p6 "Let's gooooooo I beat [p3.name] 3-2."
+    p6 "Let's gooooooo I beat {color=[p3.who_args['color']]}[p3.name]{/color} 3-2."
     m "Very nice. Congrats on the W! I'll submit that for you."
     hide p6 onlayer screens
     $ expected_result = {"winner": p6, "loser": p3, "winner_games": 3, "loser_games": 2}
